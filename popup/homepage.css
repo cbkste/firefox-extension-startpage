@@ -1,5 +1,4 @@
 .favourite-box {
-  border: 1px solid #000000;
   min-height: 200px;
   border-radius: 5px;
 
@@ -40,16 +39,24 @@
    background-size: cover;
    background-repeat: no-repeat;
    background-position: center;
-
    justify-content: center;
    align-items: center;
    display: flex;
+   border-top: 1px solid black;
+   border-left: 1px solid black;
+   border-right: 1px solid black;
+   border-top-left-radius: 7px;
+   border-top-right-radius: 7px;
 }
 .favourite-box-title {
   min-height: 25px;
   text-align: center;
-  border-top: 1px solid #000000;
   background-color: #4fbdbc;
+  border-bottom: 1px solid black;
+  border-bottom-left-radius: 7px;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  border-bottom-right-radius: 7px;
 }
 
 .row {

@@ -98,6 +98,7 @@ function storeSettings(id) {
   var storingSettings = browser.storage.local.set({ ["startpage-settings"] : { "id" : id} });
 }
 
+
 /* function to display a note in the note box */
 
 function displayNote(id, title, url) {
@@ -111,15 +112,20 @@ function displayNote(id, title, url) {
   var clearFix = document.createElement('div');
 
   var favouritecontainer = document.createElement('div');
-  var favouritebox = document.createElement('div');
+  var favouritebox = document.createElement('a');
   var favouriteboximage = document.createElement('div');
+  var favouriteIconbox = document.createElement('i');
   var favouriteboxtitle = document.createElement('div');
-  favouritecontainer.setAttribute('class','grid-25 tablet-grid-33');
+  favouritecontainer.setAttribute('class','grid-25 tablet-grid-33 favourite-container');
   favouritebox.setAttribute('class','favourite-box');
+  favouritebox.setAttribute('href', "http://google.com");
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
+  favouriteIconbox.setAttribute('class','fa fa-5x fa-youtube');
+  favouriteIconbox.setAttribute('aria-hidden','true');
   favouriteboxtitle.setAttribute('class','grid-100 favourite-box-title');
   favouriteboxtitle.textContent = title;
 
+  favouriteboximage.appendChild(favouriteIconbox);  
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
@@ -148,6 +154,16 @@ function displayNote(id, title, url) {
     const evtTgt = e.target;
     evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
     browser.storage.local.remove(title);
+  })
+
+  favouritebox.addEventListener('click',(e) => {
+    const evtTgt = e.target;
+    console.log("Favourites Box"+evtTgt);
+    var startpageContainerHTML = document.querySelector('.startpage-container');
+    var bool = startpageContainerHTML.classList.contains('edit-mode');
+    if(bool){
+      alert("Edit mode");
+    }
   })
 
   /* create note edit box */
