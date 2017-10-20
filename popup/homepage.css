@@ -1,6 +1,7 @@
 .favourite-box {
   min-height: 200px;
   border-radius: 5px;
+  text-decoration: none;
 
   background-size: cover;
   background-repeat: no-repeat;
@@ -18,7 +19,8 @@
 }
 
 .favourite-box:hover {
-  box-shadow: 0 0 6px rgba(35, 173, 278, 1);
+  box-shadow: 10px 10px 5px #888888;
+  text-decoration: none;
 }
 
 .settings i{
@@ -33,6 +35,15 @@
 
 .favourite-box-image {
   min-height: 175px;
+}
+
+.favourite-box-image i {
+  color: black;
+  text-decoration: none;
+}
+
+.favourite-box-image i:before {
+  display: inline-block;
 }
 
 .favourite-box-image{

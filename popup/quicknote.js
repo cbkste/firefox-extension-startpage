@@ -115,17 +115,27 @@ function displayNote(id, title, url) {
   var favouritebox = document.createElement('a');
   var favouriteboximage = document.createElement('div');
   var favouriteIconbox = document.createElement('i');
+  var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
+  favouritecontainer.setAttribute('id',title);
   favouritecontainer.setAttribute('class','grid-25 tablet-grid-33 favourite-container');
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', "http://google.com");
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   favouriteIconbox.setAttribute('class','fa fa-5x fa-youtube');
   favouriteIconbox.setAttribute('aria-hidden','true');
+  favouriteHiddenImageUrl.setAttribute('type','hidden');
+  favouriteHiddenImageUrl.setAttribute('aria-hidden','hidden');
+  favouriteHiddenImageUrl.setAttribute('id','label'+title);
+  favouriteHiddenImageUrl.setAttribute('name','hiddenField');
+  favouriteHiddenImageUrl.setAttribute('value','images/paris.jpg');
+  favouriteHiddenImageUrl.setAttribute('class','hiddenField');
+
   favouriteboxtitle.setAttribute('class','grid-100 favourite-box-title');
   favouriteboxtitle.textContent = title;
 
-  favouriteboximage.appendChild(favouriteIconbox);  
+  favouriteboximage.appendChild(favouriteHiddenImageUrl);
+  favouriteboximage.appendChild(favouriteIconbox);
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
@@ -165,6 +175,19 @@ function displayNote(id, title, url) {
       alert("Edit mode");
     }
   })
+
+  favouritebox.addEventListener('mouseenter',(e) => {
+    const evtTgt = e.target;
+    var backgroundImgBox = evtTgt.firstChild;
+    var backgroundImgBoxUrl = evtTgt.firstChild.firstChild.value;
+    backgroundImgBox.setAttribute("style", "background-image: url("+"/"+backgroundImgBoxUrl+')');
+  });
+
+  favouritebox.addEventListener('mouseleave',(e) => {
+    const evtTgt = e.target;
+    var backgroundImgBox = evtTgt.firstChild;
+    backgroundImgBox.setAttribute("style", "background-image: none");
+  });
 
   /* create note edit box */
   var noteEdit = document.createElement('div');
