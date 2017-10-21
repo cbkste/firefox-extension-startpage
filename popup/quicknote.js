@@ -172,6 +172,7 @@ function displayNote(id, title, url) {
     var startpageContainerHTML = document.querySelector('.startpage-container');
     var bool = startpageContainerHTML.classList.contains('edit-mode');
     if(bool){
+      e.preventDefault();
       alert("Edit mode");
     }
   })
