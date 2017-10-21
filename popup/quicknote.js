@@ -76,12 +76,10 @@ function removeEditOverlay() {
 function switchIconsToEditAndDelete() {
   var editDeleteIconDivs = document.querySelectorAll('.edit-delete-icons');
   for (i = 0; i < editDeleteIconDivs.length; ++i) {
-    console.log(i);
     editDeleteIconDivs[i].setAttribute('style','display: inline-block');
   }
   var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    console.log(i);
     FavouritesIconDivs[i].setAttribute('style','display: none');
   }
 
@@ -257,10 +255,21 @@ function displayNote(id, title, url) {
     var bool = startpageContainerHTML.classList.contains('edit-mode');
     if(bool){
       e.preventDefault();
-      alert("Edit mode");
+      //alert("Edit mode");
     }
   })
 
+  editiconfavouritebox.addEventListener('click',(e) => {
+    const evtTgt = e.target;
+    alert("editiconfavouritebox");
+  })
+
+  deleteiconfavouritebox.addEventListener('click',(e) => {
+    console.log("deleteiconfavouritebox");
+    const evtTgt = e.target;
+    evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode);
+    browser.storage.local.remove(title);
+  })
 
   favouritebox.addEventListener('mouseenter',(e) => {
     const evtTgt = e.target;
