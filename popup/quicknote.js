@@ -55,10 +55,13 @@ function EditOverlay() {
   var bool = startpageContainerHTML.classList.contains('edit-mode');
   if(bool){
     removeEditOverlay();
+    switchIconsToLogo();
   } else {
     startpageContainerHTML.setAttribute("style", "background-color: grey;");
     startpageContainerHTML.setAttribute('class','startpage-container edit-mode');
     displayAddNewFavourite();
+    console.log("switchIconsToEditAndDelete");
+    switchIconsToEditAndDelete();
   }
 }
 
@@ -68,6 +71,31 @@ function removeEditOverlay() {
   startpageContainerHTML.setAttribute('class','startpage-container');
   var newFavouriteContainerHTML = document.querySelector('.new-favourite-container');
   newFavouriteContainerHTML.parentNode.removeChild(newFavouriteContainerHTML);
+}
+
+function switchIconsToEditAndDelete() {
+  var editDeleteIconDivs = document.querySelectorAll('.edit-delete-icons');
+  for (i = 0; i < editDeleteIconDivs.length; ++i) {
+    console.log(i);
+    editDeleteIconDivs[i].setAttribute('style','display: inline-block');
+  }
+  var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
+  for (i = 0; i < FavouritesIconDivs.length; ++i) {
+    console.log(i);
+    FavouritesIconDivs[i].setAttribute('style','display: none');
+  }
+
+}
+
+function switchIconsToLogo() {
+  var editDeleteIconDivs = document.querySelectorAll('.edit-delete-icons');
+  for (i = 0; i < editDeleteIconDivs.length; ++i) {
+    editDeleteIconDivs[i].setAttribute('style','display: none');
+  }
+  var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
+  for (i = 0; i < FavouritesIconDivs.length; ++i) {
+    FavouritesIconDivs[i].setAttribute('style','display: inline-block');
+  }
 }
 
 function displayAddNewFavourite() {
@@ -150,16 +178,31 @@ function displayNote(id, title, url) {
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
   var favouriteboximage = document.createElement('div');
+  var editdeleteiconfavouritebox = document.createElement('div');
+  var editiconfavouritebox = document.createElement('div');
+  var deleteiconfavouritebox = document.createElement('div');
   var favouriteIconbox = document.createElement('i');
+  var editIconbox = document.createElement('i');
+  var deleteIconbox = document.createElement('i');
   var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
   favouritecontainer.setAttribute('id',title);
   favouritecontainer.setAttribute('class','grid-25 tablet-grid-33 favourite-container');
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', "http://google.com");
+  editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
+  editdeleteiconfavouritebox.setAttribute('style','display: none');
+  editiconfavouritebox.setAttribute('class','grid-50 edit-favourite-icon');
+  editiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
+  deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
+  deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
-  favouriteIconbox.setAttribute('class','fa fa-5x fa-youtube');
+  favouriteIconbox.setAttribute('class','favourite-icon fa fa-5x fa-youtube');
   favouriteIconbox.setAttribute('aria-hidden','true');
+  editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
+  editIconbox.setAttribute('aria-hidden','true');
+  deleteIconbox.setAttribute('class','fa fa-4x fa-trash-o');
+  deleteIconbox.setAttribute('aria-hidden','true');
   favouriteHiddenImageUrl.setAttribute('type','hidden');
   favouriteHiddenImageUrl.setAttribute('aria-hidden','hidden');
   favouriteHiddenImageUrl.setAttribute('id','label'+title);
@@ -170,8 +213,13 @@ function displayNote(id, title, url) {
   favouriteboxtitle.setAttribute('class','grid-100 favourite-box-title');
   favouriteboxtitle.textContent = title;
 
+  editiconfavouritebox.appendChild(editIconbox);
+  deleteiconfavouritebox.appendChild(deleteIconbox);
+  editdeleteiconfavouritebox.appendChild(editiconfavouritebox);
+  editdeleteiconfavouritebox.appendChild(deleteiconfavouritebox);
   favouriteboximage.appendChild(favouriteHiddenImageUrl);
   favouriteboximage.appendChild(favouriteIconbox);
+  favouriteboximage.appendChild(editdeleteiconfavouritebox);
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
@@ -213,11 +261,19 @@ function displayNote(id, title, url) {
     }
   })
 
+
   favouritebox.addEventListener('mouseenter',(e) => {
     const evtTgt = e.target;
-    var backgroundImgBox = evtTgt.firstChild;
-    var backgroundImgBoxUrl = evtTgt.firstChild.firstChild.value;
-    backgroundImgBox.setAttribute("style", "background-image: url("+"/"+backgroundImgBoxUrl+')');
+    var startpageContainerHTML = document.querySelector('.startpage-container');
+    var bool = startpageContainerHTML.classList.contains('edit-mode');
+    if(bool){
+
+    } else {
+      var backgroundImgBox = evtTgt.firstChild;
+      var backgroundImgBoxUrl = evtTgt.firstChild.firstChild.value;
+      backgroundImgBox.setAttribute("style", "background-image: url("+"/"+backgroundImgBoxUrl+')');
+      //backgroundImgBox.setAttribute("style", "background-color: red");
+    }
   });
 
   favouritebox.addEventListener('mouseleave',(e) => {

@@ -25,6 +25,7 @@
 
 .settings i{
   padding-right: 20px;
+  margin-bottom: 30px;
     //color: #4fbdbc;
 }
 
@@ -34,7 +35,7 @@
 }
 
 .favourite-box-image, .new-favourite-box-image {
-  min-height: 175px;
+  min-height: 170px;
 }
 
 .favourite-box-image i, .new-favourite-box-image i {
@@ -74,9 +75,12 @@
 }
 
 .favourite-box-title, .new-favourite-box-title {
-  min-height: 25px;
+  min-height: 30px;
   text-align: center;
   background-color: #4fbdbc;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 .favourite-box-title {
