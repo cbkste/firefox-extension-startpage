@@ -58,14 +58,50 @@ function EditOverlay() {
   } else {
     startpageContainerHTML.setAttribute("style", "background-color: grey;");
     startpageContainerHTML.setAttribute('class','startpage-container edit-mode');
+    displayAddNewFavourite();
   }
 }
-
 
 function removeEditOverlay() {
   var startpageContainerHTML = document.querySelector('.startpage-container');
   startpageContainerHTML.setAttribute("style", "background-color: white;");
   startpageContainerHTML.setAttribute('class','startpage-container');
+  var newFavouriteContainerHTML = document.querySelector('.new-favourite-container');
+  newFavouriteContainerHTML.parentNode.removeChild(newFavouriteContainerHTML);
+}
+
+function displayAddNewFavourite() {
+  var newfavouritecontainer = document.createElement('div');
+  var newfavouritebox = document.createElement('div');
+  var favouriteboximage = document.createElement('div');
+  var favouriteIconbox = document.createElement('i');
+  var favouriteHiddenImageUrl = document.createElement('input');
+  var favouriteboxtitle = document.createElement('div');
+  newfavouritecontainer.setAttribute('class','grid-25 tablet-grid-33 new-favourite-container');
+  newfavouritebox.setAttribute('class','new-favourite-box');
+  //newfavouritebox.setAttribute('href', "#");
+  favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
+  favouriteIconbox.setAttribute('class','fa fa-5x fa-plus');
+  favouriteIconbox.setAttribute('aria-hidden','true');
+  favouriteHiddenImageUrl.setAttribute('type','hidden');
+  favouriteHiddenImageUrl.setAttribute('aria-hidden','hidden');
+  favouriteHiddenImageUrl.setAttribute('name','hiddenField');
+  favouriteHiddenImageUrl.setAttribute('value','');
+  favouriteHiddenImageUrl.setAttribute('class','hiddenField');
+
+  favouriteboxtitle.setAttribute('class','grid-100 new-favourite-box-title');
+
+  favouriteboximage.appendChild(favouriteHiddenImageUrl);
+  favouriteboximage.appendChild(favouriteIconbox);
+  newfavouritebox.appendChild(favouriteboximage);
+  newfavouritebox.appendChild(favouriteboxtitle);
+  newfavouritecontainer.appendChild(newfavouritebox);
+  favouritesContainer.appendChild(newfavouritecontainer);
+
+  newfavouritecontainer.addEventListener('click',(e) => {
+    const evtTgt = e.target;
+    console.log("NEW Favourite Box Selected"+evtTgt);
+  })
 }
 
 /* Add a note to the display, and storage */
