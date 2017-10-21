@@ -5,6 +5,8 @@ var inputBody = document.querySelector('.new-note textarea');
 var global_id = "1";
 var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
+var dateTimeContainer = document.querySelector('.timeDateValue');
+
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -48,6 +50,7 @@ function initialize() {
     }
   }, onError);
   defaultEventListener();
+  //dateTimeContainer.textContent = getDateTime();
 }
 
 function EditOverlay() {
@@ -95,6 +98,14 @@ function switchIconsToLogo() {
     FavouritesIconDivs[i].setAttribute('style','display: inline-block');
   }
 }
+
+function getDateTime(){
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      return dateTime = date+' '+time;
+}
+
 
 function displayAddNewFavourite() {
   var newfavouritecontainer = document.createElement('div');
