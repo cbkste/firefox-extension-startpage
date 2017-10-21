@@ -267,7 +267,15 @@ function displayNote(id, title, url) {
   deleteiconfavouritebox.addEventListener('click',(e) => {
     console.log("deleteiconfavouritebox");
     const evtTgt = e.target;
-    evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode);
+    var option1 = evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
+    var option2 = evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode;
+    var bool = option2.classList.contains('favourite-container');
+    console.log(bool)
+    if(bool){
+      option1.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode.parentNode);
+    } else {
+      option2.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode);
+    }
     browser.storage.local.remove(title);
   })
 
