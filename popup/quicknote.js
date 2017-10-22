@@ -17,6 +17,7 @@ var editModeBtn = document.querySelector('.edit-icon');
 var settingsBtn = document.querySelector('.settings-icon');
 var settingsMode = false;
 var currentCssClassSize = "grid-25";
+var changeLinksToHttps = true;
 
 /* generic error handler */
 function onError(error) {
@@ -55,8 +56,9 @@ function initialize() {
           console.log("KEY: "+noteKey);
           var id = results[noteKey].ref;
           var text = results[noteKey].text;
+          var url = results[noteKey].url;
           console.log(results[noteKey]);
-          displayNote("2",noteKey,text);
+          displayNote("2",noteKey,url);
         }
       }
   }, onError);
@@ -217,10 +219,30 @@ function storeSettings(id, rowCount) {
   var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount } });
 }
 
+function generateValidUrl(url) {
+  var createCorrectUrl;
+  if(typeof url !== "undefined"){
+    if(url.startsWith('www.')){
+      createCorrectUrl = "https://" + url;
+      return createCorrectUrl;
+    } else if (!url.startsWith('http') && !url.startsWith('https') && url.startsWith('www.')) {
+      createCorrectUrl = "https://www." + url;
+      return createCorrectUrl;
+    } else {
+      return url;
+    }
+  } else {
+    return url;
+  }
+}
 
 /* function to display a note in the note box */
 
 function displayNote(id, title, url) {
+
+  var createCorrectUrl = generateValidUrl(url);
+
+  console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
   /* create note display box */
   var note = document.createElement('div');
   var noteDisplay = document.createElement('div');
@@ -245,7 +267,7 @@ function displayNote(id, title, url) {
   var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
   favouritecontainer.setAttribute('class',classList);
   favouritebox.setAttribute('class','favourite-box');
-  favouritebox.setAttribute('href', "http://google.com");
+  favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
   editdeleteiconfavouritebox.setAttribute('style','display: none');
   editiconfavouritebox.setAttribute('class','grid-50 edit-favourite-icon');
