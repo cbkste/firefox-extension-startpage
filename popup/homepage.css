@@ -110,3 +110,8 @@
 .welcome-box {
   text-align: center;
 }
+
+.settings-container {
+  display: none;
+  padding-bottom: 30px;
+}

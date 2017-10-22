@@ -6,11 +6,16 @@ var global_id = "1";
 var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
 var dateTimeContainer = document.querySelector('.timeDateValue');
-
+var settingsContainer = document.querySelector('.settings-container');
+var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
+var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
+var settingsUpdateBtn = document.querySelector('input[id="UpdateSettingsBtn"]');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
 var editModeBtn = document.querySelector('.edit-icon');
+var settingsBtn = document.querySelector('.settings-icon');
+var settingsMode = false;
 
 /* generic error handler */
 function onError(error) {
@@ -21,6 +26,8 @@ function defaultEventListener() {
   addBtn.addEventListener('click', addNote);
   clearBtn.addEventListener('click', clearAll);
   editModeBtn.addEventListener('click', EditOverlay);
+  settingsBtn.addEventListener('click', OpenSettings);
+  settingsUpdateBtn.addEventListener('click', updateUiWithSettings);
 }
 
 /* display previously-saved stored notes on startup */
@@ -32,25 +39,61 @@ function initialize() {
   gettingAllStorageItems.then((results) => {
     var noteKeys = Object.keys(results);
     for (let noteKey of noteKeys) {
-        if(noteKey !== "startpage-settings"){
+        if(noteKey !== "startpagesettings"){
           console.log("KEY: "+noteKey);
           var id = results[noteKey].ref;
           var text = results[noteKey].text;
+          console.log(results[noteKey]);
           displayNote("2",noteKey,text);
         }
       }
   }, onError);
-  var gettingSettingsItem = browser.storage.local.get("startpage-settings");
+  var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
   gettingSettingsItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1");
+      storeSettings("1", "4");
     }
   }, onError);
   defaultEventListener();
   //dateTimeContainer.textContent = getDateTime();
+}
+
+function OpenSettings() {
+  if(settingsMode){
+    settingsContainer.setAttribute("style", "display: none;");
+    settingsMode = false;
+  } else {
+    var gettingSettingsItem = browser.storage.local.get("startpagesettings");
+    console.log("Checking if Settings are in keys");
+    gettingSettingsItem.then((result) => {
+      var objTest = Object.keys(result);
+      if(objTest.length < 1) {
+        storeSettings("1","4");
+        settingsRowCountTextField.value = "Items Per Row: 4";
+      } else {
+        settingsRowCountTextField.value = result.startpagesettings.RowCount;
+      }
+    }, onError);
+    settingsContainer.setAttribute("style", "display: block;");
+    settingsMode = true;
+  }
+}
+
+function updateUiWithSettings(){
+  console.log("updateUiWithSettings");
+  var newCountValue = settingsRowCountTextField.value;
+  updateSettings(newCountValue);
+}
+
+function updateUi(newCssClass){
+  var allFavouritesDivs = document.querySelectorAll('.favourite-container');
+  var cssClass = newCssClass + " tablet-grid-33 favourite-container";
+  for (i = 0; i < allFavouritesDivs.length; ++i) {
+    allFavouritesDivs[i].setAttribute('class',cssClass);
+  }
 }
 
 function EditOverlay() {
@@ -166,9 +209,9 @@ function storeNote(id, title, url) {
   }, onError);
 }
 
-function storeSettings(id) {
-  console.log("storeSettings: "+ id);
-  var storingSettings = browser.storage.local.set({ ["startpage-settings"] : { "id" : id} });
+function storeSettings(id, rowCount) {
+  console.log("storeSettings: "+ id + ", RowCount: " +rowCount);
+  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount } });
 }
 
 
@@ -381,6 +424,52 @@ function updateNote(delNote,newTitle,newBody) {
       displayNote(newTitle, newBody);
     }
   }, onError);
+}
+
+function updateSettings(newRowCount) {
+  var gettingSettingsItem = browser.storage.local.get("startpagesettings");
+  gettingSettingsItem.then((result) => {
+    var objTest = Object.keys(result);
+    if(objTest.length < 1) {
+      storeSettings("1", newRowCount);
+    } else {
+      if(result.startpagesettings.RowCount !== newRowCount)
+      {
+        console.log("Updated Settings");
+        storeSettings("1",newRowCount);
+        settingsRowCountTextField.value = newRowCount;
+        updateUi(getNewCssClass(newRowCount));
+      }
+    }
+  }, onError);
+}
+
+function getNewCssClass(rowCountRequired) {
+  console.log(rowCountRequired);
+    switch(rowCountRequired) {
+      case "1":
+          return "grid-100";
+      case "2":
+          return "grid-50";
+      case "3":
+        return "grid-33";
+      case "4":
+          return "grid-25";
+      case "5":
+          return "grid-20";
+      case "6":
+          return "grid-10";
+      case "7":
+          return "grid-10";
+      case "8":
+          return "grid-10";
+      case "9":
+          return "grid-10";
+      case "10":
+          return "grid-10";
+      default:
+          return "grid-25";
+      }
 }
 
 /* Clear all notes from the display/storage */
