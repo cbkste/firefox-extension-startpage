@@ -10,6 +10,7 @@ var settingsContainer = document.querySelector('.settings-container');
 var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateBtn = document.querySelector('input[id="UpdateSettingsBtn"]');
+var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:checked');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -239,9 +240,9 @@ function generateValidUrl(url) {
 /* function to display a note in the note box */
 
 function displayNote(id, title, url) {
-
   var createCorrectUrl = generateValidUrl(url);
 
+  console.log(itemsPerRowRadio.value);
   console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
   /* create note display box */
   var note = document.createElement('div');
