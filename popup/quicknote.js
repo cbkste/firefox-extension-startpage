@@ -16,6 +16,7 @@ var addBtn = document.querySelector('.add');
 var editModeBtn = document.querySelector('.edit-icon');
 var settingsBtn = document.querySelector('.settings-icon');
 var settingsMode = false;
+var currentCssClassSize = "grid-25";
 
 /* generic error handler */
 function onError(error) {
@@ -35,6 +36,17 @@ function defaultEventListener() {
 initialize();
 
 function initialize() {
+  var gettingSettingsItem = browser.storage.local.get("startpagesettings");
+  console.log("Checking if Settings are in keys");
+  gettingSettingsItem.then((result) => {
+    var objTest = Object.keys(result);
+    if(objTest.length < 1) {
+      console.log("Settings Not Found");
+      storeSettings("1", "4");
+    }
+    getNewCssClass(result.startpagesettings.RowCount);
+  }, onError);
+
   var gettingAllStorageItems = browser.storage.local.get(null);
   gettingAllStorageItems.then((results) => {
     var noteKeys = Object.keys(results);
@@ -47,15 +59,6 @@ function initialize() {
           displayNote("2",noteKey,text);
         }
       }
-  }, onError);
-  var gettingSettingsItem = browser.storage.local.get("startpagesettings");
-  console.log("Checking if Settings are in keys");
-  gettingSettingsItem.then((result) => {
-    var objTest = Object.keys(result);
-    if(objTest.length < 1) {
-      console.log("Settings Not Found");
-      storeSettings("1", "4");
-    }
   }, onError);
   defaultEventListener();
   //dateTimeContainer.textContent = getDateTime();
@@ -239,7 +242,8 @@ function displayNote(id, title, url) {
   var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
   favouritecontainer.setAttribute('id',title);
-  favouritecontainer.setAttribute('class','grid-25 tablet-grid-33 favourite-container');
+  var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
+  favouritecontainer.setAttribute('class',classList);
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', "http://google.com");
   editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
@@ -448,27 +452,23 @@ function getNewCssClass(rowCountRequired) {
   console.log(rowCountRequired);
     switch(rowCountRequired) {
       case "1":
-          return "grid-100";
+        currentCssClassSize = "grid-100";
+        return "grid-100";
       case "2":
-          return "grid-50";
+        currentCssClassSize = "grid-50";
+        return "grid-50";
       case "3":
+        currentCssClassSize = "grid-33";
         return "grid-33";
       case "4":
-          return "grid-25";
+        currentCssClassSize = "grid-25";
+        return "grid-25";
       case "5":
-          return "grid-20";
-      case "6":
-          return "grid-10";
-      case "7":
-          return "grid-10";
-      case "8":
-          return "grid-10";
-      case "9":
-          return "grid-10";
-      case "10":
-          return "grid-10";
+        currentCssClassSize = "grid-20";
+        return "grid-20";
       default:
-          return "grid-25";
+        currentCssClassSize = "grid-25";
+        return "grid-25";
       }
 }
 
