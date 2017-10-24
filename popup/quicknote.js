@@ -26,7 +26,7 @@ function onError(error) {
 }
 
 function defaultEventListener() {
-  addBtn.addEventListener('click', addNote);
+  addBtn.addEventListener('click', addFavourite);
   clearBtn.addEventListener('click', clearAll);
   editModeBtn.addEventListener('click', EditOverlay);
   settingsBtn.addEventListener('click', OpenSettings);
@@ -46,7 +46,7 @@ function initialize() {
       console.log("Settings Not Found");
       storeSettings("1", "4");
     }
-    getNewCssClass(result.startpagesettings.RowCount);
+    getNewCssClass("4");
   }, onError);
 
   var gettingAllStorageItems = browser.storage.local.get(null);
@@ -58,8 +58,9 @@ function initialize() {
           var id = results[noteKey].ref;
           var text = results[noteKey].text;
           var url = results[noteKey].url;
+          var icon = results[noteKey].icon;
           console.log(results[noteKey]);
-          displayNote("2",noteKey,url);
+          displayFavourite("2",noteKey,url,icon);
         }
       }
   }, onError);
@@ -192,26 +193,26 @@ function displayAddNewFavourite() {
 
 /* Add a note to the display, and storage */
 
-function addNote() {
+function addFavourite() {
   var noteTitle = inputTitle.value;
   var noteBody = inputBody.value;
+  var icon = "fa-globe";
   var gettingItem = browser.storage.local.get(noteTitle);
   gettingItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
       inputTitle.value = '';
       inputBody.value = '';
-      storeNote("1",noteTitle,noteBody);
+      storeFavourite("1",noteTitle,noteBody,icon);
     }
   }, onError);
 }
 
-/* function to store a new note in storage */
-
-function storeNote(id, title, url) {
-  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url} });
+/* function to store a new favourite in storage */
+function storeFavourite(id, title, url, icon) {
+  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon} });
   storingNote.then(() => {
-    displayNote(id, title,url);
+    displayFavourite(id, title,url, icon);
   }, onError);
 }
 
@@ -239,7 +240,7 @@ function generateValidUrl(url) {
 
 /* function to display a note in the note box */
 
-function displayNote(id, title, url) {
+function displayFavourite(id, title, url, icon) {
   var createCorrectUrl = generateValidUrl(url);
 
   console.log(itemsPerRowRadio.value);
@@ -276,7 +277,9 @@ function displayNote(id, title, url) {
   deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
   deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
-  favouriteIconbox.setAttribute('class','favourite-icon fa fa-5x fa-youtube');
+  var iconClass = "favourite-icon fa fa-5x "+ icon;
+  console.log(iconClass);
+  favouriteIconbox.setAttribute('class',iconClass);
   favouriteIconbox.setAttribute('aria-hidden','true');
   editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
   editIconbox.setAttribute('aria-hidden','true');
@@ -430,7 +433,7 @@ function displayNote(id, title, url) {
 
   updateBtn.addEventListener('click',() => {
     if(noteTitleEdit.value !== title || noteBodyEdit.value !== url) {
-      updateNote(title,noteTitleEdit.value,noteBodyEdit.value);
+      updateFavourite(title,noteTitleEdit.value,noteBodyEdit.value,icon);
       note.parentNode.removeChild(note);
     }
   });
@@ -439,16 +442,16 @@ function displayNote(id, title, url) {
 
 /* function to update notes */
 
-function updateNote(delNote,newTitle,newBody) {
+function updateFavourite(delNote,newTitle,newBody,icon) {
   var storingNote = browser.storage.local.set({ [newTitle] : newBody });
   storingNote.then(() => {
     if(delNote !== newTitle) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayNote(newTitle, newBody);
+        displayFavourite(newTitle, newBody, icon);
       }, onError);
     } else {
-      displayNote(newTitle, newBody);
+      displayFavourite(newTitle, newBody, icon);
     }
   }, onError);
 }
