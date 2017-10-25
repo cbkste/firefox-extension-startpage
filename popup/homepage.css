@@ -115,3 +115,25 @@
   display: none;
   padding-bottom: 30px;
 }
+
+.image-drop-zone {
+  border: 1px dotted black;
+  height: 200px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-display-zone {
+  height: 100%;
+  border: 1px solid black;
+}
+
+.single-image-zone {
+  height: 150px;
+  border: 1px solid black;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}

@@ -1,3 +1,4 @@
+/* global IDBFiles */
 /* initialise variables */
 
 var inputTitle = document.querySelector('.new-note input');
@@ -11,6 +12,8 @@ var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateBtn = document.querySelector('input[id="UpdateSettingsBtn"]');
 var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:checked');
+var backgroundImageDropZone = document.querySelector('.image-drop-zone');
+var backgroundImageDisplayZone = document.querySelector('.image-display-zone');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -19,6 +22,11 @@ var settingsBtn = document.querySelector('.settings-icon');
 var settingsMode = false;
 var currentCssClassSize = "grid-25";
 var changeLinksToHttps = true;
+
+imageStores = {
+  collectedBlobs: [],
+  lastMessage: undefined,
+};
 
 /* generic error handler */
 function onError(error) {
@@ -31,6 +39,9 @@ function defaultEventListener() {
   editModeBtn.addEventListener('click', EditOverlay);
   settingsBtn.addEventListener('click', OpenSettings);
   settingsUpdateBtn.addEventListener('click', updateUiWithSettings);
+  backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
+  backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
+  backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
 }
 
 /* display previously-saved stored notes on startup */
@@ -38,6 +49,7 @@ function defaultEventListener() {
 initialize();
 
 function initialize() {
+  //createAndSaveImageStore("background-images",imageStores.collectedBlobs,"init");
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
   gettingSettingsItem.then((result) => {
@@ -196,7 +208,7 @@ function displayAddNewFavourite() {
 function addFavourite() {
   var noteTitle = inputTitle.value;
   var noteBody = inputBody.value;
-  var icon = "fa-globe";
+  var icon = "fa-steam-square";
   var gettingItem = browser.storage.local.get(noteTitle);
   gettingItem.then((result) => {
     var objTest = Object.keys(result);
@@ -498,8 +510,105 @@ function getNewCssClass(rowCountRequired) {
       }
 }
 
-/* Clear all notes from the display/storage */
+function processImageDropZone(ev){
+  console.log("Drop");
+  ev.preventDefault();
+  // If dropped items aren't files, reject them
+  var dt = ev.dataTransfer;
+  if (dt.items) {
+    // Use DataTransferItemList interface to access the file(s)
+    for (var i=0; i < dt.items.length; i++) {
+      if (dt.items[i].kind == "file") {
+        var f = dt.items[i].getAsFile();
+        console.log("... file[" + i + "].name = " + f.name);
+        createAndSaveImageStore(dt.files[i].name,dt.files[i]);
+      }
+    }
+  } else {
+    // Use DataTransfer interface to access the file(s)
+    for (var i=0; i < dt.files.length; i++) {
+      console.log("... file[" + i + "].name = " + dt.files[i].name);
+      createAndSaveImageStore("background-images", dt.files[i].name,dt.files[i]);
+    }
+  }
+}
 
+function processImageDragEndDropZone(ev){
+  console.log("dragEnd");
+    // Remove all of the drag data
+    var dt = ev.dataTransfer;
+    if (dt.items) {
+      // Use DataTransferItemList interface to remove the drag data
+      for (var i = 0; i < dt.items.length; i++) {
+        dt.items.remove(i);
+      }
+    } else {
+      // Use DataTransfer interface to remove the drag data
+      ev.dataTransfer.clearData();
+    }
+}
+
+function processImageDragOverDropZone(ev){
+  console.log("dragOver");
+  // Prevent default select and drag behavior
+  ev.preventDefault();
+}
+
+async function createAndSaveImageStore(filename, file) {
+  console.log(filename);
+  console.log(file);
+    try {
+      const tmpFiles = await IDBFiles.getFileStorage({
+        name: "tmpFiles"
+      });
+      await tmpFiles.put(filename, file);
+      await displayBackgroundImage(filename);
+
+    } catch (err) {
+      console.error("File storing error", err);
+      throw err;
+    }
+}
+
+async function getStoredData(filename) {
+  try {
+    const tmpFiles = await IDBFiles.getFileStorage({
+   name: "tmpFiles"
+ });
+ // filtered count...
+ const storedData = await tmpFiles.get(filename);
+
+ if (!storedData) {
+   // No data stored with the specified filename.
+ } else if (storedData instanceof Blob) {
+   console.log("storedData instanceof Blob");
+   return storedData;
+ } else if (storedData instanceof File) {
+   console.log("storedData instanceof File");
+   return storedData;
+ } else if (storedData instanceof IDBFiles.IDBPromisedMutableFile) {
+   console.log("storedData instanceof IDBFiles.IDBPromisedMutableFile");
+   return storedData;
+ }
+} catch (err) {
+ console.error("Get stored data", err);
+ throw err;
+}
+
+ }
+
+async function displayBackgroundImage(filename){
+ var image = await getStoredData(filename);
+ var objectURL = URL.createObjectURL(image);
+ console.log(image);
+ console.log(filename);
+ console.log(objectURL);
+ var imageBoxBackground = document.createElement('div');
+ imageBoxBackground.setAttribute("class", "grid-33 single-image-zone");
+ imageBoxBackground.setAttribute("style", "background-image: url("+objectURL+')');
+ backgroundImageDisplayZone.appendChild(imageBoxBackground);
+}
+/* Clear all notes from the display/storage */
 function clearAll() {
   while (noteContainer.firstChild) {
       noteContainer.removeChild(noteContainer.firstChild);

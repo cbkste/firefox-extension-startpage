@@ -3,10 +3,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="quicknote.css"/>
+    <link rel="stylesheet" href="startpage.css"/>
     <link rel="stylesheet" href="unemantic.css">
     <link rel="stylesheet" href="homepage.css">
     <script type="text/javascript" src='jquery.min.js'></script>
+    <script src="/deps/idb-file-storage.js"></script>
+    <script src="/deps/uuidv4.js"></script>
+    <script src="/utils/image-store.js"></script>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
             rel="stylesheet" type='text/css'>
   </head>
@@ -34,17 +37,29 @@
     </div>
   </div>
   <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 settings-container">
-    <div class="grid-100">
-      <h1>Settings</h1>
-    </div>
-    <div class="grid-100">
-      <div class="grid-100 radio-buttons">
-        <input type="radio" name="itemsPerRowRadio" value="Single" checked> Single<br>
-        <input type="radio" name="itemsPerRowRadio" value="Custom"> Custom<br>
+    <div class="grid-50">
+      <div class="grid-100">
+        <h1>Settings</h1>
       </div>
-      <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
-      <input type="text" name="ItemsPerRowCountTextBox" value="">
-      <input id="UpdateSettingsBtn" type="submit" value="Update">
+      <div class="grid-100">
+        <div class="grid-100 radio-buttons">
+          <input type="radio" name="itemsPerRowRadio" value="Single" checked> Single<br>
+          <input type="radio" name="itemsPerRowRadio" value="Custom"> Custom<br>
+        </div>
+        <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
+        <input type="text" name="ItemsPerRowCountTextBox" value="">
+        <input id="UpdateSettingsBtn" type="submit" value="Update">
+      </div>
+    </div>
+    <div class="grid-50">
+      <div class="grid-100">
+        <h1>Background Image</h1>
+      </div>
+      <div class="grid-100 image-drop-zone">
+          image dropzone
+      </div>
+      <div class="grid-100 image-display-zone">
+      </div>
     </div>
   </div>
     <div class="grid-100">
@@ -52,7 +67,7 @@
     </div>
   </div>
 </div>
-  <script src="quicknote.js"></script>
+  <script src="startpage.js"></script>
 </body>
 
 </html>
