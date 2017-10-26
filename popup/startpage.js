@@ -582,9 +582,27 @@ async function createAndSaveImageStore(filename, file) {
       const storedFiles = await tmpFiles.list();
       const storedFilesCount = storedFiles.length;
       console.log(storedFilesCount);
-      if(storedFilesCount > settingsRowCountLimit){
+        /*
+        TODO: If Image added is already in Store will
+        still delete image if over limit
+        */
+      console.log("COunt "+storedFilesCount+", settingsBackgroundImageLimit: "+settingsBackgroundImageLimit);
+      if(storedFilesCount > settingsBackgroundImageLimit){
         console.log("Count Excedded Deleting last image");
-        //await deletedStoredBackgroundImageData();
+        var lastImageInStore = storedFiles[0];
+        var imageToRemove;
+        if(lastImageInStore != settingsCurrentSelectedBackground){
+          console.log(lastImageInStore);
+          imageToRemove = lastImageInStore;
+        } else {
+          var secondToLastImageInStore = storedFiles[1];
+          console.log(secondToLastImageInStore);
+          imageToRemove = secondToLastImageInStore;
+        }
+        /*
+        TODO: Delete image div Also
+        */
+        await deletedStoredBackgroundImageData(imageToRemove);
       }
       await displayBackgroundImage(filename);
 
@@ -642,11 +660,13 @@ async function setupBackgroundImages() {
 
 async function deletedStoredBackgroundImageData(filename){
   try {
+    console.log(filename)
       const tmpFiles = await IDBFiles.getFileStorage({name: "tmpFiles"});
       await tmpFiles.remove(filename);
-      console.log("All stored files have been removed.");
+      console.log("stored file has been removed.");
     } catch (err) {
       console.log("ERROR: exception raised while clearing the stored file");
+      console.log(err);
     }
 }
 
