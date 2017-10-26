@@ -24,6 +24,9 @@ var settingsMode = false;
 var currentCssClassSize = "grid-25";
 var changeLinksToHttps = true;
 
+var settingsBackgroundImageLimit = "6";
+var settingsRowCountLimit = "4";
+
 imageStores = {
   collectedBlobs: [],
   lastMessage: undefined,
@@ -58,9 +61,13 @@ async function initialize() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1", "4");
+      storeSettings("1", "4","6");
+    } else {
+      settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
+      settingsRowCountLimit = result.startpagesettings.RowCount;
     }
-    getNewCssClass("4");
+    console.log("getNewCssClass"+settingsRowCountLimit);
+    getNewCssClass(settingsRowCountLimit);
   }, onError);
 
   var gettingAllStorageItems = browser.storage.local.get(null);
@@ -68,12 +75,12 @@ async function initialize() {
     var noteKeys = Object.keys(results);
     for (let noteKey of noteKeys) {
         if(noteKey !== "startpagesettings"){
-          console.log("KEY: "+noteKey);
+          //console.log("KEY: "+noteKey);
           var id = results[noteKey].ref;
           var text = results[noteKey].text;
           var url = results[noteKey].url;
           var icon = results[noteKey].icon;
-          console.log(results[noteKey]);
+          //console.log(results[noteKey]);
           displayFavourite("2",noteKey,url,icon);
         }
       }
@@ -87,17 +94,23 @@ function OpenSettings() {
     settingsContainer.setAttribute("style", "display: none;");
     settingsMode = false;
   } else {
-    var gettingSettingsItem = browser.storage.local.get("startpagesettings");
-    console.log("Checking if Settings are in keys");
-    gettingSettingsItem.then((result) => {
-      var objTest = Object.keys(result);
-      if(objTest.length < 1) {
-        storeSettings("1","4");
-        settingsRowCountTextField.value = "Items Per Row: 4";
-      } else {
-        settingsRowCountTextField.value = result.startpagesettings.RowCount;
-      }
-    }, onError);
+    // var gettingSettingsItem = browser.storage.local.get("startpagesettings");
+    // console.log("Checking if Settings are in keys");
+    // gettingSettingsItem.then((result) => {
+    //   var objTest = Object.keys(result);
+    //   if(objTest.length < 1) {
+    //     storeSettings("1","4","6");
+    //     settingsRowCountTextField.value = "Items Per Row: 4";
+    //   } else {
+    //     settingsRowCountTextField.value = result.startpagesettings.RowCount;
+    //   }
+    // }, onError);
+       if(!settingsRowCountLimit) {
+         storeSettings("1","4","6");
+         settingsRowCountTextField.value = "4";
+       } else {
+         settingsRowCountTextField.value = settingsRowCountLimit;
+       }
     settingsContainer.setAttribute("style", "display: block;");
     settingsMode = true;
   }
@@ -228,9 +241,11 @@ function storeFavourite(id, title, url, icon) {
   }, onError);
 }
 
-function storeSettings(id, rowCount) {
-  console.log("storeSettings: "+ id + ", RowCount: " +rowCount);
-  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount } });
+function storeSettings(id, rowCount, backgroundCount) {
+  console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount);
+  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount } });
+  settingsBackgroundImageLimit = backgroundCount;
+  settingsRowCountLimit = rowCount;
 }
 
 function generateValidUrl(url) {
@@ -255,8 +270,8 @@ function generateValidUrl(url) {
 function displayFavourite(id, title, url, icon) {
   var createCorrectUrl = generateValidUrl(url);
 
-  console.log(itemsPerRowRadio.value);
-  console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
+  //console.log(itemsPerRowRadio.value);
+  //console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
   /* create note display box */
   var note = document.createElement('div');
   var noteDisplay = document.createElement('div');
@@ -290,7 +305,7 @@ function displayFavourite(id, title, url, icon) {
   deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   var iconClass = "favourite-icon fa fa-5x "+ icon;
-  console.log(iconClass);
+  //console.log(iconClass);
   favouriteIconbox.setAttribute('class',iconClass);
   favouriteIconbox.setAttribute('aria-hidden','true');
   editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
@@ -371,7 +386,7 @@ function displayFavourite(id, title, url, icon) {
     } else {
       option2.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode);
     }
-    browser.storage.local.remove(title);
+    browser.storage.local.remove("startpagesettings");
   })
 
   favouritebox.addEventListener('mouseenter',(e) => {
@@ -467,16 +482,17 @@ function updateFavourite(delNote,newTitle,newBody,icon) {
 }
 
 function updateSettings(newRowCount) {
+  console.log()
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   gettingSettingsItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
-      storeSettings("1", newRowCount);
+      storeSettings("1", newRowCount, "6");
     } else {
       if(result.startpagesettings.RowCount !== newRowCount)
       {
         console.log("Updated Settings");
-        storeSettings("1",newRowCount);
+        storeSettings("1",newRowCount, "6");
         settingsRowCountTextField.value = newRowCount;
         updateUi(getNewCssClass(newRowCount));
       }
@@ -485,7 +501,7 @@ function updateSettings(newRowCount) {
 }
 
 function getNewCssClass(rowCountRequired) {
-  console.log(rowCountRequired);
+  //console.log(rowCountRequired);
     switch(rowCountRequired) {
       case "1":
         currentCssClassSize = "grid-100";
@@ -574,20 +590,20 @@ async function getStoredData(filename) {
      name: "tmpFiles"
    });
    // filtered count...
-   console.log("getStoredData:TempData");
-   console.log(tmpFiles);
+  //  console.log("getStoredData:TempData");
+  //  console.log(tmpFiles);
    const storedData = await tmpFiles.get(filename);
 
    if (!storedData) {
      // No data stored with the specified filename.
    } else if (storedData instanceof Blob) {
-     console.log("storedData instanceof Blob");
+     //console.log("storedData instanceof Blob");
      return storedData;
    } else if (storedData instanceof File) {
-     console.log("storedData instanceof File");
+     //console.log("storedData instanceof File");
      return storedData;
    } else if (storedData instanceof IDBFiles.IDBPromisedMutableFile) {
-     console.log("storedData instanceof IDBFiles.IDBPromisedMutableFile");
+     //console.log("storedData instanceof IDBFiles.IDBPromisedMutableFile");
      return storedData;
    }
   } catch (err) {
@@ -627,9 +643,9 @@ async function deletedStoredBackgroundImageData(filename){
 async function displayBackgroundImage(filename){
  var image = await getStoredData(filename);
  var objectURL = URL.createObjectURL(image);
- console.log(image);
- console.log(filename);
- console.log(objectURL);
+ //console.log(image);
+ //console.log(filename);
+ //console.log(objectURL);
  var imageBoxBackground = document.createElement('div');
  var imageBoxBackgroundSelected = document.createElement('div');
  var selectedIconBox = document.createElement('i');
