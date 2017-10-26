@@ -386,7 +386,7 @@ function displayFavourite(id, title, url, icon) {
     } else {
       option2.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode);
     }
-    browser.storage.local.remove("startpagesettings");
+    browser.storage.local.remove(title);
   })
 
   favouritebox.addEventListener('mouseenter',(e) => {
