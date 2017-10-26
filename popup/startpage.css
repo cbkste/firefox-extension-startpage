@@ -19,7 +19,10 @@ body {
   padding: 2px;
   height: inherit;
 }*/
-
+body {
+  margin-left: 0px;
+  margin-right: 0px;
+}
 .outer-wrapper {
   overflow: auto;
   width: 100%;

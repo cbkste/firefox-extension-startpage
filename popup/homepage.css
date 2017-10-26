@@ -26,7 +26,8 @@
 .settings i{
   padding-right: 20px;
   margin-bottom: 30px;
-    //color: #4fbdbc;
+  //color: #4fbdbc;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .favourite-container, .new-favourite-container {
@@ -114,6 +115,9 @@
 .settings-container {
   display: none;
   padding-bottom: 30px;
+  border-bottom: 2px solid black;
+  margin-bottom: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .image-drop-zone {
@@ -123,6 +127,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AswK4SAFXuAf8EPy+xAAAAAElFTkSuQmCC) repeat;
 }
 
 .image-display-zone {
@@ -136,4 +141,12 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+.startpage-container {
+padding-top: 30px;
+background: url(#) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }

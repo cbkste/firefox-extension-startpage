@@ -14,6 +14,7 @@ var settingsUpdateBtn = document.querySelector('input[id="UpdateSettingsBtn"]');
 var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:checked');
 var backgroundImageDropZone = document.querySelector('.image-drop-zone');
 var backgroundImageDisplayZone = document.querySelector('.image-display-zone');
+var startpageContainerHTML = document.querySelector('.startpage-container');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -48,8 +49,9 @@ function defaultEventListener() {
 
 initialize();
 
-function initialize() {
+async function initialize() {
   //createAndSaveImageStore("background-images",imageStores.collectedBlobs,"init");
+  await setupBackgroundImages();
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
   gettingSettingsItem.then((result) => {
@@ -116,7 +118,6 @@ function updateUi(newCssClass){
 }
 
 function EditOverlay() {
-  var startpageContainerHTML = document.querySelector('.startpage-container');
   var bool = startpageContainerHTML.classList.contains('edit-mode');
   if(bool){
     removeEditOverlay();
@@ -131,7 +132,6 @@ function EditOverlay() {
 }
 
 function removeEditOverlay() {
-  var startpageContainerHTML = document.querySelector('.startpage-container');
   startpageContainerHTML.setAttribute("style", "background-color: white;");
   startpageContainerHTML.setAttribute('class','startpage-container');
   var newFavouriteContainerHTML = document.querySelector('.new-favourite-container');
@@ -239,7 +239,7 @@ function generateValidUrl(url) {
     if(url.startsWith('www.')){
       createCorrectUrl = "https://" + url;
       return createCorrectUrl;
-    } else if (!url.startsWith('http') && !url.startsWith('https') && url.startsWith('www.')) {
+    } else if (!url.startsWith('http') && !url.startsWith('https') && !url.startsWith('www.')) {
       createCorrectUrl = "https://www." + url;
       return createCorrectUrl;
     } else {
@@ -347,7 +347,6 @@ function displayFavourite(id, title, url, icon) {
   favouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
     console.log("Favourites Box"+evtTgt);
-    var startpageContainerHTML = document.querySelector('.startpage-container');
     var bool = startpageContainerHTML.classList.contains('edit-mode');
     if(bool){
       e.preventDefault();
@@ -377,7 +376,6 @@ function displayFavourite(id, title, url, icon) {
 
   favouritebox.addEventListener('mouseenter',(e) => {
     const evtTgt = e.target;
-    var startpageContainerHTML = document.querySelector('.startpage-container');
     var bool = startpageContainerHTML.classList.contains('edit-mode');
     if(bool){
 
@@ -571,31 +569,60 @@ async function createAndSaveImageStore(filename, file) {
 }
 
 async function getStoredData(filename) {
-  try {
-    const tmpFiles = await IDBFiles.getFileStorage({
-   name: "tmpFiles"
- });
- // filtered count...
- const storedData = await tmpFiles.get(filename);
+    try {
+      const tmpFiles = await IDBFiles.getFileStorage({
+     name: "tmpFiles"
+   });
+   // filtered count...
+   console.log("getStoredData:TempData");
+   console.log(tmpFiles);
+   const storedData = await tmpFiles.get(filename);
 
- if (!storedData) {
-   // No data stored with the specified filename.
- } else if (storedData instanceof Blob) {
-   console.log("storedData instanceof Blob");
-   return storedData;
- } else if (storedData instanceof File) {
-   console.log("storedData instanceof File");
-   return storedData;
- } else if (storedData instanceof IDBFiles.IDBPromisedMutableFile) {
-   console.log("storedData instanceof IDBFiles.IDBPromisedMutableFile");
-   return storedData;
- }
-} catch (err) {
- console.error("Get stored data", err);
- throw err;
+   if (!storedData) {
+     // No data stored with the specified filename.
+   } else if (storedData instanceof Blob) {
+     console.log("storedData instanceof Blob");
+     return storedData;
+   } else if (storedData instanceof File) {
+     console.log("storedData instanceof File");
+     return storedData;
+   } else if (storedData instanceof IDBFiles.IDBPromisedMutableFile) {
+     console.log("storedData instanceof IDBFiles.IDBPromisedMutableFile");
+     return storedData;
+   }
+  } catch (err) {
+   console.error("Get stored data", err);
+   throw err;
+  }
 }
 
+async function setupBackgroundImages() {
+  console.log("setupBackgroundImages: INIT");
+  try {
+      const tmpFiles = await IDBFiles.getFileStorage({name: "tmpFiles"});
+      const storedFiles = await tmpFiles.list();
+      if (storedFiles.length === 0) {
+        console.log("No files stored.\n");
+      } else {
+        console.log("files stored.\n\n");
+        for (const filename of storedFiles) {
+          displayBackgroundImage(filename);
+        }
+      }
+ } catch (err) {
+  console.log("ERROR: exception raised while listing all the stored files:\n");
  }
+}
+
+async function deletedStoredBackgroundImageData(filename){
+  try {
+      const tmpFiles = await IDBFiles.getFileStorage({name: "tmpFiles"});
+      await tmpFiles.remove(filename);
+      console.log("All stored files have been removed.");
+    } catch (err) {
+      console.log("ERROR: exception raised while clearing the stored file");
+    }
+}
 
 async function displayBackgroundImage(filename){
  var image = await getStoredData(filename);
@@ -604,9 +631,29 @@ async function displayBackgroundImage(filename){
  console.log(filename);
  console.log(objectURL);
  var imageBoxBackground = document.createElement('div');
+ var imageBoxBackgroundSelected = document.createElement('div');
+ var selectedIconBox = document.createElement('i');
  imageBoxBackground.setAttribute("class", "grid-33 single-image-zone");
  imageBoxBackground.setAttribute("style", "background-image: url("+objectURL+')');
+ imageBoxBackgroundSelected.setAttribute("style", "display: none");
+ imageBoxBackgroundSelected.setAttribute('class','single-image-zone-icon');
+ selectedIconBox.setAttribute('aria-hidden','true');
+ selectedIconBox.setAttribute('class','fa fa-2x fa-check-circle');
+ selectedIconBox.setAttribute("style", "color: green");
+ imageBoxBackgroundSelected.appendChild(selectedIconBox);
+ imageBoxBackground.appendChild(imageBoxBackgroundSelected);
  backgroundImageDisplayZone.appendChild(imageBoxBackground);
+
+ imageBoxBackground.addEventListener('click',() => {
+   console.log("CLick imageBoxBackground");
+   var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
+   console.log(backgroundImageDivs);
+   for (i = 0; i < backgroundImageDivs.length; ++i) {
+     backgroundImageDivs[i].setAttribute("style", "display: none;");
+   }
+   imageBoxBackgroundSelected.setAttribute("style", "display: block;");
+   startpageContainerHTML.setAttribute("style", "background-image: url("+objectURL+')');
+ });
 }
 /* Clear all notes from the display/storage */
 function clearAll() {
