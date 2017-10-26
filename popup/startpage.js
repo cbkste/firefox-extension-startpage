@@ -26,6 +26,7 @@ var changeLinksToHttps = true;
 
 var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
+var settingsCurrentSelectedBackground;
 
 imageStores = {
   collectedBlobs: [],
@@ -61,10 +62,12 @@ async function initialize() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1", "4","6");
+      storeSettings("1", "4","6","");
     } else {
       settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
       settingsRowCountLimit = result.startpagesettings.RowCount;
+      console.log(result.startpagesettings.SelectedBackgroundImage);
+      settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
     }
     console.log("getNewCssClass"+settingsRowCountLimit);
     getNewCssClass(settingsRowCountLimit);
@@ -106,7 +109,7 @@ function OpenSettings() {
     //   }
     // }, onError);
        if(!settingsRowCountLimit) {
-         storeSettings("1","4","6");
+         storeSettings("1","4","6","");
          settingsRowCountTextField.value = "4";
        } else {
          settingsRowCountTextField.value = settingsRowCountLimit;
@@ -160,7 +163,6 @@ function switchIconsToEditAndDelete() {
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
     FavouritesIconDivs[i].setAttribute('style','display: none');
   }
-
 }
 
 function switchIconsToLogo() {
@@ -241,11 +243,12 @@ function storeFavourite(id, title, url, icon) {
   }, onError);
 }
 
-function storeSettings(id, rowCount, backgroundCount) {
+function storeSettings(id, rowCount, backgroundCount, backgroundImage) {
   console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount);
-  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount } });
+  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount,"SelectedBackgroundImage" : backgroundImage } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
+  settingsCurrentSelectedBackground = backgroundImage;
 }
 
 function generateValidUrl(url) {
@@ -487,12 +490,12 @@ function updateSettings(newRowCount) {
   gettingSettingsItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
-      storeSettings("1", newRowCount, "6");
+      storeSettings("1", newRowCount, "6","");
     } else {
       if(result.startpagesettings.RowCount !== newRowCount)
       {
         console.log("Updated Settings");
-        storeSettings("1",newRowCount, "6");
+        storeSettings("1",newRowCount, "6","");
         settingsRowCountTextField.value = newRowCount;
         updateUi(getNewCssClass(newRowCount));
       }
@@ -576,6 +579,13 @@ async function createAndSaveImageStore(filename, file) {
         name: "tmpFiles"
       });
       await tmpFiles.put(filename, file);
+      const storedFiles = await tmpFiles.list();
+      const storedFilesCount = storedFiles.length;
+      console.log(storedFilesCount);
+      if(storedFilesCount > settingsRowCountLimit){
+        console.log("Count Excedded Deleting last image");
+        //await deletedStoredBackgroundImageData();
+      }
       await displayBackgroundImage(filename);
 
     } catch (err) {
@@ -651,7 +661,12 @@ async function displayBackgroundImage(filename){
  var selectedIconBox = document.createElement('i');
  imageBoxBackground.setAttribute("class", "grid-33 single-image-zone");
  imageBoxBackground.setAttribute("style", "background-image: url("+objectURL+')');
- imageBoxBackgroundSelected.setAttribute("style", "display: none");
+ if(settingsCurrentSelectedBackground == filename){
+   imageBoxBackgroundSelected.setAttribute("style", "display: block");
+ } else {
+   imageBoxBackgroundSelected.setAttribute("style", "display: none");
+ }
+
  imageBoxBackgroundSelected.setAttribute('class','single-image-zone-icon');
  selectedIconBox.setAttribute('aria-hidden','true');
  selectedIconBox.setAttribute('class','fa fa-2x fa-check-circle');
@@ -659,6 +674,7 @@ async function displayBackgroundImage(filename){
  imageBoxBackgroundSelected.appendChild(selectedIconBox);
  imageBoxBackground.appendChild(imageBoxBackgroundSelected);
  backgroundImageDisplayZone.appendChild(imageBoxBackground);
+
 
  imageBoxBackground.addEventListener('click',() => {
    console.log("CLick imageBoxBackground");
@@ -669,6 +685,8 @@ async function displayBackgroundImage(filename){
    }
    imageBoxBackgroundSelected.setAttribute("style", "display: block;");
    startpageContainerHTML.setAttribute("style", "background-image: url("+objectURL+')');
+   settingsCurrentSelectedBackground = filename;
+   storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename);
  });
 }
 /* Clear all notes from the display/storage */
