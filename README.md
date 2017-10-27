@@ -9,6 +9,7 @@ The extension includes:
 
 * a browser action with a popup including HTML, CSS, and JS
 * a content script
+* Uses the WebExtensions Storage API to persist the website data.
 
 ## What it shows
 
