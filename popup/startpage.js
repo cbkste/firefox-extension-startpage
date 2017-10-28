@@ -124,18 +124,27 @@ function OpenSettings() {
 }
 
 function updateRowCountAndUiWithSettings(){
-  console.log("updateUiWithSettings");
-  var newRowCountValue = settingsRowCountTextField.value;
-  updateRowCountSettings(newRowCountValue);
+  updateSettings("rowCount");
 }
 
 function updateBackgroundWithSettings(){
-  console.log("updateBackgroundWithSettings");
-  var newBackgroundCountValue = settingsUpdateStoredBackgroundImageCountTextField.value;
-  updateBackgroundImageCountSettings(newBackgroundCountValue);
-
+  updateSettings("backgroundImageCount");
 }
 
+function updateSettings(updatedSettingsType){
+  console.log("updateSettings: "+updatedSettingsType);
+  if(updatedSettingsType == "rowCount"){
+    console.log(updatedSettingsType);
+      var newRowCountValue = settingsRowCountTextField.value;
+      updateSettingsForType(newRowCountValue, updatedSettingsType);
+  }
+
+  if(updatedSettingsType == "backgroundImageCount"){
+    console.log(updatedSettingsType);
+    var newBackgroundCountValue = settingsUpdateStoredBackgroundImageCountTextField.value;
+    updateSettingsForType(newBackgroundCountValue, updatedSettingsType);
+  }
+}
 
 function updateUi(newCssClass){
   var allFavouritesDivs = document.querySelectorAll('.favourite-container');
@@ -496,40 +505,42 @@ function updateFavourite(delNote,newTitle,newBody,icon) {
   }, onError);
 }
 
-function updateRowCountSettings(newRowCount) {
-  console.log()
-  var gettingSettingsItem = browser.storage.local.get("startpagesettings");
-  gettingSettingsItem.then((result) => {
-    var objTest = Object.keys(result);
-    if(objTest.length < 1) {
-      storeSettings("1", newRowCount, settingsBackgroundImageLimit,settingsCurrentSelectedBackground);
-      settingsRowCountTextField.value = newRowCount;
-    } else {
-      if(result.startpagesettings.RowCount !== newRowCount)
-      {
-        console.log("Updated Row Count Settings");
-        storeSettings("1",newRowCount, settingsBackgroundImageLimit,settingsCurrentSelectedBackground);
-        settingsRowCountTextField.value = newRowCount;
-        updateUi(getNewCssClass(newRowCount));
-      }
-    }
-  }, onError);
-}
 
-function updateBackgroundImageCountSettings(newBackgroundImageCount) {
-  console.log()
+function updateSettingsForType(updatedValue, settingsType) {
+  console.log("updateSettingsForType")
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   gettingSettingsItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
-      storeSettings("1", settingsRowCountLimit, newBackgroundImageCount,settingsCurrentSelectedBackground);
-      settingsUpdateStoredBackgroundImageCountTextField.value = newBackgroundImageCount;
+      switch (settingsType) {
+          case "rowCount":
+              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground);
+              settingsRowCountTextField.value = newRowCount;
+              break;
+          case "backgroundImageCount":
+              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground);
+              settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
+              break;
+      }
     } else {
-      if(result.startpagesettings.storedBackgroundImageCount !== newBackgroundImageCount)
-      {
-        console.log("Updated BackgrondImage Count Settings");
-        storeSettings("1",settingsRowCountLimit, newBackgroundImageCount,settingsCurrentSelectedBackground);
-        settingsUpdateStoredBackgroundImageCountTextField.value = newBackgroundImageCount;
+      switch (settingsType) {
+          case "rowCount":
+              if(result.startpagesettings.RowCount !== updatedValue)
+              {
+                console.log("Updated Row Count Settings");
+                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground);
+                settingsRowCountTextField.value = updatedValue;
+                updateUi(getNewCssClass(updatedValue));
+              }
+              break;
+          case "backgroundImageCount":
+              if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
+              {
+                console.log("Updated BackgrondImage Count Settings");
+                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground);
+                settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
+              }
+              break;
       }
     }
   }, onError);
