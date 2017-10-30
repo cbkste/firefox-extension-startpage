@@ -658,6 +658,14 @@ async function createAndSaveImageStore(newFilename, newFile) {
       await tmpFiles.put(newFilename, newFile);
       const storedFiles = await tmpFiles.list();
       const storedFilesCount = storedFiles.length;
+
+      /*
+      TODO: Add date added to File Object, sort and remove oldest
+      not first found in list which isnt current background or new file name
+      */
+      newFile.added = getDateTime();
+      console.log(newFile);
+
       if(storedFilesCount > settingsBackgroundImageLimit){
         for (const filename of storedFiles) {
           if(!imageToRemove){
