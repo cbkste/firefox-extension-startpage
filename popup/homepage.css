@@ -143,10 +143,14 @@
   background-position: center;
 }
 .startpage-container {
-padding-top: 30px;
-position: fixed;
-z-index: -99;
-width: 100%;
-height: 100%;
-background-size: cover;
+  padding-top: 30px;
+  position: fixed;
+  z-index: -99;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.background-image-info-block {
+    display: none;
 }

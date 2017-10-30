@@ -1,6 +1,3 @@
-/* global IDBFiles */
-/* initialise variables */
-
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
 var global_id = "1";
@@ -17,6 +14,8 @@ var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:ch
 var backgroundImageDropZone = document.querySelector('.image-drop-zone');
 var backgroundImageDisplayZone = document.querySelector('.image-display-zone');
 var startpageContainerHTML = document.querySelector('.startpage-container');
+var backgroundImageInfoBlock = document.querySelector('.background-image-info-block');
+var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -29,6 +28,7 @@ var changeLinksToHttps = true;
 var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
+var currentBackgroudnBlobUrl;
 
 imageStores = {
   collectedBlobs: [],
@@ -38,6 +38,16 @@ imageStores = {
 /* generic error handler */
 function onError(error) {
   console.log(error);
+}
+
+function onBackgroundImageSuccess(message) {
+  backgroundImageInfoBlock.setAttribute("style", "display: block;");
+  backgroundImageInfoBlockText.textContent = message;
+}
+
+function onBackgroundImageError(message) {
+  backgroundImageInfoBlock.setAttribute("style", "display: block;");
+  backgroundImageInfoBlockText.text = message;
 }
 
 function defaultEventListener() {
@@ -72,6 +82,12 @@ async function initialize() {
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
     }
+    // if(settingsCurrentSelectedBackground){
+    //   var image = await getStoredData(settingsCurrentSelectedBackground);
+    //   var objectURL = URL.createObjectURL(image);
+    //   currentBackgroudnBlobUrl = objectURL;
+    //   setBackgroundContainerImage(currentBackgroudnBlobUrl);
+    // }
     console.log("getNewCssClass"+settingsRowCountLimit);
     getNewCssClass(settingsRowCountLimit);
   }, onError);
@@ -154,10 +170,10 @@ function updateUi(newCssClass){
   }
 }
 
-function EditOverlay() {
+async function EditOverlay() {
   var bool = startpageContainerHTML.classList.contains('edit-mode');
   if(bool){
-    removeEditOverlay();
+    await removeEditOverlay();
     switchIconsToLogo();
   } else {
     startpageContainerHTML.setAttribute("style", "background-color: grey;");
@@ -168,8 +184,22 @@ function EditOverlay() {
   }
 }
 
-function removeEditOverlay() {
-  startpageContainerHTML.setAttribute("style", "background-color: white;");
+async function removeEditOverlay() {
+  if (settingsCurrentSelectedBackground) {
+    console.log("INSIDE:"+settingsCurrentSelectedBackground);
+    if(currentBackgroudnBlobUrl){
+      console.log("currentBackgroudnBlobUrl:"+currentBackgroudnBlobUrl);
+      setBackgroundContainerImage(currentBackgroudnBlobUrl);
+    } else {
+      console.log("currentBackgroudnBlobUrl2:"+currentBackgroudnBlobUrl)
+      var image = await getStoredData(settingsCurrentSelectedBackground);
+      var objectURL = URL.createObjectURL(image);
+      currentBackgroudnBlobUrl = objectURL;
+      setBackgroundContainerImage(objectURL);
+    }
+  } else {
+    startpageContainerHTML.setAttribute("style", "background-color: white;");
+  }
   startpageContainerHTML.setAttribute('class','startpage-container');
   var newFavouriteContainerHTML = document.querySelector('.new-favourite-container');
   newFavouriteContainerHTML.parentNode.removeChild(newFavouriteContainerHTML);
@@ -615,41 +645,35 @@ function processImageDragOverDropZone(ev){
   ev.preventDefault();
 }
 
-async function createAndSaveImageStore(filename, file) {
-  console.log(filename);
-  console.log(file);
+async function createAndSaveImageStore(newFilename, newFile) {
+  var imageToRemove;
     try {
       const tmpFiles = await IDBFiles.getFileStorage({
         name: "tmpFiles"
       });
-      await tmpFiles.put(filename, file);
+      /*
+      TODO: If Image added is already in Store will
+      still delete image if over limit
+      */
+      await tmpFiles.put(newFilename, newFile);
       const storedFiles = await tmpFiles.list();
       const storedFilesCount = storedFiles.length;
-      console.log(storedFilesCount);
-        /*
-        TODO: If Image added is already in Store will
-        still delete image if over limit
-        */
-      console.log("COunt "+storedFilesCount+", settingsBackgroundImageLimit: "+settingsBackgroundImageLimit);
       if(storedFilesCount > settingsBackgroundImageLimit){
-        console.log("Count Excedded Deleting last image");
-        var lastImageInStore = storedFiles[0];
-        var imageToRemove;
-        if(lastImageInStore != settingsCurrentSelectedBackground){
-          console.log(lastImageInStore);
-          imageToRemove = lastImageInStore;
-        } else {
-          var secondToLastImageInStore = storedFiles[1];
-          console.log(secondToLastImageInStore);
-          imageToRemove = secondToLastImageInStore;
+        for (const filename of storedFiles) {
+          if(!imageToRemove){
+            if(filename != settingsCurrentSelectedBackground && filename != newFilename){
+            imageToRemove = filename;
+          }
         }
-        /*
-        TODO: Delete image div Also
-        */
-        await deletedStoredBackgroundImageData(imageToRemove);
+        }
+        if(imageToRemove){
+          await deletedStoredBackgroundImageData(imageToRemove);
+        } else {
+          onBackgroundImageError("Error Occured When Finding Image To Remove due to Background Image Limit in Settings.");
+        }
       }
-      await displayBackgroundImage(filename);
-
+      await displayBackgroundImage(newFilename);
+      onBackgroundImageSuccess("Image Successfully Added.");
     } catch (err) {
       console.error("File storing error", err);
       throw err;
@@ -708,14 +732,24 @@ async function deletedStoredBackgroundImageData(filename){
       const tmpFiles = await IDBFiles.getFileStorage({name: "tmpFiles"});
       await tmpFiles.remove(filename);
       console.log("stored file has been removed.");
+      deletedStoredBackgroundImageDiv(filename);
     } catch (err) {
       console.log("ERROR: exception raised while clearing the stored file");
       console.log(err);
     }
 }
 
+function deletedStoredBackgroundImageDiv(filename){
+  console.log(filename);
+//  var deletedStoredBackgroundImageDiv = document.getElementById(filename);
+  document.getElementById(filename).remove();
+  // console.log(deletedStoredBackgroundImageDiv);
+  // deletedStoredBackgroundImageDiv.remove();
+}
+
 async function displayBackgroundImage(filename){
  var image = await getStoredData(filename);
+ console.log(image);
  var objectURL = URL.createObjectURL(image);
  //console.log(image);
  //console.log(filename);
@@ -724,6 +758,7 @@ async function displayBackgroundImage(filename){
  var imageBoxBackgroundSelected = document.createElement('div');
  var selectedIconBox = document.createElement('i');
  imageBoxBackground.setAttribute("class", "grid-33 single-image-zone");
+ imageBoxBackground.setAttribute("id", filename);
  imageBoxBackground.setAttribute("style", "background-image: url("+objectURL+')');
  if(settingsCurrentSelectedBackground == filename){
    imageBoxBackgroundSelected.setAttribute("style", "display: block");
@@ -748,11 +783,18 @@ async function displayBackgroundImage(filename){
      backgroundImageDivs[i].setAttribute("style", "display: none;");
    }
    imageBoxBackgroundSelected.setAttribute("style", "display: block;");
-   startpageContainerHTML.setAttribute("style", "background-image: url("+objectURL+')');
+   setBackgroundContainerImage(objectURL);
    settingsCurrentSelectedBackground = filename;
+   currentBackgroudnBlobUrl = objectURL;
    storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename);
  });
 }
+
+function setBackgroundContainerImage(url) {
+  startpageContainerHTML.setAttribute("style", "background-image: url("+url+')');
+}
+
+
 /* Clear all notes from the display/storage */
 function clearAll() {
   while (noteContainer.firstChild) {
