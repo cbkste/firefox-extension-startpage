@@ -16,6 +16,7 @@ var backgroundImageDisplayZone = document.querySelector('.image-display-zone');
 var startpageContainerHTML = document.querySelector('.startpage-container');
 var backgroundImageInfoBlock = document.querySelector('.background-image-info-block');
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
+var welcomeContainer = document.querySelector('.welcome-container');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -24,7 +25,7 @@ var settingsBtn = document.querySelector('.settings-icon');
 var settingsMode = false;
 var currentCssClassSize = "grid-25";
 var changeLinksToHttps = true;
-
+var NoCurrentFavourites = false;
 var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
@@ -106,6 +107,14 @@ async function initialize() {
           displayFavourite("2",noteKey,url,icon);
         }
       }
+      console.log(noteKeys.length);
+      if(noteKeys.length == 1){
+        if(noteKeys[0] == "startpagesettings"){
+          console.log("Empty Favourites");
+          NoCurrentFavourites = true;
+          welcomeContainer.setAttribute("style", "display: block;");
+        }
+      }
   }, onError);
   defaultEventListener();
   //dateTimeContainer.textContent = getDateTime();
@@ -171,8 +180,14 @@ function updateUi(newCssClass){
 }
 
 async function EditOverlay() {
-  var bool = startpageContainerHTML.classList.contains('edit-mode');
-  if(bool){
+  var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
+
+  if(NoCurrentFavourites){
+    welcomeContainer.setAttribute("style", "display: none;");
+    NoCurrentFavourites = false;
+  }
+
+  if(inEditMode){
     await removeEditOverlay();
     switchIconsToLogo();
   } else {

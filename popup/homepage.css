@@ -152,5 +152,40 @@
 }
 
 .background-image-info-block {
-    display: none;
+  display: none;
+}
+
+.welcome-container {
+  display: none;
+}
+
+.welcome-text-icon {
+  background: none repeat scroll 0 0 #F8F8F8;
+  border: 5px solid #DFDFDF;
+  color: #717171;
+  font-size: 13px;
+  letter-spacing: 1px;
+  line-height: 30px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  left: -100px;
+  display: block;
+  padding: 0 20px;
+}
+
+.welcome-text-icon:after{
+    content:'';
+    position:absolute;
+    top:-10px;
+    width:10px;
+    height:10px;
+    border-bottom:5px solid #dfdfdf;
+    border-right:5px solid #dfdfdf;
+    background:#f8f8f8;
+    left:63%;
+    -moz-transform:rotate(225deg);
+    -webkit-transform:rotate(225deg);
+    transform:rotate(225deg);
 }
