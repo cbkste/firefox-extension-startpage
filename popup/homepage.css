@@ -189,3 +189,49 @@
     -webkit-transform:rotate(225deg);
     transform:rotate(225deg);
 }
+
+.welcome-main-container {
+  min-height:200px;
+  /*background: url("/images/settings-background.png");*/
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  padding: 0;
+}
+
+.welcome-main {
+    padding: 0;
+}
+
+.welcome-main-container-left {
+  background-color: rgba(39,40,44,.8);
+  min-height:350px;
+  padding-top: 100px;
+}
+.welcome-main-container-right {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  min-height: 350px;
+  color: white;
+}
+
+
+.welcome-main-container-left p {
+  color: white;
+  background: #ce2745;
+  padding: 2px 8px 0;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+  height: 20px;
+  margin-right: 15px;
+}
+
+.welcome-main-container-left-title, .welcome-main-container-left-icon, .welcome-main-container-left-text {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: white;
+  text-align: center;
+}
