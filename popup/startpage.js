@@ -76,7 +76,6 @@ function defaultWelcomeEventListener() {
 initialize();
 
 async function initialize() {
-  //createAndSaveImageStore("background-images",imageStores.collectedBlobs,"init");
   await setupBackgroundImages();
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
