@@ -17,11 +17,14 @@ var startpageContainerHTML = document.querySelector('.startpage-container');
 var backgroundImageInfoBlock = document.querySelector('.background-image-info-block');
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
 var welcomeContainer = document.querySelector('.welcome-container');
+var welcomeMainContainer = document.querySelector('.welcome-main-container');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
 var editModeBtn = document.querySelector('.edit-icon');
 var settingsBtn = document.querySelector('.settings-icon');
+var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
+var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
 var settingsMode = false;
 var currentCssClassSize = "grid-25";
 var changeLinksToHttps = true;
@@ -61,6 +64,11 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
+}
+
+function defaultWelcomeEventListener() {
+  editModeWelcomeBtn.addEventListener('click', EditOverlay);
+  settingsWelcomeBtn.addEventListener('click', OpenSettings);
 }
 
 /* display previously-saved stored notes on startup */
@@ -113,6 +121,8 @@ async function initialize() {
           console.log("Empty Favourites");
           NoCurrentFavourites = true;
           welcomeContainer.setAttribute("style", "display: block;");
+          welcomeMainContainer.setAttribute("style", "display: block;");
+          defaultWelcomeEventListener();
         }
       }
   }, onError);

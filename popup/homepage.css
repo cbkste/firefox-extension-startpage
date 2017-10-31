@@ -192,6 +192,7 @@
 
 .welcome-main-container {
   min-height:200px;
+  display: none;
   /*background: url("/images/settings-background.png");*/
   background-size: cover;
   background-repeat: no-repeat;
@@ -207,6 +208,7 @@
   background-color: rgba(39,40,44,.8);
   min-height:350px;
   padding-top: 100px;
+  border-right: 1px solid white;
 }
 .welcome-main-container-right {
   justify-content: center;
@@ -214,6 +216,8 @@
   display: flex;
   min-height: 350px;
   color: white;
+  background-color: rgba(39,40,44,.8);
+  border-left: 1px solid white;
 }
 
 
