@@ -257,11 +257,11 @@
   text-align: center;
 }
 
-.settings-title{
+.settings-title, .edit-mode-title {
   display: flex;
 }
 
-.settings-title p{
+.settings-title p, .edit-mode-title p {
   color: white;
   background: #ce2745;
   padding: 2px 45px 0;
@@ -269,4 +269,11 @@
   line-height: 55px;
   font-weight: 800;
   margin-right: 15px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.edit-mode-title-container {
+  display: none;
 }

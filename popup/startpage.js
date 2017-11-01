@@ -18,6 +18,7 @@ var backgroundImageInfoBlock = document.querySelector('.background-image-info-bl
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
 var welcomeContainer = document.querySelector('.welcome-container');
 var welcomeMainContainer = document.querySelector('.welcome-main-container');
+var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -237,7 +238,8 @@ if(settingsMode){
     await removeEditOverlay();
     switchIconsToLogo();
   } else {
-    startpageContainerHTML.setAttribute("style", "background-color: grey;");
+    editModeTitleContainer.setAttribute("style", "display: block;");
+    //startpageContainerHTML.setAttribute("style", "background-color: grey;");
     startpageContainerHTML.setAttribute('class','startpage-container edit-mode');
     displayAddNewFavourite();
     console.log("switchIconsToEditAndDelete");
@@ -251,6 +253,7 @@ async function removeEditOverlay() {
   } else {
     startpageContainerHTML.setAttribute("style", "background-color: white;");
   }
+  editModeTitleContainer.setAttribute("style", "display: none;");
   startpageContainerHTML.setAttribute('class','startpage-container');
   var newFavouriteContainerHTML = document.querySelector('.new-favourite-container');
   newFavouriteContainerHTML.parentNode.removeChild(newFavouriteContainerHTML);
