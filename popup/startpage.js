@@ -73,13 +73,13 @@ function defaultWelcomeEventListener() {
 
 /* display previously-saved stored notes on startup */
 
-initialize();
+initialise();
 
-async function initialize() {
+async function initialise() {
   await setupBackgroundImages();
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
-  gettingSettingsItem.then((result) => {
+  gettingSettingsItem.then(async (result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
@@ -89,6 +89,7 @@ async function initialize() {
       settingsRowCountLimit = result.startpagesettings.RowCount;
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
+      await setupbackgroundInit();
     }
     // if(settingsCurrentSelectedBackground){
     //   var image = await getStoredData(settingsCurrentSelectedBackground);
@@ -114,7 +115,6 @@ async function initialize() {
           displayFavourite("2",noteKey,url,icon);
         }
       }
-      console.log(noteKeys.length);
       if(noteKeys.length == 0 || noteKeys.length == 1){
         if(noteKeys.length == 1){
           if(noteKeys[0] == "startpagesettings"){
@@ -136,6 +136,22 @@ async function initialize() {
   }, onError);
   defaultEventListener();
   //dateTimeContainer.textContent = getDateTime();
+}
+async function setupbackgroundInit(){
+  console.log("Setup Background:"+settingsCurrentSelectedBackground);
+  if (settingsCurrentSelectedBackground) {
+    console.log("INSIDE:"+settingsCurrentSelectedBackground);
+    if(currentBackgroudnBlobUrl){
+      console.log("currentBackgroudnBlobUrl:"+currentBackgroudnBlobUrl);
+      setBackgroundContainerImage(currentBackgroudnBlobUrl);
+    } else {
+      console.log("currentBackgroudnBlobUrl2:"+currentBackgroudnBlobUrl)
+      var image = await getStoredData(settingsCurrentSelectedBackground);
+      var objectURL = URL.createObjectURL(image);
+      currentBackgroudnBlobUrl = objectURL;
+      setBackgroundContainerImage(objectURL);
+    }
+  }
 }
 
 async function OpenSettings() {
@@ -231,17 +247,7 @@ if(settingsMode){
 
 async function removeEditOverlay() {
   if (settingsCurrentSelectedBackground) {
-    console.log("INSIDE:"+settingsCurrentSelectedBackground);
-    if(currentBackgroudnBlobUrl){
-      console.log("currentBackgroudnBlobUrl:"+currentBackgroudnBlobUrl);
-      setBackgroundContainerImage(currentBackgroudnBlobUrl);
-    } else {
-      console.log("currentBackgroudnBlobUrl2:"+currentBackgroudnBlobUrl)
-      var image = await getStoredData(settingsCurrentSelectedBackground);
-      var objectURL = URL.createObjectURL(image);
-      currentBackgroudnBlobUrl = objectURL;
-      setBackgroundContainerImage(objectURL);
-    }
+    await setupbackgroundInit();
   } else {
     startpageContainerHTML.setAttribute("style", "background-color: white;");
   }
