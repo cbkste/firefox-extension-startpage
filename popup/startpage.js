@@ -115,15 +115,24 @@ async function initialize() {
         }
       }
       console.log(noteKeys.length);
-      if(noteKeys.length == 1){
-        if(noteKeys[0] == "startpagesettings"){
-          console.log("Empty Favourites");
-          NoCurrentFavourites = true;
-          welcomeContainer.setAttribute("style", "display: block;");
-          welcomeMainContainer.setAttribute("style", "display: block;");
-          defaultWelcomeEventListener();
+      if(noteKeys.length == 0 || noteKeys.length == 1){
+        if(noteKeys.length == 1){
+          if(noteKeys[0] == "startpagesettings"){
+            console.log("Empty Favourites");
+            NoCurrentFavourites = true;
+            welcomeContainer.setAttribute("style", "display: block;");
+            welcomeMainContainer.setAttribute("style", "display: block;");
+            defaultWelcomeEventListener();
+          }
         }
-      }
+        if(noteKeys.length == 0){
+            console.log("Empty Favourites");
+            NoCurrentFavourites = true;
+            welcomeContainer.setAttribute("style", "display: block;");
+            welcomeMainContainer.setAttribute("style", "display: block;");
+            defaultWelcomeEventListener();
+        }
+    }
   }, onError);
   defaultEventListener();
   //dateTimeContainer.textContent = getDateTime();
