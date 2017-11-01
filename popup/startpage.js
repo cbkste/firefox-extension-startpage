@@ -45,12 +45,12 @@ function onError(error) {
 }
 
 function onBackgroundImageSuccess(message) {
-  backgroundImageInfoBlock.setAttribute("style", "display: block;");
+  backgroundImageInfoBlock.setAttribute("style", "display: flex;");
   backgroundImageInfoBlockText.textContent = message;
 }
 
 function onBackgroundImageError(message) {
-  backgroundImageInfoBlock.setAttribute("style", "display: block;");
+  backgroundImageInfoBlock.setAttribute("style", "display: flex;");
   backgroundImageInfoBlockText.text = message;
 }
 
@@ -138,7 +138,14 @@ async function initialize() {
   //dateTimeContainer.textContent = getDateTime();
 }
 
-function OpenSettings() {
+async function OpenSettings() {
+  var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
+
+  if(inEditMode){
+    await removeEditOverlay();
+    switchIconsToLogo();
+  }
+
   if(settingsMode){
     settingsContainer.setAttribute("style", "display: none;");
     settingsMode = false;
@@ -204,6 +211,11 @@ async function EditOverlay() {
     welcomeContainer.setAttribute("style", "display: none;");
     NoCurrentFavourites = false;
   }
+
+if(settingsMode){
+  settingsContainer.setAttribute("style", "display: none;");
+  settingsMode = false;
+}
 
   if(inEditMode){
     await removeEditOverlay();
