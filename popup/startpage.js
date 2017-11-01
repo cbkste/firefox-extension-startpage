@@ -239,7 +239,7 @@ if(settingsMode){
     switchIconsToLogo();
   } else {
     editModeTitleContainer.setAttribute("style", "display: block;");
-    //startpageContainerHTML.setAttribute("style", "background-color: grey;");
+    //startpageContainerHTML.setAttribute("style", "background-color: rgba(192,192,192, 0.2);");
     startpageContainerHTML.setAttribute('class','startpage-container edit-mode');
     displayAddNewFavourite();
     console.log("switchIconsToEditAndDelete");

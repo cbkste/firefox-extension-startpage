@@ -57,10 +57,20 @@
           <input type="radio" name="itemsPerRowRadio" value="Single" checked> Single<br>
           <input type="radio" name="itemsPerRowRadio" value="Custom"> Custom<br>
         </div>
-        <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
+        <div class="ItemsPerRowCountContainer">
+          <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
+          <div class="tooltip"><i class="fa fa-info"></i>
+            <span class="tooltiptext">Set Number of Favourites to appear on each Row</span>
+          </div>
+        </div>
         <input type="text" name="ItemsPerRowCountTextBox" value="">
         <input id="UpdateSettingsRowCountBtn" type="submit" value="Update Items">
-        <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
+        <div class="StoredBackgroundImagesCountContainer">
+          <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
+            <div class="tooltip"><i class="fa fa-info"></i>
+              <span class="tooltiptext">Set Number of Stored Background Images, If Limit is exceeded oldest stored Image will be removed.</span>
+            </div>
+        </div>
         <input type="text" name="StoredBackgroundImagesCountTextBox" value="">
         <input id="UpdateStoredBackgroundImagesBtn" type="submit" value="Update Background Images">
       </div>
@@ -91,7 +101,7 @@
                 <p>SETTINGS</p>
               </div>
               <div class="grid-100 welcome-main-container-left-text">
-                <h1>Click Settings to open and edit saved Settings</h1>
+                <h1>Click Settings to edit saved current Settings and Add a Background Image</h1>
               </div>
         </div>
         <div class="grid-50 welcome-main-container-right">
@@ -104,7 +114,7 @@
                 <p>ADD/EDIT FAVOURITES</p>
               </div>
               <div class="grid-100 welcome-main-container-left-text">
-                <h1>Click Edit Icon to Add or Edit New Favourites</h1>
+                <h1>Click Edit Icon to Add or Edit Favourites</h1>
               </div>
         </div>
         <div class="grid-50 welcome-main-container-right">
