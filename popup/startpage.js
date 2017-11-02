@@ -163,6 +163,30 @@ function CloseAddNewFavouritesOverlay() {
   newFavouriteOverlayContainer.setAttribute("style", "display: none;");
 }
 
+function getBrowsingHisotyForLast20Sites(){
+  var list = document.getElementById('browsing-history-container');
+
+  var searchingHistory = browser.history.search({maxResults: 20});
+    searchingHistory.then((results) => {
+    // What to show if there are no results.
+    if (results.length < 1) {
+      no_history(hostname);
+    } else {
+      for (var k in results) {
+        var history = results[k];
+        var li = document.createElement('p');
+        var a = document.createElement('a');
+        var url = document.createTextNode(history.url);
+        a.href = history.url;
+        a.target = '_blank';
+        a.appendChild(url);
+        li.appendChild(a);
+        list.appendChild(li);
+      }
+    }
+});
+}
+
 async function OpenSettings() {
   var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
 
@@ -328,6 +352,7 @@ function displayAddNewFavourite() {
   newfavouritecontainer.addEventListener('click',(e) => {
     const evtTgt = e.target;
     console.log("NEW Favourite Box Selected"+evtTgt);
+    getBrowsingHisotyForLast20Sites();
     newFavouriteOverlayContainer.setAttribute("style","display:block");
   })
 }
