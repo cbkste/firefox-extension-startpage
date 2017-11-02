@@ -166,7 +166,7 @@ function CloseAddNewFavouritesOverlay() {
 function getBrowsingHisotyForLast20Sites(){
   var list = document.getElementById('browsing-history-container');
 
-  var searchingHistory = browser.history.search({maxResults: 20});
+  var searchingHistory = browser.history.search({text: "", maxResults: 20});
     searchingHistory.then((results) => {
     // What to show if there are no results.
     if (results.length < 1) {
