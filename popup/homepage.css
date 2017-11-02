@@ -364,6 +364,10 @@
   margin-top: 130px;
 }
 
+.browsing-history-item-container {
+  margin-bottom: 5px;
+}
+
 .outer-wrapper {
   display:none;
 }

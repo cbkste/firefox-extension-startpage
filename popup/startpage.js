@@ -22,6 +22,8 @@ var editModeTitleContainer = document.querySelector('.edit-mode-title-container'
 var newFavouriteOverlayContainer = document.querySelector('.add-overlay-container');
 var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-box-close');
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
+var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
+var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
 
 
 var clearBtn = document.querySelector('.clear');
@@ -166,14 +168,26 @@ function CloseAddNewFavouritesOverlay() {
 }
 
 function getBrowsingHisotyForLast20Sites(){
-  var searchingHistory = browser.history.search({text: "", maxResults: 20});
+  var searchingHistory = browser.history.search({text: "", maxResults: 10});
     searchingHistory.then((results) => {
     // What to show if there are no results.
     if (results.length < 1) {
-      no_history(hostname);
+      var NoResultsContainer = document.createElement('div');
+      NoResultsContainer.setAttribute('class','grid-100');
+      NoResultsContainer.textContent = "No History Found";
+      BrowsingHistoryList.appendChild(NoResultsContainer);
     } else {
       for (var k in results) {
         var history = results[k];
+        var divContainer = document.createElement('div');
+        var divIcon = document.createElement('div');
+        var addIcon = document.createElement('i');
+        var divLink = document.createElement('div');
+        divContainer.setAttribute('class','grid-100 browsing-history-item-container');
+        divIcon.setAttribute('class','grid-5 browsing-history-item-icon');
+        addIcon.setAttribute('class','fa fa-2x fa-check-circle');
+        addIcon.setAttribute('aria-hidden','true');
+        divLink.setAttribute('class','grid-95');
         var li = document.createElement('p');
         var a = document.createElement('a');
         var url = document.createTextNode(history.url);
@@ -181,7 +195,32 @@ function getBrowsingHisotyForLast20Sites(){
         a.target = '_blank';
         a.appendChild(url);
         li.appendChild(a);
-        BrowsingHistoryList.appendChild(li);
+        divLink.appendChild(li);
+        divIcon.appendChild(addIcon);
+        divContainer.appendChild(divIcon);
+        divContainer.appendChild(divIcon);
+        divContainer.appendChild(divLink);
+        BrowsingHistoryList.appendChild(divContainer);
+
+        divIcon.addEventListener('click',(e) => {
+          var option1 = e.target.nextSibling;
+
+          var browsingHistoryDiv = document.querySelectorAll('.browsing-history-item-icon');
+          for (i = 0; i < browsingHistoryDiv.length; ++i) {
+            browsingHistoryDiv[i].setAttribute('style','color: black;');
+          }
+
+          if(!option1){
+            var option2 = e.target.parentNode.parentNode;
+            var option2Parent = e.target.parentNode.parentNode.children[1];
+            newFavouriteUrlTextField.value = option2Parent.innerText;
+            e.target.parentNode.setAttribute('style','color: green;');
+          } else {
+            newFavouriteUrlTextField.value = option1.innerText;
+            e.target.setAttribute('style','color: green;');
+          }
+
+        });
       }
     }
 });
