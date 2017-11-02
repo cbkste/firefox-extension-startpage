@@ -21,6 +21,7 @@ var welcomeMainContainer = document.querySelector('.welcome-main-container');
 var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
 var newFavouriteOverlayContainer = document.querySelector('.add-overlay-container');
 var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-box-close');
+var BrowsingHistoryList = document.getElementById('browsing-history-container');
 
 
 var clearBtn = document.querySelector('.clear');
@@ -161,11 +162,10 @@ async function setupbackgroundInit(){
 
 function CloseAddNewFavouritesOverlay() {
   newFavouriteOverlayContainer.setAttribute("style", "display: none;");
+  BrowsingHistoryList.innerHTML = "";
 }
 
 function getBrowsingHisotyForLast20Sites(){
-  var list = document.getElementById('browsing-history-container');
-
   var searchingHistory = browser.history.search({text: "", maxResults: 20});
     searchingHistory.then((results) => {
     // What to show if there are no results.
@@ -181,7 +181,7 @@ function getBrowsingHisotyForLast20Sites(){
         a.target = '_blank';
         a.appendChild(url);
         li.appendChild(a);
-        list.appendChild(li);
+        BrowsingHistoryList.appendChild(li);
       }
     }
 });
