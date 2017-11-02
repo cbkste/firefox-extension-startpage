@@ -257,11 +257,16 @@
   text-align: center;
 }
 
-.settings-title, .edit-mode-title {
+.settings-title, .edit-mode-title, .add-overlay-box-title, .add-overlay-box-close {
   display: flex;
 }
 
-.settings-title p, .edit-mode-title p {
+.add-overlay-box-close {
+  justify-content: center;
+  align-items: center;
+}
+
+.settings-title p, .edit-mode-title p, .add-overlay-box-title p {
   color: white;
   background: #ce2745;
   padding: 2px 45px 0;
@@ -269,6 +274,18 @@
   line-height: 55px;
   font-weight: 800;
   margin-right: 15px;
+  border-radius: 7px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.add-overlay-box-close i {
+  color: white;
+  background: #ce2745;
+  padding: 2px 10px 0;
+  font-size: 40px;
+  line-height: 55px;
+  font-weight: 800;
   border-radius: 7px;
   margin-bottom: 10px;
   margin-top: 10px;
@@ -319,6 +336,34 @@
   margin-top: 4px;
 }
 
-.ItemsPerRowCountContainer, .StoredBackgroundImagesCountContainer {
+.ItemsPerRowCountContainer, .StoredBackgroundImagesCountContainer, .BackgroundImageTextBlockContainer, .add-favourite-details-form {
   display: flex;
+}
+
+.add-overlay-container {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+
+.add-overlay-box {
+  position: fixed;
+  display: block;
+  height: 50%;
+  background-color: white;
+  z-index: 2;
+  border: 1px solid black;
+  border-radius: 7px;
+  margin-top: 130px;
+}
+
+.outer-wrapper {
+  display:none;
 }

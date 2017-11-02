@@ -19,6 +19,9 @@ var backgroundImageInfoBlockText = document.querySelector('.background-image-inf
 var welcomeContainer = document.querySelector('.welcome-container');
 var welcomeMainContainer = document.querySelector('.welcome-main-container');
 var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
+var newFavouriteOverlayContainer = document.querySelector('.add-overlay-container');
+var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-box-close');
+
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -65,6 +68,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
+  newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
 }
 
 function defaultWelcomeEventListener() {
@@ -153,6 +157,10 @@ async function setupbackgroundInit(){
       setBackgroundContainerImage(objectURL);
     }
   }
+}
+
+function CloseAddNewFavouritesOverlay() {
+  newFavouriteOverlayContainer.setAttribute("style", "display: none;");
 }
 
 async function OpenSettings() {
@@ -320,6 +328,7 @@ function displayAddNewFavourite() {
   newfavouritecontainer.addEventListener('click',(e) => {
     const evtTgt = e.target;
     console.log("NEW Favourite Box Selected"+evtTgt);
+    newFavouriteOverlayContainer.setAttribute("style","display:block");
   })
 }
 
