@@ -356,16 +356,20 @@
 .add-overlay-box {
   position: fixed;
   display: block;
-  height: 50%;
   background-color: white;
   z-index: 2;
   border: 1px solid black;
   border-radius: 7px;
   margin-top: 130px;
+  padding-bottom: 50px;
 }
 
 .browsing-history-item-container {
   margin-bottom: 5px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .outer-wrapper {

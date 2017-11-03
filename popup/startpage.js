@@ -167,63 +167,57 @@ function CloseAddNewFavouritesOverlay() {
   BrowsingHistoryList.innerHTML = "";
 }
 
-function getBrowsingHisotyForLast20Sites(){
-  var searchingHistory = browser.history.search({text: "", maxResults: 10});
+function getRecentBrowsingHisoty(count){
+  var searchingHistory = browser.history.search({text: "", maxResults: count});
     searchingHistory.then((results) => {
     // What to show if there are no results.
     if (results.length < 1) {
       var NoResultsContainer = document.createElement('div');
       NoResultsContainer.setAttribute('class','grid-100');
-      NoResultsContainer.textContent = "No History Found";
+      NoResultsContainer.textContent = "No Recent History Found";
       BrowsingHistoryList.appendChild(NoResultsContainer);
     } else {
       for (var k in results) {
-        var history = results[k];
-        var divContainer = document.createElement('div');
-        var divIcon = document.createElement('div');
-        var addIcon = document.createElement('i');
-        var divLink = document.createElement('div');
-        divContainer.setAttribute('class','grid-100 browsing-history-item-container');
-        divIcon.setAttribute('class','grid-5 browsing-history-item-icon');
-        addIcon.setAttribute('class','fa fa-2x fa-check-circle');
-        addIcon.setAttribute('aria-hidden','true');
-        divLink.setAttribute('class','grid-95');
-        var li = document.createElement('p');
-        var a = document.createElement('a');
-        var url = document.createTextNode(history.url);
-        a.href = history.url;
-        a.target = '_blank';
-        a.appendChild(url);
-        li.appendChild(a);
-        divLink.appendChild(li);
-        divIcon.appendChild(addIcon);
-        divContainer.appendChild(divIcon);
-        divContainer.appendChild(divIcon);
-        divContainer.appendChild(divLink);
-        BrowsingHistoryList.appendChild(divContainer);
-
-        divIcon.addEventListener('click',(e) => {
-          var option1 = e.target.nextSibling;
-
-          var browsingHistoryDiv = document.querySelectorAll('.browsing-history-item-icon');
-          for (i = 0; i < browsingHistoryDiv.length; ++i) {
-            browsingHistoryDiv[i].setAttribute('style','color: black;');
-          }
-
-          if(!option1){
-            var option2 = e.target.parentNode.parentNode;
-            var option2Parent = e.target.parentNode.parentNode.children[1];
-            newFavouriteUrlTextField.value = option2Parent.innerText;
-            e.target.parentNode.setAttribute('style','color: green;');
-          } else {
-            newFavouriteUrlTextField.value = option1.innerText;
-            e.target.setAttribute('style','color: green;');
-          }
-
-        });
+        createBrowsingHistoryDiv(results[k]);
       }
     }
 });
+}
+
+function createBrowsingHistoryDiv(history) {
+  var divContainer = document.createElement('div');
+  var divIcon = document.createElement('div');
+  var addIcon = document.createElement('i');
+  var divLink = document.createElement('div');
+  divContainer.setAttribute('class','grid-50 browsing-history-item-container');
+  divIcon.setAttribute('class','grid-5 browsing-history-item-icon');
+  addIcon.setAttribute('class','fa fa-check-circle');
+  addIcon.setAttribute('aria-hidden','true');
+  divLink.setAttribute('class','grid-95');
+  var li = document.createElement('p');
+  var a = document.createElement('a');
+  var url = document.createTextNode(history.url);
+  a.href = history.url;
+  a.target = '_blank';
+  a.appendChild(url);
+  li.appendChild(a);
+  divLink.appendChild(li);
+  divIcon.appendChild(addIcon);
+  divContainer.appendChild(divIcon);
+  divContainer.appendChild(divIcon);
+  divContainer.appendChild(divLink);
+  BrowsingHistoryList.appendChild(divContainer);
+
+  addIcon.addEventListener('click',(e) => {
+    var browsingHistoryDiv = document.querySelectorAll('.browsing-history-item-icon');
+    for (i = 0; i < browsingHistoryDiv.length; ++i) {
+      browsingHistoryDiv[i].setAttribute('style','color: black;');
+    }
+     newFavouriteUrlTextField.value = history.url;
+     newFavouriteTitleTextField.value = a.hostname;
+
+     e.target.parentNode.setAttribute('style','color: green;');
+  });
 }
 
 async function OpenSettings() {
@@ -391,7 +385,7 @@ function displayAddNewFavourite() {
   newfavouritecontainer.addEventListener('click',(e) => {
     const evtTgt = e.target;
     console.log("NEW Favourite Box Selected"+evtTgt);
-    getBrowsingHisotyForLast20Sites();
+    getRecentBrowsingHisoty(16);
     newFavouriteOverlayContainer.setAttribute("style","display:block");
   })
 }
