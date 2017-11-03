@@ -96,19 +96,12 @@ async function initialise() {
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       await setupbackgroundInit();
     }
-    // if(settingsCurrentSelectedBackground){
-    //   var image = await getStoredData(settingsCurrentSelectedBackground);
-    //   var objectURL = URL.createObjectURL(image);
-    //   currentBackgroudnBlobUrl = objectURL;
-    //   setBackgroundContainerImage(currentBackgroudnBlobUrl);
-    // }
-    console.log("getNewCssClass"+settingsRowCountLimit);
-    getNewCssClass(settingsRowCountLimit);
-    console.log("INIT:"+currentCssClassSize);
   }, onError);
 
   var gettingAllStorageItems = browser.storage.local.get(null);
   gettingAllStorageItems.then((results) => {
+    getNewCssClass(settingsRowCountLimit);
+    console.log("INIT:"+currentCssClassSize);
     var noteKeys = Object.keys(results);
     for (let noteKey of noteKeys) {
         if(noteKey !== "startpagesettings"){
