@@ -41,11 +41,6 @@ var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
 
-imageStores = {
-  collectedBlobs: [],
-  lastMessage: undefined,
-};
-
 /* generic error handler */
 function onError(error) {
   console.log(error);
@@ -190,8 +185,8 @@ function createBrowsingHistoryDiv(history) {
   var addIcon = document.createElement('i');
   var divLink = document.createElement('div');
   divContainer.setAttribute('class','grid-50 browsing-history-item-container');
-  divIcon.setAttribute('class','grid-5 browsing-history-item-icon');
-  addIcon.setAttribute('class','fa fa-check-circle');
+  divIcon.setAttribute('class','grid-5 browsing-history-item-icon-container');
+  addIcon.setAttribute('class','fa fa-check-circle browsing-history-item-icon');
   addIcon.setAttribute('aria-hidden','true');
   divLink.setAttribute('class','grid-95');
   var li = document.createElement('p');
@@ -208,15 +203,21 @@ function createBrowsingHistoryDiv(history) {
   divContainer.appendChild(divLink);
   BrowsingHistoryList.appendChild(divContainer);
 
-  addIcon.addEventListener('click',(e) => {
-    var browsingHistoryDiv = document.querySelectorAll('.browsing-history-item-icon');
+  divIcon.addEventListener('click',(e) => {
+    var browsingHistoryDiv = document.querySelectorAll('.browsing-history-item-icon-container');
     for (i = 0; i < browsingHistoryDiv.length; ++i) {
       browsingHistoryDiv[i].setAttribute('style','color: black;');
     }
      newFavouriteUrlTextField.value = history.url;
      newFavouriteTitleTextField.value = a.hostname;
 
-     e.target.parentNode.setAttribute('style','color: green;');
+     var correctNode = e.target.classList.contains('browsing-history-item-icon');
+
+     if(correctNode) {
+       e.target.parentNode.setAttribute('style','color: green;');
+     } else {
+       e.target.setAttribute('style','color: green;');
+     }
   });
 }
 
@@ -352,7 +353,6 @@ function getDateTime(){
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       return dateTime = date+' '+time;
 }
-
 
 function displayAddNewFavourite() {
   var newfavouritecontainer = document.createElement('div');
