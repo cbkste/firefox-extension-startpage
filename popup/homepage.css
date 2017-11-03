@@ -78,7 +78,7 @@
 .favourite-box-title, .new-favourite-box-title {
   min-height: 30px;
   text-align: center;
-  background-color: #4fbdbc;
+  background-color: #ce2745;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -336,7 +336,12 @@
   margin-top: 4px;
 }
 
-.ItemsPerRowCountContainer, .StoredBackgroundImagesCountContainer, .BackgroundImageTextBlockContainer, .add-favourite-details-form {
+.ItemsPerRowCountContainer,
+.StoredBackgroundImagesCountContainer,
+.BackgroundImageTextBlockContainer,
+.add-favourite-details-form,
+.add-favourite-details-form-url,
+.add-favourite-details-form-title {
   display: flex;
 }
 
