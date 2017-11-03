@@ -24,7 +24,8 @@ var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
 var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
-
+var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
+var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -67,6 +68,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
+  addNewFavouriteBtn.addEventListener('click', createNewFavourite);
 }
 
 function defaultWelcomeEventListener() {
@@ -102,6 +104,7 @@ async function initialise() {
     // }
     console.log("getNewCssClass"+settingsRowCountLimit);
     getNewCssClass(settingsRowCountLimit);
+    console.log("INIT:"+currentCssClassSize);
   }, onError);
 
   var gettingAllStorageItems = browser.storage.local.get(null);
@@ -125,7 +128,6 @@ async function initialise() {
             NoCurrentFavourites = true;
             welcomeContainer.setAttribute("style", "display: block;");
             welcomeMainContainer.setAttribute("style", "display: block;");
-            defaultWelcomeEventListener();
           }
         }
         if(noteKeys.length == 0){
@@ -133,8 +135,8 @@ async function initialise() {
             NoCurrentFavourites = true;
             welcomeContainer.setAttribute("style", "display: block;");
             welcomeMainContainer.setAttribute("style", "display: block;");
-            defaultWelcomeEventListener();
         }
+        defaultWelcomeEventListener();
     }
   }, onError);
   defaultEventListener();
@@ -361,7 +363,8 @@ function displayAddNewFavourite() {
   var favouriteIconbox = document.createElement('i');
   var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
-  newfavouritecontainer.setAttribute('class','grid-25 tablet-grid-33 new-favourite-container');
+  var cssClass = currentCssClassSize + " tablet-grid-33 new-favourite-container";
+  newfavouritecontainer.setAttribute('class',cssClass);
   newfavouritebox.setAttribute('class','new-favourite-box');
   //newfavouritebox.setAttribute('href', "#");
   favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
@@ -407,6 +410,30 @@ function addFavourite() {
   }, onError);
 }
 
+function addNewFavourite(title,url,icon) {
+  var gettingItem = browser.storage.local.get(title);
+  console.log(icon);
+  gettingItem.then((result) => {
+    var objTest = Object.keys(result);
+    if(objTest.length < 1 && title !== '' && url !== '') {
+      newFavouriteTitleTextField.value = '';
+      newFavouriteUrlTextField.value = '';
+      storeFavourite("1",title,url,icon);
+    }
+  }, onError);
+}
+
+function createNewFavourite(){
+  var title = newFavouriteTitleTextField.value;
+  var url = newFavouriteUrlTextField.value;
+  var icon = NewFavouriteIconTextField.value;
+
+  if(icon == ''){
+    icon = "fa-steam-square";
+  }
+  addNewFavourite(title,url,icon)
+}
+
 /* function to store a new favourite in storage */
 function storeFavourite(id, title, url, icon) {
   var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon} });
@@ -444,7 +471,7 @@ function generateValidUrl(url) {
 
 function displayFavourite(id, title, url, icon) {
   var createCorrectUrl = generateValidUrl(url);
-
+  console.log("displayFavourite: "+currentCssClassSize);
   //console.log(itemsPerRowRadio.value);
   //console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
   /* create note display box */
