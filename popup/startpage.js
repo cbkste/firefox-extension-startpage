@@ -26,6 +26,8 @@ var newFavouriteTitleTextField = document.querySelector('input[name="NewFavourit
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
 var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
+var iconColourExampleTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
+var iconColourExampleDiv = document.querySelector('.icon-colour-example');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -69,6 +71,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
   addNewFavouriteBtn.addEventListener('click', createNewFavourite);
+  iconColourExampleTextField.addEventListener('keyup', updateIconColourExampleDiv);
 }
 
 function defaultWelcomeEventListener() {
@@ -110,8 +113,9 @@ async function initialise() {
           var text = results[noteKey].text;
           var url = results[noteKey].url;
           var icon = results[noteKey].icon;
+          var iconColour = results[noteKey].iconColour;
           //console.log(results[noteKey]);
-          displayFavourite("2",noteKey,url,icon);
+          displayFavourite("2",noteKey,url,icon,iconColour);
         }
       }
       if(noteKeys.length == 0 || noteKeys.length == 1){
@@ -327,7 +331,8 @@ function switchIconsToEditAndDelete() {
   }
   var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    FavouritesIconDivs[i].setAttribute('style','display: none');
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style");
+    FavouritesIconDivs[i].setAttribute('style',iconcolour+"; display: none");
   }
 }
 
@@ -338,7 +343,8 @@ function switchIconsToLogo() {
   }
   var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    FavouritesIconDivs[i].setAttribute('style','display: inline-block');
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style");
+    FavouritesIconDivs[i].setAttribute('style',iconcolour+";display: inline-block");
   }
 }
 
@@ -398,12 +404,12 @@ function addFavourite() {
     if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
       inputTitle.value = '';
       inputBody.value = '';
-      storeFavourite("1",noteTitle,noteBody,icon);
+      storeFavourite("1",noteTitle,noteBody,icon, "#000000");
     }
   }, onError);
 }
 
-function addNewFavourite(title,url,icon) {
+function addNewFavourite(title,url,icon,iconColour) {
   var gettingItem = browser.storage.local.get(title);
   console.log(icon);
   gettingItem.then((result) => {
@@ -411,7 +417,7 @@ function addNewFavourite(title,url,icon) {
     if(objTest.length < 1 && title !== '' && url !== '') {
       newFavouriteTitleTextField.value = '';
       newFavouriteUrlTextField.value = '';
-      storeFavourite("1",title,url,icon);
+      storeFavourite("1",title,url,icon,iconColour);
     }
   }, onError);
 }
@@ -420,18 +426,33 @@ function createNewFavourite(){
   var title = newFavouriteTitleTextField.value;
   var url = newFavouriteUrlTextField.value;
   var icon = NewFavouriteIconTextField.value;
+  var iconColour = iconColourExampleTextField.value;
 
-  if(icon == ''){
-    icon = "fa-steam-square";
+  if(iconColour != ''){
+    if(!iconColour.startsWith('#')){
+      iconColour = '#'+iconColour;
+    }
+  } else {
+    iconColour = '#000000'
   }
-  addNewFavourite(title,url,icon)
+
+  addNewFavourite(title,url,icon, iconColour)
+}
+
+/* TODO: Add Debouce */
+function updateIconColourExampleDiv(){
+  var divColour = iconColourExampleTextField.value;
+  if(!divColour.startsWith('#')){
+    divColour = '#'+divColour;
+  }
+  iconColourExampleDiv.setAttribute('style', "background-color:"+divColour);
 }
 
 /* function to store a new favourite in storage */
-function storeFavourite(id, title, url, icon) {
-  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon} });
+function storeFavourite(id, title, url, icon, iconColour) {
+  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon, "iconColour" : iconColour} });
   storingNote.then(() => {
-    displayFavourite(id, title,url, icon);
+    displayFavourite(id, title,url, icon, iconColour);
   }, onError);
 }
 
@@ -462,7 +483,7 @@ function generateValidUrl(url) {
 
 /* function to display a note in the note box */
 
-function displayFavourite(id, title, url, icon) {
+function displayFavourite(id, title, url, icon, iconColour) {
   var createCorrectUrl = generateValidUrl(url);
   console.log("displayFavourite: "+currentCssClassSize);
   //console.log(itemsPerRowRadio.value);
@@ -502,6 +523,8 @@ function displayFavourite(id, title, url, icon) {
   var iconClass = "favourite-icon fa fa-5x "+ icon;
   //console.log(iconClass);
   favouriteIconbox.setAttribute('class',iconClass);
+  favouriteIconbox.setAttribute('style',"color: "+iconColour);
+  console.log(iconColour);
   favouriteIconbox.setAttribute('aria-hidden','true');
   editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
   editIconbox.setAttribute('aria-hidden','true');
