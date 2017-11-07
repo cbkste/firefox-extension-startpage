@@ -24,6 +24,17 @@ var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-
 var editCurrentFavouriteOverlayContainer = document.querySelector('.edit-overlay-container');
 var editCurrentFavouriteOverlayCloseContainerBtn = document.querySelector('.edit-overlay-box-close');
 
+/** Edit/Update Favourite Box Preview Selectors **/
+//input
+var editCurrentFavouriteTitleTextField = document.querySelector('input[name="EditCurrentFavouriteTitle"]');
+var editCurrentFavouriteUrlTextField = document.querySelector('input[name="EditCurrentFavouriteUrl"]');
+var editCurrentFavouriteIconTextField = document.querySelector('input[name="EditCurrentFavouriteIcon"]');
+var editCurrentFavouriteIconColourTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
+//Preview
+var previewTitle = document.querySelector('.preview-favourite-box-title');
+var previewIcon = document.querySelector('.preview-favourite-icon');
+var previewUrl = document.querySelector('.preview-favourite-box');
+
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
 var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
@@ -46,6 +57,7 @@ var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
+
 
 /* generic error handler */
 function onError(error) {
@@ -76,6 +88,11 @@ function defaultEventListener() {
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseEditCurrentFavouritesOverlay);
   addNewFavouriteBtn.addEventListener('click', createNewFavourite);
   iconColourExampleTextField.addEventListener('keyup', updateIconColourExampleDiv);
+
+  editCurrentFavouriteTitleTextField.addEventListener('keyup', updatePreviewInEditFavouriteTitle);
+  editCurrentFavouriteUrlTextField.addEventListener('keyup', updatePreviewInEditFavouriteUrl);
+  editCurrentFavouriteIconTextField.addEventListener('keyup', updatePreviewInEditFavouriteIcon);
+  editCurrentFavouriteIconColourTextField.addEventListener('keyup', updatePreviewInEditFavouriteIconColour);
 }
 
 function defaultWelcomeEventListener() {
@@ -561,6 +578,7 @@ function displayFavourite(id, title, url, icon, iconColour) {
   favouritecontainer.appendChild(favouritebox);
   favouritesContainer.appendChild(favouritecontainer);
 
+
   note.setAttribute('class','note');
 
   noteH.textContent = title;
@@ -707,6 +725,24 @@ function updateFavourite(delNote,newTitle,newBody,icon) {
       displayFavourite(newTitle, newBody, icon);
     }
   }, onError);
+}
+
+function updatePreviewInEditFavouriteTitle() {
+  var updatedTitle = editCurrentFavouriteTitleTextField.value;
+  console.log(updatedTitle);
+  previewTitle.textContent = updatedTitle;
+}
+
+function updatePreviewInEditFavouriteUrl() {
+
+}
+
+function updatePreviewInEditFavouriteIcon() {
+
+}
+
+function updatePreviewInEditFavouriteIconColour() {
+
 }
 
 
