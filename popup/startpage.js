@@ -29,7 +29,7 @@ var editCurrentFavouriteOverlayCloseContainerBtn = document.querySelector('.edit
 var editCurrentFavouriteTitleTextField = document.querySelector('input[name="EditCurrentFavouriteTitle"]');
 var editCurrentFavouriteUrlTextField = document.querySelector('input[name="EditCurrentFavouriteUrl"]');
 var editCurrentFavouriteIconTextField = document.querySelector('input[name="EditCurrentFavouriteIcon"]');
-var editCurrentFavouriteIconColourTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
+var editCurrentFavouriteIconColourTextField = document.querySelector('input[name="EditCurrentFavouriteIconColour"]');
 //Preview
 var previewTitle = document.querySelector('.preview-favourite-box-title');
 var previewIcon = document.querySelector('.preview-favourite-icon');
@@ -738,11 +738,18 @@ function updatePreviewInEditFavouriteUrl() {
 }
 
 function updatePreviewInEditFavouriteIcon() {
-
+  var updatedIcon = editCurrentFavouriteIconTextField.value;
+  console.log(updatedIcon);
+  previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
 }
 
 function updatePreviewInEditFavouriteIconColour() {
-
+  var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
+  console.log(updatedIconColour);
+  if(!updatedIconColour.startsWith('#')){
+    updatedIconColour = '#'+updatedIconColour;
+  }
+  previewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
 }
 
 
