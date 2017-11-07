@@ -21,13 +21,16 @@ var welcomeMainContainer = document.querySelector('.welcome-main-container');
 var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
 var newFavouriteOverlayContainer = document.querySelector('.add-overlay-container');
 var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-box-close');
+var editCurrentFavouriteOverlayContainer = document.querySelector('.edit-overlay-container');
+var editCurrentFavouriteOverlayCloseContainerBtn = document.querySelector('.edit-overlay-box-close');
+
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
 var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
 var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
 var iconColourExampleTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
-var iconColourExampleDiv = document.querySelector('.icon-colour-example');
+var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 
 var clearBtn = document.querySelector('.clear');
 var addBtn = document.querySelector('.add');
@@ -70,6 +73,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
+  editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseEditCurrentFavouritesOverlay);
   addNewFavouriteBtn.addEventListener('click', createNewFavourite);
   iconColourExampleTextField.addEventListener('keyup', updateIconColourExampleDiv);
 }
@@ -160,6 +164,11 @@ function CloseAddNewFavouritesOverlay() {
   newFavouriteOverlayContainer.setAttribute("style", "display: none;");
   BrowsingHistoryList.innerHTML = "";
 }
+
+function CloseEditCurrentFavouritesOverlay() {
+  editCurrentFavouriteOverlayContainer.setAttribute("style", "display: none;");
+}
+
 
 function getRecentBrowsingHisoty(count){
   var searchingHistory = browser.history.search({text: "", maxResults: count});
@@ -589,7 +598,8 @@ function displayFavourite(id, title, url, icon, iconColour) {
 
   editiconfavouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
-    alert("editiconfavouritebox");
+    console.log("edit/Update Favourite"+evtTgt);
+    editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
   })
 
   deleteiconfavouritebox.addEventListener('click',(e) => {

@@ -69,7 +69,7 @@
            <span class="tooltiptext">Set Colour of Icon, Default Black</span>
          </div>
        </div>
-       <div class="grid-20 icon-colour-example">
+       <div class="grid-20 icon-colour-example-add">
          <br>
        </div>
        <input type="text" name="NewFavouriteIconColour" value="">
@@ -82,6 +82,58 @@
      </div>
    </div>
  </div>
+
+ <div id="edit-overlay" class="grid-100 edit-overlay-container">
+   <div class="suffix-15 prefix-15 grid-70 edit-overlay-box">
+     <div class="grid-95 edit-overlay-box-title">
+       <p>Edit Favourite</p>
+     </div>
+     <div class="grid-5 edit-overlay-box-close">
+       <i class="fa fa-times" aria-hidden="true"></i>
+     </div>
+     <div class="grid-30 edit-favourite-details-input">
+       <div class="edit-favourite-details-form-title">
+         <p id="EditCurrentFavouriteTitle">Current Favourite Title: </p>
+         <div class="tooltip"><i class="fa fa-info"></i>
+           <span class="tooltiptext">Update Title of Favourite</span>
+         </div>
+       </div>
+       <input type="text" name="EditCurrentFavouriteTitle" value="">
+       <div class="edit-favourite-details-form-url">
+         <p id="EditCurrentFavouriteUrl">Current Favourite Url: </p>
+         <div class="tooltip"><i class="fa fa-info"></i>
+           <span class="tooltiptext">Set Url of New Favourite</span>
+         </div>
+       </div>
+       <input type="text" name="EditCurrentFavouriteUrl" value="">
+       <div class="grid-50">
+         <div class="edit-favourite-details-form-icon">
+         <p id="EditCurrentFavouriteIcon">Favourite Icon: </p>
+         <div class="tooltip"><i class="fa fa-info"></i>
+           <span class="tooltiptext">Set Icon of New Favourite, leave empty for none to be used</span>
+         </div>
+       </div>
+       <input type="text" name="EditCurrentFavouriteIcon" value="">
+        </div>
+       <div class="grid-50">
+       <div class="grid-80 edit-favourite-details-form-icon-colour">
+         <p id="EditCurrentFavouriteIconColour">Icon Colour #:</p>
+         <div class="tooltip"><i class="fa fa-info"></i>
+           <span class="tooltiptext">Set Colour of Icon, Default Black</span>
+         </div>
+       </div>
+       <div class="grid-20 icon-colour-example-edit">
+         <br>
+       </div>
+       <input type="text" name="NewFavouriteIconColour" value="">
+       </div>
+       <input id="EditCurrentFavouriteBtn" type="submit" value="Update Favourite">
+     </div>
+   </div>
+ </div>
+
+
+
   <div class="prefix-85 grid-15 tablet-prefix-80 tablet-grid-20 mobile-prefix-70 mobile-grid-30 settings">
     <div class="grid-100">
       <i class="fa fa-2x fa-sliders settings-icon" aria-hidden="true"></i>
