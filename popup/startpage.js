@@ -65,12 +65,12 @@ function onError(error) {
   console.log(error);
 }
 
-function onBackgroundImageSuccess(message) {
+function onSettingsScreenSuccess(message) {
   backgroundImageInfoBlock.setAttribute("style", "display: flex;");
   backgroundImageInfoBlockText.textContent = message;
 }
 
-function onBackgroundImageError(message) {
+function onSettingsScreenError(message) {
   backgroundImageInfoBlock.setAttribute("style", "display: flex;");
   backgroundImageInfoBlockText.text = message;
 }
@@ -285,15 +285,12 @@ function updateBackgroundWithSettings(){
 }
 
 function updateSettings(updatedSettingsType){
-  console.log("updateSettings: "+updatedSettingsType);
   if(updatedSettingsType == "rowCount"){
-    console.log(updatedSettingsType);
       var newRowCountValue = settingsRowCountTextField.value;
       updateSettingsForType(newRowCountValue, updatedSettingsType);
   }
 
   if(updatedSettingsType == "backgroundImageCount"){
-    console.log(updatedSettingsType);
     var newBackgroundCountValue = settingsUpdateStoredBackgroundImageCountTextField.value;
     updateSettingsForType(newBackgroundCountValue, updatedSettingsType);
   }
@@ -812,6 +809,7 @@ function updateSettingsForType(updatedValue, settingsType) {
                 storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground);
                 settingsRowCountTextField.value = updatedValue;
                 updateUi(getNewCssClass(updatedValue));
+                onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
               }
               break;
           case "backgroundImageCount":
@@ -820,11 +818,12 @@ function updateSettingsForType(updatedValue, settingsType) {
                 console.log("Updated BackgrondImage Count Settings");
                 storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
+                onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
               }
               break;
       }
     }
-  }, onError);
+  }, onSettingsScreenError);
 }
 
 
@@ -928,11 +927,11 @@ async function createAndSaveImageStore(newFilename, newFile) {
         if(imageToRemove){
           await deletedStoredBackgroundImageData(imageToRemove);
         } else {
-          onBackgroundImageError("Error Occured When Finding Image To Remove due to Background Image Limit in Settings.");
+          onSettingsScreenError("Error Occured When Finding Image To Remove due to Background Image Limit in Settings.");
         }
       }
       await displayBackgroundImage(newFilename);
-      onBackgroundImageSuccess("Image Successfully Added.");
+      onSettingsScreenSuccess("Image Successfully Added.");
     } catch (err) {
       console.error("File storing error", err);
       throw err;
