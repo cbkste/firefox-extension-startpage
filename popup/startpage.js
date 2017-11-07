@@ -727,22 +727,26 @@ function updateFavourite(delNote,newTitle,newBody,icon) {
   }, onError);
 }
 
+/**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteTitle() {
   var updatedTitle = editCurrentFavouriteTitleTextField.value;
   console.log(updatedTitle);
   previewTitle.textContent = updatedTitle;
 }
 
+/**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteUrl() {
 
 }
 
+/**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteIcon() {
   var updatedIcon = editCurrentFavouriteIconTextField.value;
   console.log(updatedIcon);
   previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
 }
 
+/**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteIconColour() {
   var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
   console.log(updatedIconColour);
