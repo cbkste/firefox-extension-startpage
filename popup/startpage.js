@@ -40,6 +40,7 @@ var newFavouriteTitleTextField = document.querySelector('input[name="NewFavourit
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
 var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
+var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
 var iconColourExampleTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
 var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 
@@ -503,7 +504,6 @@ function generateValidUrl(url) {
 
 
 function displayEditCurrentFavouriteOverlay(currentTitle) {
-
   var item = browser.storage.local.get(currentTitle);
   item.then((results) => {
     var objectKeys = Object.keys(results);
@@ -530,25 +530,20 @@ function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
 
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click',(e) => {
     CloseEditCurrentFavouritesOverlay();
-    //editCurrentFavouriteTitleTextField.removeEventListener("keyup");
+    editCurrentFavouriteTitleTextField.removeEventListener("keyup", updatePreviewInEditFavouriteTitle);
+    editCurrentFavouriteUrlTextField.removeEventListener("keyup", updatePreviewInEditFavouriteUrl);
+    editCurrentFavouriteIconTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIcon);
+    editCurrentFavouriteIconColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIconColour);
   })
 
-  editCurrentFavouriteTitleTextField.addEventListener('keyup',(e) => {
-    updatePreviewInEditFavouriteTitle();
+  editCurrentFavouriteTitleTextField.addEventListener('keyup',updatePreviewInEditFavouriteTitle);
+  editCurrentFavouriteUrlTextField.addEventListener('keyup',updatePreviewInEditFavouriteUrl);
+  editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
+  editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
+  editUpdateFavouriteBtn.addEventListener('click',(e) => {
+    document.getElementById(title).remove();
+    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, editCurrentFavouriteIconTextField.value, editCurrentFavouriteIconColourTextField.value);
   })
-
-  editCurrentFavouriteUrlTextField.addEventListener('keyup',(e) => {
-    updatePreviewInEditFavouriteUrl();
-  })
-
-  editCurrentFavouriteIconTextField.addEventListener('keyup',(e) => {
-    updatePreviewInEditFavouriteIcon();
-  })
-
-  editCurrentFavouriteIconColourTextField.addEventListener('keyup',(e) => {
-    updatePreviewInEditFavouriteIconColour();
-  })
-
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
 }
 
@@ -558,9 +553,6 @@ function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
 function displayFavourite(id, title, url, icon, iconColour) {
   var createCorrectUrl = generateValidUrl(url);
   console.log("displayFavourite: "+currentCssClassSize);
-  //console.log(itemsPerRowRadio.value);
-  //console.log("Correct URL: "+createCorrectUrl+ " OLD URL: "+ url);
-  /* create note display box */
   var note = document.createElement('div');
   var noteDisplay = document.createElement('div');
   var noteH = document.createElement('h2');
@@ -593,7 +585,6 @@ function displayFavourite(id, title, url, icon, iconColour) {
   deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   var iconClass = "favourite-icon fa fa-5x "+ icon;
-  //console.log(iconClass);
   favouriteIconbox.setAttribute('class',iconClass);
   favouriteIconbox.setAttribute('style',"color: "+iconColour);
   console.log(iconColour);
@@ -746,28 +737,22 @@ function displayFavourite(id, title, url, icon, iconColour) {
     noteTitleEdit.value = title;
     noteBodyEdit.value = url;
   })
-
-  updateBtn.addEventListener('click',() => {
-    if(noteTitleEdit.value !== title || noteBodyEdit.value !== url) {
-      updateFavourite(title,noteTitleEdit.value,noteBodyEdit.value,icon);
-      note.parentNode.removeChild(note);
-    }
-  });
 }
 
 
 /* function to update notes */
 
-function updateFavourite(delNote,newTitle,newBody,icon) {
-  var storingNote = browser.storage.local.set({ [newTitle] : newBody });
-  storingNote.then(() => {
-    if(delNote !== newTitle) {
+function updateFavourite(delNote,title, url, icon, iconColour) {
+  //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
+  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "icon" : icon, "iconColour" : iconColour} });
+  storingFavourite.then(() => {
+    if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayFavourite(newTitle, newBody, icon);
+        displayFavourite("1",title, url, icon,iconColour);
       }, onError);
     } else {
-      displayFavourite(newTitle, newBody, icon);
+      displayFavourite("1",title, url, icon,iconColour);
     }
   }, onError);
 }
@@ -1015,10 +1000,7 @@ async function deletedStoredBackgroundImageData(filename){
 
 function deletedStoredBackgroundImageDiv(filename){
   console.log(filename);
-//  var deletedStoredBackgroundImageDiv = document.getElementById(filename);
   document.getElementById(filename).remove();
-  // console.log(deletedStoredBackgroundImageDiv);
-  // deletedStoredBackgroundImageDiv.remove();
 }
 
 async function displayBackgroundImage(filename){
