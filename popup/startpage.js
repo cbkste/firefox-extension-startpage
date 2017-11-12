@@ -131,7 +131,7 @@ async function initialise() {
           var icon = results[noteKey].icon;
           var iconColour = results[noteKey].iconColour;
           //console.log(results[noteKey]);
-          displayFavourite("2",noteKey,url,icon,iconColour);
+          displayFavourite("2",noteKey,url,icon,iconColour,false);
         }
       }
       if(noteKeys.length == 0 || noteKeys.length == 1){
@@ -349,8 +349,8 @@ function switchIconsToEditAndDelete() {
   }
   var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    var iconcolour = FavouritesIconDivs[i].getAttribute("style");
-    FavouritesIconDivs[i].setAttribute('style',iconcolour+"; display: none");
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
+    FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: none");
   }
 }
 
@@ -361,8 +361,8 @@ function switchIconsToLogo() {
   }
   var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    var iconcolour = FavouritesIconDivs[i].getAttribute("style");
-    FavouritesIconDivs[i].setAttribute('style',iconcolour+";display: inline-block");
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
+    FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: inline-block");
   }
 }
 
@@ -411,7 +411,7 @@ function displayAddNewFavourite() {
 }
 
 /* Add a note to the display, and storage */
-
+/*TODO: Remove me once addNewFavourite is Complete **/
 function addFavourite() {
   var noteTitle = inputTitle.value;
   var noteBody = inputBody.value;
@@ -422,7 +422,7 @@ function addFavourite() {
     if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
       inputTitle.value = '';
       inputBody.value = '';
-      storeFavourite("1",noteTitle,noteBody,icon, "#000000");
+      storeFavourite("1",noteTitle,noteBody,icon, "#000000", false);
     }
   }, onError);
 }
@@ -435,7 +435,7 @@ function addNewFavourite(title,url,icon,iconColour) {
     if(objTest.length < 1 && title !== '' && url !== '') {
       newFavouriteTitleTextField.value = '';
       newFavouriteUrlTextField.value = '';
-      storeFavourite("1",title,url,icon,iconColour);
+      storeFavourite("1",title,url,icon,iconColour, true);
     }
   }, onError);
 }
@@ -467,10 +467,10 @@ function updateIconColourExampleDiv(){
 }
 
 /* function to store a new favourite in storage */
-function storeFavourite(id, title, url, icon, iconColour) {
+function storeFavourite(id, title, url, icon, iconColour, inEditMode) {
   var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon, "iconColour" : iconColour} });
   storingNote.then(() => {
-    displayFavourite(id, title,url, icon, iconColour);
+    displayFavourite(id, title,url, icon, iconColour,inEditMode);
   }, onError);
 }
 
@@ -547,7 +547,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
 
 /* function to display a note in the note box */
 
-function displayFavourite(id, title, url, icon, iconColour) {
+function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
   var createCorrectUrl = generateValidUrl(url);
   console.log("displayFavourite: "+currentCssClassSize);
   var note = document.createElement('div');
@@ -575,7 +575,7 @@ function displayFavourite(id, title, url, icon, iconColour) {
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
-  editdeleteiconfavouritebox.setAttribute('style','display: none');
+  //editdeleteiconfavouritebox.setAttribute('style','display: none');
   editiconfavouritebox.setAttribute('class','grid-50 edit-favourite-icon');
   editiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
@@ -583,7 +583,14 @@ function displayFavourite(id, title, url, icon, iconColour) {
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   var iconClass = "favourite-icon fa fa-5x "+ icon;
   favouriteIconbox.setAttribute('class',iconClass);
-  favouriteIconbox.setAttribute('style',"color: "+iconColour);
+  if(inEditMode){
+    favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+    editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
+  } else {
+    favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: inline-block");
+    editdeleteiconfavouritebox.setAttribute('style','display: none');
+  }
+
   console.log(iconColour);
   favouriteIconbox.setAttribute('aria-hidden','true');
   editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
@@ -746,10 +753,10 @@ function updateFavourite(delNote,title, url, icon, iconColour) {
     if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayFavourite("1",title, url, icon,iconColour);
+        displayFavourite("1",title, url, icon,iconColour,true);
       }, onError);
     } else {
-      displayFavourite("1",title, url, icon,iconColour);
+      displayFavourite("1",title, url, icon,iconColour,true);
     }
   }, onError);
 }
