@@ -617,8 +617,11 @@ function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
-  favouritesContainer.appendChild(favouritecontainer);
-
+  if(inEditMode){
+    favouritesContainer.insertBefore(favouritecontainer, favouritesContainer.lastChild);
+  } else {
+    favouritesContainer.appendChild(favouritecontainer);
+  }
 
   note.setAttribute('class','note');
 
