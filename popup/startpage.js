@@ -59,6 +59,7 @@ var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
 var currentOrderPosition = 0;
+var InWelcomeMode = false;
 
 /* generic error handler */
 function onError(error) {
@@ -93,6 +94,11 @@ function defaultEventListener() {
 function defaultWelcomeEventListener() {
   editModeWelcomeBtn.addEventListener('click', EditOverlay);
   settingsWelcomeBtn.addEventListener('click', OpenSettings);
+}
+
+function RemoveDefaultWelcomeEventListener() {
+  editModeWelcomeBtn.removeEventListener("click", EditOverlay);
+  settingsWelcomeBtn.removeEventListener("click", OpenSettings);
 }
 
 /* display previously-saved stored notes on startup */
@@ -141,6 +147,7 @@ async function initialise() {
           if(noteKeys[0] == "startpagesettings"){
             console.log("Empty Favourites");
             NoCurrentFavourites = true;
+            InWelcomeMode = true;
             welcomeContainer.setAttribute("style", "display: block;");
             welcomeMainContainer.setAttribute("style", "display: block;");
           }
@@ -148,6 +155,7 @@ async function initialise() {
         if(noteKeys.length == 0){
             console.log("Empty Favourites");
             NoCurrentFavourites = true;
+            InWelcomeMode = true;
             welcomeContainer.setAttribute("style", "display: block;");
             welcomeMainContainer.setAttribute("style", "display: block;");
         }
@@ -435,6 +443,11 @@ function addNewFavourite(title,url,icon,iconColour) {
       console.log("addNewFavourite Updaed Order Position"+currentOrderPosition);
       storeFavourite("1",title,url,currentOrderPosition,icon,iconColour, true);
       updateDivOrderCount();
+
+      if(InWelcomeMode){
+        welcomeMainContainer.setAttribute("style","display:none");
+        InWelcomeMode = false;
+      }
     }
   }, onError);
 }
@@ -507,7 +520,7 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
-    var currentOrder = results[objectKeys].Order;
+    var currentOrder = results[objectKeys].order;
     // console.log(currentTitle);
     // console.log(currentUrl);
     // console.log(currentIcon);
@@ -539,8 +552,12 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
   editUpdateFavouriteBtn.addEventListener('click',(e) => {
     console.log("Div to inital Remove: TITLE: "+title)
+    var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
+    if(!updatedIconColour.startsWith('#')){
+      updatedIconColour = '#'+updatedIconColour;
+    }
     document.getElementById(title).remove();
-    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value,order, editCurrentFavouriteIconTextField.value, editCurrentFavouriteIconColourTextField.value);
+    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value,order, editCurrentFavouriteIconTextField.value, updatedIconColour);
   })
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
 }
