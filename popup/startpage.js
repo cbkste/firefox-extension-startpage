@@ -58,7 +58,7 @@ var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
-var currentOrderPosition = 1;
+var currentOrderPosition = 0;
 
 /* generic error handler */
 function onError(error) {
@@ -131,7 +131,7 @@ async function initialise() {
           var url = results[noteKey].url;
           var icon = results[noteKey].icon;
           var iconColour = results[noteKey].iconColour;
-          var order = results[noteKey].order;
+          var order = results[noteKey].Order;
           //console.log(results[noteKey]);
           displayFavourite("2",noteKey,url,order,icon,iconColour,false);
         }
@@ -467,7 +467,7 @@ function updateIconColourExampleDiv(){
 
 /* function to store a new favourite in storage */
 function storeFavourite(id, title, url, order, icon, iconColour, inEditMode) {
-  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "order" : order, "icon" : icon, "iconColour" : iconColour} });
+  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour} });
   storingNote.then(() => {
     displayFavourite(id, title,url,order,icon,iconColour,inEditMode);
   }, onError);
@@ -507,7 +507,7 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
-    var currentOrder = results[objectKeys].order;
+    var currentOrder = results[objectKeys].Order;
     // console.log(currentTitle);
     // console.log(currentUrl);
     // console.log(currentIcon);
@@ -538,6 +538,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
   editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
   editUpdateFavouriteBtn.addEventListener('click',(e) => {
+    console.log("Div to inital Remove: TITLE: "+title)
     document.getElementById(title).remove();
     updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value,order, editCurrentFavouriteIconTextField.value, editCurrentFavouriteIconColourTextField.value);
   })
@@ -753,7 +754,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
 
 function updateFavourite(delNote,title, url, order, icon, iconColour) {
   //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
-  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "order" : order, "icon" : icon, "iconColour" : iconColour} });
+  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour} });
   storingFavourite.then(() => {
     if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
