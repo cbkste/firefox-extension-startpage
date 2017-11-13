@@ -51,6 +51,7 @@ var settingsBtn = document.querySelector('.settings-icon');
 var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
 var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
 var settingsMode = false;
+var inEditMode = false;
 var currentCssClassSize = "grid-25";
 var changeLinksToHttps = true;
 var NoCurrentFavourites = false;
@@ -310,7 +311,7 @@ function updateUi(newCssClass){
 }
 
 async function EditOverlay() {
-  var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
+  var hasEditModeClass = startpageContainerHTML.classList.contains('edit-mode');
 
   if(NoCurrentFavourites){
     welcomeContainer.setAttribute("style", "display: none;");
@@ -322,9 +323,10 @@ if(settingsMode){
   settingsMode = false;
 }
 
-  if(inEditMode){
+  if(hasEditModeClass){
     await removeEditOverlay();
     switchIconsToLogo();
+    inEditMode = false;
   } else {
     editModeTitleContainer.setAttribute("style", "display: block;");
     //startpageContainerHTML.setAttribute("style", "background-color: rgba(192,192,192, 0.2);");
@@ -332,6 +334,7 @@ if(settingsMode){
     displayAddNewFavourite();
     console.log("switchIconsToEditAndDelete");
     switchIconsToEditAndDelete();
+    inEditMode = true;
   }
 }
 
@@ -616,8 +619,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
   favouritecontainer.addEventListener('dragover', handleDragOver, false);
   favouritecontainer.addEventListener('dragleave', handleDragLeave, false);
   favouritecontainer.addEventListener('drop', handleDrop, false);
-  favouritecontainer.addEventListener('dragend', handleDragEnd, false);
-  favourtieArrayList = document.querySelectorAll('.favourite-container');
 
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
@@ -1123,57 +1124,64 @@ JS SECTION FOR
 DRAG AND DROP FAVOURITE CONTAINER FOR REORDERING
 **/
 
-function dragstart_handler(ev) {
- console.log("dragStart");
- this.style.opacity = '0.4';
- dragSrcEl = this;
- e.dataTransfer.effectAllowed = 'move';
- e.dataTransfer.setData('text/html', this.innerHTML);
+function dragstart_handler(e) {
+  console.log("IN EDIT MODE: "+inEditMode)
+  if(!inEditMode){
+    console.log("dragStart");
+    dragSrcEl = this;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+  }
 }
 
 function handleDragOver(e) {
-  if (e.preventDefault) {
-    e.preventDefault(); // Necessary. Allows us to drop.
+  if(!inEditMode){
+    if (e.preventDefault) {
+      e.preventDefault(); // Necessary. Allows us to drop.
+    }
+    e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+    return false;
   }
-
-  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
-
-  return false;
 }
 
 function handleDragEnter(e) {
-  // this / e.target is the current hover target.
-  this.classList.add('over');
+  if(!inEditMode){
+    this.classList.add('over');
+  }
 }
 
 function handleDragLeave(e) {
-  this.classList.remove('over');  // this / e.target is previous target element.
+  if(!inEditMode){
+    this.classList.remove('over');
+  }
 }
 
 function handleDrop(e) {
-  // this / e.target is current target element.
-  e.preventDefault();
-  // if (e.stopPropagation) {
-  //   e.stopPropagation(); // stops the browser from redirecting.
-  // }
+  if(!inEditMode){
+    e.preventDefault();
 
-  // Don't do anything if dropping the same column we're dragging.
-  if (dragSrcEl != this) {
-    // Set the source column's HTML to the HTML of the column we dropped on.
-    dragSrcEl.innerHTML = this.innerHTML;
-    this.innerHTML = e.dataTransfer.getData('text/html');
-    console.log(e.dataTransfer.getData('text/html'));
+    // Don't do anything if dropping the same column we're dragging.
+    if (dragSrcEl != this) {
+      // Set the source column's HTML to the HTML of the column we dropped on.
+      dragSrcEl.innerHTML = this.innerHTML;
+      this.innerHTML = e.dataTransfer.getData('text/html');
+      //console.log(e.dataTransfer.getData('text/html'));
+    }
+    handleDragEnd();
+    return false;
   }
-
-  return false;
 }
 
 function handleDragEnd(e) {
-  // this/e.target is the source node.
-
-  [].forEach.call(favourtieArrayList, function (favourtieList) {
-    favourtieList.classList.remove('over');
-  });
+  if(!inEditMode){
+    // this/e.target is the source node.
+    console.log("handleDragEnd");
+    favourtieArrayList = document.querySelectorAll('.favourite-container');
+    console.log(favourtieArrayList);
+      [].forEach.call(favourtieArrayList, function (favourtieList) {
+        favourtieList.classList.remove('over');
+      });
+    }
 }
 
 /* Clear all notes from the display/storage */
