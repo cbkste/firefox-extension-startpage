@@ -520,7 +520,7 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
-    var currentOrder = results[objectKeys].order;
+    var currentOrder = results[objectKeys].Order;
     // console.log(currentTitle);
     // console.log(currentUrl);
     // console.log(currentIcon);
@@ -544,24 +544,41 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
     editCurrentFavouriteUrlTextField.removeEventListener("keyup", updatePreviewInEditFavouriteUrl);
     editCurrentFavouriteIconTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIcon);
     editCurrentFavouriteIconColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIconColour);
+    editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   })
 
   editCurrentFavouriteTitleTextField.addEventListener('keyup',updatePreviewInEditFavouriteTitle);
   editCurrentFavouriteUrlTextField.addEventListener('keyup',updatePreviewInEditFavouriteUrl);
   editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
-  editUpdateFavouriteBtn.addEventListener('click',(e) => {
-    console.log("Div to inital Remove: TITLE: "+title)
-    var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
-    if(!updatedIconColour.startsWith('#')){
-      updatedIconColour = '#'+updatedIconColour;
-    }
-    document.getElementById(title).remove();
-    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value,order, editCurrentFavouriteIconTextField.value, updatedIconColour);
-  })
+
+  editUpdateFavouriteBtn.title = title;
+  editUpdateFavouriteBtn.order = order;
+  editUpdateFavouriteBtn.addEventListener('click',ProcessUpdateFavourite, false);
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
 }
 
+function ProcessUpdateFavourite(evt)
+{
+  console.log("Div to inital Remove: TITLE: "+evt.target.title )
+  console.log("Div Order: "+evt.target.order )
+  var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
+  if(!updatedIconColour.startsWith('#')){
+    updatedIconColour = '#'+updatedIconColour;
+  }
+  console.log(document.getElementById(evt.target.title));
+  document.getElementById(evt.target.title).remove();
+  updateFavourite(evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour);
+  editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
+  console.log("ProcessUpdateFavourite")
+  eventListnerForNewUpdateDiv(evt.target.order);
+}
+
+function eventListnerForNewUpdateDiv(order){
+  editUpdateFavouriteBtn.title = editCurrentFavouriteTitleTextField.value;
+  editUpdateFavouriteBtn.order = order;
+  editUpdateFavouriteBtn.addEventListener('click',ProcessUpdateFavourite, false);
+}
 
 /* function to display a note in the note box */
 
