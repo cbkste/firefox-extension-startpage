@@ -60,6 +60,8 @@ var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
 var currentOrderPosition = 0;
 var InWelcomeMode = false;
+var favourtieArrayList = document.querySelectorAll('.favourite-container');
+var dragSrcEl = null;
 
 /* generic error handler */
 function onError(error) {
@@ -607,7 +609,16 @@ function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
   favouritecontainer.setAttribute('id',title);
   var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
   favouritecontainer.setAttribute('class',classList);
-  favouritecontainer.setAttribute('style',"order: "+order+";");
+  favouritecontainer.setAttribute('style',"order: "+order);
+  favouritecontainer.setAttribute('draggable',"true");
+  favouritecontainer.addEventListener('dragstart', dragstart_handler, false);
+  favouritecontainer.addEventListener('dragenter', handleDragEnter, false);
+  favouritecontainer.addEventListener('dragover', handleDragOver, false);
+  favouritecontainer.addEventListener('dragleave', handleDragLeave, false);
+  favouritecontainer.addEventListener('drop', handleDrop, false);
+  favouritecontainer.addEventListener('dragend', handleDragEnd, false);
+  favourtieArrayList = document.querySelectorAll('.favourite-container');
+
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
@@ -1107,6 +1118,63 @@ function setBackgroundContainerImage(url) {
   startpageContainerHTML.setAttribute("style", "background-image: url("+url+')');
 }
 
+/**
+JS SECTION FOR
+DRAG AND DROP FAVOURITE CONTAINER FOR REORDERING
+**/
+
+function dragstart_handler(ev) {
+ console.log("dragStart");
+ this.style.opacity = '0.4';
+ dragSrcEl = this;
+ e.dataTransfer.effectAllowed = 'move';
+ e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) {
+    e.preventDefault(); // Necessary. Allows us to drop.
+  }
+
+  e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+
+  return false;
+}
+
+function handleDragEnter(e) {
+  // this / e.target is the current hover target.
+  this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+  this.classList.remove('over');  // this / e.target is previous target element.
+}
+
+function handleDrop(e) {
+  // this / e.target is current target element.
+  e.preventDefault();
+  // if (e.stopPropagation) {
+  //   e.stopPropagation(); // stops the browser from redirecting.
+  // }
+
+  // Don't do anything if dropping the same column we're dragging.
+  if (dragSrcEl != this) {
+    // Set the source column's HTML to the HTML of the column we dropped on.
+    dragSrcEl.innerHTML = this.innerHTML;
+    this.innerHTML = e.dataTransfer.getData('text/html');
+    console.log(e.dataTransfer.getData('text/html'));
+  }
+
+  return false;
+}
+
+function handleDragEnd(e) {
+  // this/e.target is the source node.
+
+  [].forEach.call(favourtieArrayList, function (favourtieList) {
+    favourtieList.classList.remove('over');
+  });
+}
 
 /* Clear all notes from the display/storage */
 function clearAll() {

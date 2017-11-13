@@ -398,6 +398,10 @@
   flex-wrap: wrap;
 }
 
+.favourite-container.over {
+  border: 2px dashed #000;
+}
+
 .outer-wrapper {
   display:none;
 }
