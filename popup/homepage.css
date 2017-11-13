@@ -391,6 +391,13 @@
   text-overflow: ellipsis;
 }
 
+
+.startpage-favourites-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .outer-wrapper {
   display:none;
 }

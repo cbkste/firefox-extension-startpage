@@ -58,7 +58,7 @@ var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
-
+var currentOrderPosition = 1;
 
 /* generic error handler */
 function onError(error) {
@@ -107,12 +107,13 @@ async function initialise() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1", "4","6","");
+      storeSettings("1", "4","6","","1");
     } else {
       settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
       settingsRowCountLimit = result.startpagesettings.RowCount;
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
+      currentOrderPosition = result.startpagesettings.Order;
       await setupbackgroundInit();
     }
   }, onError);
@@ -130,8 +131,9 @@ async function initialise() {
           var url = results[noteKey].url;
           var icon = results[noteKey].icon;
           var iconColour = results[noteKey].iconColour;
+          var order = results[noteKey].order;
           //console.log(results[noteKey]);
-          displayFavourite("2",noteKey,url,icon,iconColour,false);
+          displayFavourite("2",noteKey,url,order,icon,iconColour,false);
         }
       }
       if(noteKeys.length == 0 || noteKeys.length == 1){
@@ -253,19 +255,8 @@ async function OpenSettings() {
     settingsContainer.setAttribute("style", "display: none;");
     settingsMode = false;
   } else {
-    // var gettingSettingsItem = browser.storage.local.get("startpagesettings");
-    // console.log("Checking if Settings are in keys");
-    // gettingSettingsItem.then((result) => {
-    //   var objTest = Object.keys(result);
-    //   if(objTest.length < 1) {
-    //     storeSettings("1","4","6");
-    //     settingsRowCountTextField.value = "Items Per Row: 4";
-    //   } else {
-    //     settingsRowCountTextField.value = result.startpagesettings.RowCount;
-    //   }
-    // }, onError);
        if(!settingsRowCountLimit) {
-         storeSettings("1","4","6","");
+         storeSettings("1","4","6","","1");
          settingsRowCountTextField.value = "4";
        } else {
          settingsRowCountTextField.value = settingsRowCountLimit;
@@ -294,6 +285,10 @@ function updateSettings(updatedSettingsType){
     var newBackgroundCountValue = settingsUpdateStoredBackgroundImageCountTextField.value;
     updateSettingsForType(newBackgroundCountValue, updatedSettingsType);
   }
+}
+
+function updateDivOrderCount(){
+  updateSettingsForType(currentOrderPosition, "DivOrderUpdate");
 }
 
 function updateUi(newCssClass){
@@ -382,6 +377,7 @@ function displayAddNewFavourite() {
   var favouriteboxtitle = document.createElement('div');
   var cssClass = currentCssClassSize + " tablet-grid-33 new-favourite-container";
   newfavouritecontainer.setAttribute('class',cssClass);
+  newfavouritecontainer.setAttribute('style',"order:99");
   newfavouritebox.setAttribute('class','new-favourite-box');
   //newfavouritebox.setAttribute('href', "#");
   favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
@@ -422,7 +418,7 @@ function addFavourite() {
     if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
       inputTitle.value = '';
       inputBody.value = '';
-      storeFavourite("1",noteTitle,noteBody,icon, "#000000", false);
+      storeFavourite("1",noteTitle,noteBody,"1",icon, "#000000", false);
     }
   }, onError);
 }
@@ -435,7 +431,10 @@ function addNewFavourite(title,url,icon,iconColour) {
     if(objTest.length < 1 && title !== '' && url !== '') {
       newFavouriteTitleTextField.value = '';
       newFavouriteUrlTextField.value = '';
-      storeFavourite("1",title,url,icon,iconColour, true);
+      currentOrderPosition++;
+      console.log("addNewFavourite Updaed Order Position"+currentOrderPosition);
+      storeFavourite("1",title,url,currentOrderPosition,icon,iconColour, true);
+      updateDivOrderCount();
     }
   }, onError);
 }
@@ -454,7 +453,7 @@ function createNewFavourite(){
     iconColour = '#000000'
   }
 
-  addNewFavourite(title,url,icon, iconColour)
+  addNewFavourite(title,url,icon,iconColour)
 }
 
 /* TODO: Add Debouce */
@@ -467,16 +466,16 @@ function updateIconColourExampleDiv(){
 }
 
 /* function to store a new favourite in storage */
-function storeFavourite(id, title, url, icon, iconColour, inEditMode) {
-  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "icon" : icon, "iconColour" : iconColour} });
+function storeFavourite(id, title, url, order, icon, iconColour, inEditMode) {
+  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "order" : order, "icon" : icon, "iconColour" : iconColour} });
   storingNote.then(() => {
-    displayFavourite(id, title,url, icon, iconColour,inEditMode);
+    displayFavourite(id, title,url,order,icon,iconColour,inEditMode);
   }, onError);
 }
 
-function storeSettings(id, rowCount, backgroundCount, backgroundImage) {
-  console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount);
-  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount,"SelectedBackgroundImage" : backgroundImage } });
+function storeSettings(id, rowCount, backgroundCount, backgroundImage, order) {
+  console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order);
+  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
   settingsCurrentSelectedBackground = backgroundImage;
@@ -508,15 +507,16 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
+    var currentOrder = results[objectKeys].order;
     // console.log(currentTitle);
     // console.log(currentUrl);
     // console.log(currentIcon);
     // console.log(currentIconColour);
-    createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentIcon, currentIconColour);
+    createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour);
   }, onError);
 }
 
-function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
+function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColour) {
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
   editCurrentFavouriteIconTextField.value = icon;
@@ -539,7 +539,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
   editUpdateFavouriteBtn.addEventListener('click',(e) => {
     document.getElementById(title).remove();
-    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, editCurrentFavouriteIconTextField.value, editCurrentFavouriteIconColourTextField.value);
+    updateFavourite(title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value,order, editCurrentFavouriteIconTextField.value, editCurrentFavouriteIconColourTextField.value);
   })
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
 }
@@ -547,7 +547,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, icon, iconColour) {
 
 /* function to display a note in the note box */
 
-function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
+function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
   var createCorrectUrl = generateValidUrl(url);
   console.log("displayFavourite: "+currentCssClassSize);
   var note = document.createElement('div');
@@ -572,6 +572,7 @@ function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
   favouritecontainer.setAttribute('id',title);
   var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
   favouritecontainer.setAttribute('class',classList);
+  favouritecontainer.setAttribute('style',"order: "+order+";");
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
@@ -617,6 +618,7 @@ function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
+  //**TODO: Remove if, Not Needed due to flexbox order, keep else part of statment**//
   if(inEditMode){
     favouritesContainer.insertBefore(favouritecontainer, favouritesContainer.lastChild);
   } else {
@@ -749,17 +751,17 @@ function displayFavourite(id, title, url, icon, iconColour, inEditMode) {
 
 /* function to update notes */
 
-function updateFavourite(delNote,title, url, icon, iconColour) {
+function updateFavourite(delNote,title, url, order, icon, iconColour) {
   //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
-  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "icon" : icon, "iconColour" : iconColour} });
+  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "order" : order, "icon" : icon, "iconColour" : iconColour} });
   storingFavourite.then(() => {
     if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayFavourite("1",title, url, icon,iconColour,true);
+        displayFavourite("1",title, url, order,icon,iconColour,true);
       }, onError);
     } else {
-      displayFavourite("1",title, url, icon,iconColour,true);
+      displayFavourite("1",title, url, order,icon,iconColour,true);
     }
   }, onError);
 }
@@ -802,12 +804,15 @@ function updateSettingsForType(updatedValue, settingsType) {
     if(objTest.length < 1) {
       switch (settingsType) {
           case "rowCount":
-              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground);
+              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition);
               settingsRowCountTextField.value = newRowCount;
               break;
           case "backgroundImageCount":
-              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground);
+              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition);
               settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
+              break;
+          case "DivOrderUpdate":
+              storeSettings("1", settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue);
               break;
       }
     } else {
@@ -816,7 +821,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.RowCount !== updatedValue)
               {
                 console.log("Updated Row Count Settings");
-                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground);
+                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
                 settingsRowCountTextField.value = updatedValue;
                 updateUi(getNewCssClass(updatedValue));
                 onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
@@ -826,9 +831,17 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
               {
                 console.log("Updated BackgrondImage Count Settings");
-                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground);
+                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
+              }
+              break;
+          case "DivOrderUpdate":
+              if(result.startpagesettings.Order !== updatedValue)
+              {
+                console.log("Updated Order");
+                storeSettings("1",settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue);
+                onSettingsScreenSuccess("Updated Order to "+updatedValue);
               }
               break;
       }
