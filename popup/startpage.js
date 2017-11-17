@@ -428,7 +428,7 @@ function displayAddNewFavourite() {
   var favouriteboxtitle = document.createElement('div');
   var cssClass = currentCssClassSize + " tablet-grid-33 new-favourite-container";
   newfavouritecontainer.setAttribute('class',cssClass);
-  newfavouritecontainer.setAttribute('style',"order:99");
+  newfavouritecontainer.setAttribute('style',"order:999");
   newfavouritebox.setAttribute('class','new-favourite-box');
   //newfavouritebox.setAttribute('href', "#");
   favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
@@ -1283,7 +1283,7 @@ function weekdayToString(weekDay){
             return "Sunday";
             break;
         default:
-            return "Error: weekDay number "+today.getDay();
+            return "Error: weekday number "+today.getDay();
     }
 }
 

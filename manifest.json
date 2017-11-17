@@ -6,7 +6,7 @@
 
   "description": "Custom Startpage for firefox",
   "icons": {
-    "48": "icons/quicknote-48.png"
+    "48": "icons/startpage-48.png"
   },
 
   "permissions": [
@@ -18,7 +18,7 @@
   },
   "browser_action": {
     "default_icon": {
-     "32" : "icons/quicknote-32.png"
+     "32" : "icons/startpage-32.png"
     },
     "default_title": "Startpage"
   },
