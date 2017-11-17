@@ -35,15 +35,20 @@ var editCurrentFavouriteBackgroundColourTextField = document.querySelector('inpu
 var previewTitle = document.querySelector('.preview-favourite-box-title');
 var previewIcon = document.querySelector('.preview-favourite-icon');
 var previewUrl = document.querySelector('.preview-favourite-box');
-
-var BrowsingHistoryList = document.getElementById('browsing-history-container');
+//input
 var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
-var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
 var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
-var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
-var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
 var newFavouriteIconColourTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
 var newFavouriteBackgroundColourTextField = document.querySelector('input[name="NewFavouriteBackgroundColour"]');
+//NewFavouritePreview
+var newFavouritePreviewTitle = document.querySelector('.new-preview-favourite-box-title');
+var newFavouritePreviewIcon = document.querySelector('.new-preview-favourite-icon');
+var newFavouritePreviewUrl = document.querySelector('.new-preview-favourite-box');
+
+var BrowsingHistoryList = document.getElementById('browsing-history-container');
+var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
+var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
+var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
 var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 
 var clearBtn = document.querySelector('.clear');
@@ -92,7 +97,6 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
-  addNewFavouriteBtn.addEventListener('click', createNewFavourite);
   newFavouriteIconColourTextField.addEventListener('keyup', updateIconColourExampleDiv);
 }
 
@@ -224,6 +228,11 @@ async function setupbackgroundInit(){
 }
 
 function CloseAddNewFavouritesOverlay() {
+  addNewFavouriteBtn.removeEventListener('click', createNewFavourite);
+  newFavouriteTitleTextField.removeEventListener('keyup', updatePreviewForNewFavouriteTitle);
+  NewFavouriteIconTextField.removeEventListener('keyup', updatePreviewForNewFavouriteIcon);
+  newFavouriteIconColourTextField.removeEventListener('keyup', updatePreviewForNewFavouriteIconColour);
+  newFavouriteBackgroundColourTextField.removeEventListener('keyup', updatePreviewForNewFavouriteBackgroundColour);
   newFavouriteOverlayContainer.setAttribute("style", "display: none;");
   BrowsingHistoryList.innerHTML = "";
 }
@@ -454,6 +463,11 @@ function displayAddNewFavourite() {
     console.log("NEW Favourite Box Selected"+evtTgt);
     getRecentBrowsingHisoty(16);
     newFavouriteOverlayContainer.setAttribute("style","display:block");
+    addNewFavouriteBtn.addEventListener('click', createNewFavourite);
+    newFavouriteTitleTextField.addEventListener('keyup', updatePreviewForNewFavouriteTitle);
+    NewFavouriteIconTextField.addEventListener('keyup', updatePreviewForNewFavouriteIcon);
+    newFavouriteIconColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteIconColour);
+    newFavouriteBackgroundColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteBackgroundColour);
   })
 }
 
@@ -874,6 +888,48 @@ function updateFavourite(delNote,title, url, order, icon, iconColour, background
     }
   }, onError);
 }
+
+/**TODO: Add Debounce**/
+function updatePreviewForNewFavouriteTitle() {
+  var updatedTitle = newFavouriteTitleTextField.value;
+  console.log(updatedTitle);
+  newFavouritePreviewTitle.textContent = updatedTitle;
+}
+
+/**TODO: Add Debounce**/
+function updatePreviewForNewFavouriteUrl() {
+
+}
+
+/**TODO: Add Debounce**/
+function updatePreviewForNewFavouriteIcon() {
+  var updatedIcon = NewFavouriteIconTextField.value;
+  console.log(updatedIcon);
+  newFavouritePreviewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
+}
+
+/**TODO: Add Debounce**/
+function updatePreviewForNewFavouriteIconColour() {
+  var updatedIconColour = newFavouriteIconColourTextField.value;
+  console.log(updatedIconColour);
+  if(!updatedIconColour.startsWith('#')){
+    updatedIconColour = '#'+updatedIconColour;
+  }
+  newFavouritePreviewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
+}
+
+/**TODO: Add Debounce**/
+function updatePreviewForNewFavouriteBackgroundColour() {
+  var updatedBackgroundColour = newFavouriteBackgroundColourTextField.value;
+  console.log(updatedBackgroundColour);
+  if(!updatedBackgroundColour.startsWith('#')){
+    updatedBackgroundColour = '#'+updatedBackgroundColour;
+  }
+  newFavouritePreviewTitle.setAttribute('style',"background-color: "+updatedBackgroundColour);
+}
+
+
+
 
 /**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteTitle() {

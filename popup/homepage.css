@@ -1,4 +1,7 @@
-.favourite-box, .new-favourite-box, .preview-favourite-box {
+.favourite-box,
+.new-favourite-box,
+.preview-favourite-box,
+.new-preview-favourite-box {
   min-height: 200px;
   border-radius: 5px;
   text-decoration: none;
@@ -30,25 +33,38 @@
   text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
-.favourite-container, .new-favourite-container, .preview-favourite-container {
+.favourite-container,
+.new-favourite-container,
+.preview-favourite-container,
+.new-preview-favourite-container {
   min-height: 200px;
   margin-bottom: 30px;
 }
 
-.favourite-box-image, .new-favourite-box-image, .preview-favourite-box-image {
+.favourite-box-image,
+.new-favourite-box-image,
+.preview-favourite-box-image,
+.new-preview-favourite-box-image {
   min-height: 170px;
 }
 
-.favourite-box-image i, .new-favourite-box-image i, .preview-favourite-box-image i {
+.favourite-box-image i,
+.new-favourite-box-image i,
+.preview-favourite-box-image i,
+.new-preview-favourite-box-image i {
   color: black;
   text-decoration: none;
 }
 
-.favourite-box-image i:before, .preview-favourite-box-image i:before {
+.favourite-box-image i:before,
+.preview-favourite-box-image i:before,
+.new-preview-favourite-box-image i:before {
   display: inline-block;
 }
 
-.favourite-box-image, .preview-favourite-box-image {
+.favourite-box-image,
+.preview-favourite-box-image,
+.new-preview-favourite-box-image {
    background-size: cover;
    background-repeat: no-repeat;
    background-position: center;
@@ -75,7 +91,10 @@
   border-top-right-radius: 7px;
 }
 
-.favourite-box-title, .new-favourite-box-title, .preview-favourite-box-title {
+.favourite-box-title,
+.new-favourite-box-title,
+.preview-favourite-box-title,
+.new-preview-favourite-box-title {
   min-height: 30px;
   text-align: center;
   justify-content: center;
@@ -83,7 +102,9 @@
   display: flex;
 }
 
-.favourite-box-title, .preview-favourite-box-title {
+.favourite-box-title,
+.preview-favourite-box-title,
+.new-preview-favourite-box-title {
   border-bottom: 1px solid black;
   border-bottom-left-radius: 7px;
   border-right: 1px solid black;
