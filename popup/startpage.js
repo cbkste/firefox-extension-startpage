@@ -170,8 +170,8 @@ async function initialise() {
     }
   }, onError);
   defaultEventListener();
-  writeTime();
-  writeDate();
+  //writeTime();
+  //writeDate();
 }
 
 function writeTime() {
@@ -187,7 +187,7 @@ function writeTime() {
       m = checkTime(m);
       s = checkTime(s);
     document.getElementById('clock').innerHTML = h + ":" + m + ":" + s;
-    var t = setTimeout(startTime, 500);
+    var t = setTimeout(writeTime, 500);
 }
 
 function checkTime(i) {
@@ -203,7 +203,7 @@ function writeDate() {
     var year = today.getFullYear();
     document.getElementById('weekday').innerHTML = weekdayToString(weekDay);
     document.getElementById('date').innerHTML = monthToString(month)+" "+dayToString(day)+", "+year;
-    var t = setTimeout(startTime, 500);
+    var t = setTimeout(writeTime, 500);
 }
 
 async function setupbackgroundInit(){
