@@ -815,7 +815,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   favouritebox.addEventListener('mouseleave',(e) => {
     const evtTgt = e.target;
     var backgroundImgBox = evtTgt.firstChild;
-    backgroundImgBox.setAttribute("style", "background-image: none");
+    backgroundImgBox.setAttribute("style", "background-color: none");
   });
 
   /* create note edit box */
