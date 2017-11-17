@@ -453,10 +453,12 @@ function displayAddNewFavourite() {
   newfavouritebox.setAttribute('class','new-favourite-box');
   //newfavouritebox.setAttribute('href', "#");
   favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
+  favouriteboximage.setAttribute('style','background-color: white');
   favouriteIconbox.setAttribute('class','fa fa-5x fa-plus');
   favouriteIconbox.setAttribute('aria-hidden','true');
 
   favouriteboxtitle.setAttribute('class','grid-100 new-favourite-box-title');
+  favouriteboxtitle.setAttribute('style','background-color: white');
 
   favouriteboximage.appendChild(favouriteIconbox);
   newfavouritebox.appendChild(favouriteboximage);
