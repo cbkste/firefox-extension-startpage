@@ -30,6 +30,7 @@ var editCurrentFavouriteTitleTextField = document.querySelector('input[name="Edi
 var editCurrentFavouriteUrlTextField = document.querySelector('input[name="EditCurrentFavouriteUrl"]');
 var editCurrentFavouriteIconTextField = document.querySelector('input[name="EditCurrentFavouriteIcon"]');
 var editCurrentFavouriteIconColourTextField = document.querySelector('input[name="EditCurrentFavouriteIconColour"]');
+var editCurrentFavouriteBackgroundColourTextField = document.querySelector('input[name="EditCurrentFavouriteBackgroundColour"]');
 //Preview
 var previewTitle = document.querySelector('.preview-favourite-box-title');
 var previewIcon = document.querySelector('.preview-favourite-icon');
@@ -41,7 +42,8 @@ var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteU
 var NewFavouriteIconTextField = document.querySelector('input[name="NewFavouriteIcon"]');
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
 var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
-var iconColourExampleTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
+var newFavouriteIconColourTextField = document.querySelector('input[name="NewFavouriteIconColour"]');
+var newFavouriteBackgroundColourTextField = document.querySelector('input[name="NewFavouriteBackgroundColour"]');
 var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 
 var clearBtn = document.querySelector('.clear');
@@ -91,7 +93,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
   addNewFavouriteBtn.addEventListener('click', createNewFavourite);
-  iconColourExampleTextField.addEventListener('keyup', updateIconColourExampleDiv);
+  newFavouriteIconColourTextField.addEventListener('keyup', updateIconColourExampleDiv);
 }
 
 function defaultWelcomeEventListener() {
@@ -123,6 +125,7 @@ async function initialise() {
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       currentOrderPosition = result.startpagesettings.Order;
+      console.log("INIT:currentOrderPosition"+currentOrderPosition);
       await setupbackgroundInit();
     }
   }, onError);
@@ -140,9 +143,10 @@ async function initialise() {
           var url = results[noteKey].url;
           var icon = results[noteKey].icon;
           var iconColour = results[noteKey].iconColour;
+          var backgroundColour = results[noteKey].backgroundColour;
           var order = results[noteKey].Order;
           //console.log(results[noteKey]);
-          displayFavourite("2",noteKey,url,order,icon,iconColour,false);
+          displayFavourite("2",noteKey,url,order,icon,iconColour,backgroundColour,false);
         }
       }
       if(noteKeys.length == 0 || noteKeys.length == 1){
@@ -431,12 +435,12 @@ function addFavourite() {
     if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
       inputTitle.value = '';
       inputBody.value = '';
-      storeFavourite("1",noteTitle,noteBody,"1",icon, "#000000", false);
+      storeFavourite("1",noteTitle,noteBody,"1",icon, "#000000", "#fff", false);
     }
   }, onError);
 }
 
-function addNewFavourite(title,url,icon,iconColour) {
+function addNewFavourite(title,url,icon,iconColour,backgroundColour) {
   var gettingItem = browser.storage.local.get(title);
   console.log(icon);
   gettingItem.then((result) => {
@@ -446,7 +450,7 @@ function addNewFavourite(title,url,icon,iconColour) {
       newFavouriteUrlTextField.value = '';
       currentOrderPosition++;
       console.log("addNewFavourite Updaed Order Position"+currentOrderPosition);
-      storeFavourite("1",title,url,currentOrderPosition,icon,iconColour, true);
+      storeFavourite("1",title,url,currentOrderPosition,icon,iconColour, backgroundColour,true);
       updateDivOrderCount();
 
       if(InWelcomeMode){
@@ -461,7 +465,8 @@ function createNewFavourite(){
   var title = newFavouriteTitleTextField.value;
   var url = newFavouriteUrlTextField.value;
   var icon = NewFavouriteIconTextField.value;
-  var iconColour = iconColourExampleTextField.value;
+  var iconColour = newFavouriteIconColourTextField.value;
+  var backgroundColour = newFavouriteBackgroundColourTextField.value;
 
   if(iconColour != ''){
     if(!iconColour.startsWith('#')){
@@ -471,12 +476,20 @@ function createNewFavourite(){
     iconColour = '#000000'
   }
 
-  addNewFavourite(title,url,icon,iconColour)
+  if(backgroundColour != ''){
+    if(!backgroundColour.startsWith('#')){
+      backgroundColour = '#'+backgroundColour;
+    }
+  } else {
+    backgroundColour = '#fff'
+  }
+
+  addNewFavourite(title,url,icon,iconColour,backgroundColour)
 }
 
 /* TODO: Add Debouce */
 function updateIconColourExampleDiv(){
-  var divColour = iconColourExampleTextField.value;
+  var divColour = newFavouriteIconColourTextField.value;
   if(!divColour.startsWith('#')){
     divColour = '#'+divColour;
   }
@@ -484,10 +497,10 @@ function updateIconColourExampleDiv(){
 }
 
 /* function to store a new favourite in storage */
-function storeFavourite(id, title, url, order, icon, iconColour, inEditMode) {
-  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour} });
+function storeFavourite(id, title, url, order, icon, iconColour, backgroundColour, inEditMode) {
+  var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
   storingNote.then(() => {
-    displayFavourite(id, title,url,order,icon,iconColour,inEditMode);
+    displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
   }, onError);
 }
 
@@ -525,23 +538,26 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
+    var currentBackgroundColour = results[objectKeys].backgroundColour;
     var currentOrder = results[objectKeys].Order;
     // console.log(currentTitle);
     // console.log(currentUrl);
     // console.log(currentIcon);
     // console.log(currentIconColour);
-    createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour);
+    createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour);
   }, onError);
 }
 
-function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColour) {
+function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColour, backgroundColour) {
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
   editCurrentFavouriteIconTextField.value = icon;
   editCurrentFavouriteIconColourTextField.value = iconColour;
+  editCurrentFavouriteBackgroundColourTextField.value = backgroundColour;
   previewTitle.textContent = title;
   previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+icon);
   previewIcon.setAttribute('style',"display: inline-block; color: "+iconColour);
+  previewTitle.setAttribute('style',"background-color: "+backgroundColour);
 
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click',(e) => {
     CloseEditCurrentFavouritesOverlay();
@@ -549,6 +565,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
     editCurrentFavouriteUrlTextField.removeEventListener("keyup", updatePreviewInEditFavouriteUrl);
     editCurrentFavouriteIconTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIcon);
     editCurrentFavouriteIconColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIconColour);
+    editCurrentFavouriteBackgroundColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteBackgroundColour);
     editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   })
 
@@ -556,6 +573,7 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
   editCurrentFavouriteUrlTextField.addEventListener('keyup',updatePreviewInEditFavouriteUrl);
   editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
+  editCurrentFavouriteBackgroundColourTextField.addEventListener("keyup", updatePreviewInEditFavouriteBackgroundColour);
 
   editUpdateFavouriteBtn.title = title;
   editUpdateFavouriteBtn.order = order;
@@ -568,12 +586,16 @@ function ProcessUpdateFavourite(evt)
   console.log("Div to inital Remove: TITLE: "+evt.target.title )
   console.log("Div Order: "+evt.target.order )
   var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
+  var updatedBackgroundColour = editCurrentFavouriteBackgroundColourTextField.value;
   if(!updatedIconColour.startsWith('#')){
     updatedIconColour = '#'+updatedIconColour;
   }
+  if(!updatedBackgroundColour.startsWith('#')){
+    updatedBackgroundColour = '#'+updatedBackgroundColour;
+  }
   console.log(document.getElementById(evt.target.title));
   document.getElementById(evt.target.title).remove();
-  updateFavourite(evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour);
+  updateFavourite(evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
   editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   console.log("ProcessUpdateFavourite")
   eventListnerForNewUpdateDiv(evt.target.order);
@@ -587,7 +609,7 @@ function eventListnerForNewUpdateDiv(order){
 
 /* function to display a note in the note box */
 
-function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
+function displayFavourite(id, title, url,order, icon, iconColour, backgroundColour, inEditMode) {
   var createCorrectUrl = generateValidUrl(url);
   console.log("displayFavourite: "+currentCssClassSize);
   var note = document.createElement('div');
@@ -653,6 +675,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
   favouriteHiddenImageUrl.setAttribute('class','hiddenField');
 
   favouriteboxtitle.setAttribute('class','grid-100 favourite-box-title');
+  favouriteboxtitle.setAttribute('style',"background-color: "+backgroundColour);
   favouriteboxtitle.textContent = title;
 
   editiconfavouritebox.appendChild(editIconbox);
@@ -798,17 +821,17 @@ function displayFavourite(id, title, url,order, icon, iconColour, inEditMode) {
 
 /* function to update notes */
 
-function updateFavourite(delNote,title, url, order, icon, iconColour) {
+function updateFavourite(delNote,title, url, order, icon, iconColour, backgroundColour) {
   //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
-  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour} });
+  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
     if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayFavourite("1",title, url, order,icon,iconColour,true);
+        displayFavourite("1",title, url, order,icon,iconColour,backgroundColour,true);
       }, onError);
     } else {
-      displayFavourite("1",title, url, order,icon,iconColour,true);
+      displayFavourite("1",title, url, order,icon,iconColour,backgroundColour,true);
     }
   }, onError);
 }
@@ -842,6 +865,15 @@ function updatePreviewInEditFavouriteIconColour() {
   previewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
 }
 
+/**TODO: Add Debounce**/
+function updatePreviewInEditFavouriteBackgroundColour() {
+  var updatedBackgroundColour = editCurrentFavouriteBackgroundColourTextField.value;
+  console.log(updatedBackgroundColour);
+  if(!updatedBackgroundColour.startsWith('#')){
+    updatedBackgroundColour = '#'+updatedBackgroundColour;
+  }
+  previewTitle.setAttribute('style',"background-color: "+updatedBackgroundColour);
+}
 
 function updateSettingsForType(updatedValue, settingsType) {
   console.log("updateSettingsForType")
