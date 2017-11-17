@@ -433,7 +433,6 @@ function displayAddNewFavourite() {
   var newfavouritebox = document.createElement('div');
   var favouriteboximage = document.createElement('div');
   var favouriteIconbox = document.createElement('i');
-  var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
   var cssClass = currentCssClassSize + " tablet-grid-33 new-favourite-container";
   newfavouritecontainer.setAttribute('class',cssClass);
@@ -443,15 +442,9 @@ function displayAddNewFavourite() {
   favouriteboximage.setAttribute('class','grid-100 new-favourite-box-image');
   favouriteIconbox.setAttribute('class','fa fa-5x fa-plus');
   favouriteIconbox.setAttribute('aria-hidden','true');
-  favouriteHiddenImageUrl.setAttribute('type','hidden');
-  favouriteHiddenImageUrl.setAttribute('aria-hidden','hidden');
-  favouriteHiddenImageUrl.setAttribute('name','hiddenField');
-  favouriteHiddenImageUrl.setAttribute('value','');
-  favouriteHiddenImageUrl.setAttribute('class','hiddenField');
 
   favouriteboxtitle.setAttribute('class','grid-100 new-favourite-box-title');
 
-  favouriteboximage.appendChild(favouriteHiddenImageUrl);
   favouriteboximage.appendChild(favouriteIconbox);
   newfavouritebox.appendChild(favouriteboximage);
   newfavouritebox.appendChild(favouriteboxtitle);
@@ -677,7 +670,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   var favouriteIconbox = document.createElement('i');
   var editIconbox = document.createElement('i');
   var deleteIconbox = document.createElement('i');
-  var favouriteHiddenImageUrl = document.createElement('input');
   var favouriteboxtitle = document.createElement('div');
   favouritecontainer.setAttribute('id',title);
   var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
@@ -715,12 +707,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   editIconbox.setAttribute('aria-hidden','true');
   deleteIconbox.setAttribute('class','fa fa-4x fa-trash-o');
   deleteIconbox.setAttribute('aria-hidden','true');
-  favouriteHiddenImageUrl.setAttribute('type','hidden');
-  favouriteHiddenImageUrl.setAttribute('aria-hidden','hidden');
-  favouriteHiddenImageUrl.setAttribute('id','label'+title);
-  favouriteHiddenImageUrl.setAttribute('name','hiddenField');
-  favouriteHiddenImageUrl.setAttribute('value','images/paris.jpg');
-  favouriteHiddenImageUrl.setAttribute('class','hiddenField');
 
   favouriteboxtitle.setAttribute('class','grid-100 favourite-box-title');
   favouriteboxtitle.setAttribute('style',"background-color: "+backgroundColour);
@@ -730,7 +716,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   deleteiconfavouritebox.appendChild(deleteIconbox);
   editdeleteiconfavouritebox.appendChild(editiconfavouritebox);
   editdeleteiconfavouritebox.appendChild(deleteiconfavouritebox);
-  favouriteboximage.appendChild(favouriteHiddenImageUrl);
   favouriteboximage.appendChild(favouriteIconbox);
   favouriteboximage.appendChild(editdeleteiconfavouritebox);
   favouritebox.appendChild(favouriteboximage);
@@ -805,14 +790,10 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
   favouritebox.addEventListener('mouseenter',(e) => {
     const evtTgt = e.target;
-    var bool = startpageContainerHTML.classList.contains('edit-mode');
-    if(bool){
-
-    } else {
+    var checkIfInEditMode = startpageContainerHTML.classList.contains('edit-mode');
+    if(!checkIfInEditMode){
       var backgroundImgBox = evtTgt.firstChild;
-      var backgroundImgBoxUrl = evtTgt.firstChild.firstChild.value;
-      backgroundImgBox.setAttribute("style", "background-image: url("+"/"+backgroundImgBoxUrl+')');
-      //backgroundImgBox.setAttribute("style", "background-color: red");
+      backgroundImgBox.setAttribute("style", 'background-color: white');
     }
   });
 
