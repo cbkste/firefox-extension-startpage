@@ -170,8 +170,42 @@ async function initialise() {
     }
   }, onError);
   defaultEventListener();
-  //dateTimeContainer.textContent = getDateTime();
+  writeTime();
+  writeDate();
 }
+
+function writeTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    var month = today.getMonth();
+    var weekDay = today.getDay();
+    var day = today.getDate();
+    if(m==0 && s==0)
+        writeDate();
+      m = checkTime(m);
+      s = checkTime(s);
+    document.getElementById('clock').innerHTML = h + ":" + m + ":" + s;
+    var t = setTimeout(startTime, 500);
+}
+
+function checkTime(i) {
+    if (i < 10) {i = "0" + i};
+    return i;
+}
+
+function writeDate() {
+    var today = new Date();
+    var month = today.getMonth();
+    var weekDay = today.getDay();
+    var day = today.getDate();
+    var year = today.getFullYear();
+    document.getElementById('weekday').innerHTML = weekdayToString(weekDay);
+    document.getElementById('date').innerHTML = monthToString(month)+" "+dayToString(day)+", "+year;
+    var t = setTimeout(startTime, 500);
+}
+
 async function setupbackgroundInit(){
   console.log("Setup Background:"+settingsCurrentSelectedBackground);
   if (settingsCurrentSelectedBackground) {
@@ -747,6 +781,11 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     } else {
       option2.removeChild(evtTgt.parentNode.parentNode.parentNode.parentNode);
     }
+    if(order === currentOrderPosition) {
+      console.log("Last Div Removed, reduce current order Position");
+      currentOrderPosition--;
+      storeSettings("1",settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+    }
     browser.storage.local.remove(title);
   })
 
@@ -1216,6 +1255,97 @@ function handleDragEnd(e) {
       [].forEach.call(favourtieArrayList, function (favourtieList) {
         favourtieList.classList.remove('over');
       });
+    }
+}
+
+// Return the week day name
+function weekdayToString(weekDay){
+    switch(weekDay){
+        case 1:
+            return "Monday";
+            break;
+        case 2:
+            return "Tuesday";
+            break;
+        case 3:
+            return "Wednesday";
+            break;
+        case 4:
+            return "Thursday";
+            break;
+        case 5:
+            return "Friday";
+            break;
+        case 6:
+            return "Saturday";
+            break;
+        case 0:
+            return "Sunday";
+            break;
+        default:
+            return "Error: weekDay number "+today.getDay();
+    }
+}
+
+//Return the month name
+function monthToString(month){
+    switch(month){
+        case 0:
+            return "January";
+            break;
+        case 1:
+            return "February";
+            break;
+        case 2:
+            return "March";
+            break;
+        case 3:
+            return "April";
+            break;
+        case 4:
+            return "May";
+            break;
+        case 5:
+            return "June";
+            break;
+        case 6:
+            return "July";
+            break;
+        case 7:
+            return "August";
+            break;
+        case 8:
+            return "September";
+            break;
+        case 9:
+            return "October";
+            break;
+        case 10:
+            return "November";
+            break;
+        case 11:
+            return "December";
+            break;
+        default:
+            return "Error in month conversion, number="+month;
+    }
+}
+//Return a properly formatted day number, like 1st, 3rd ...
+function dayToString(day){
+    switch(day){
+        case 1:
+        case 21:
+        case 31:
+            return day+"st";
+            break;
+        case 2:
+            return day+"nd";
+            break;
+        case 3:
+            return day+"rd";
+            break;
+        default:
+            return day+"th";
     }
 }
 
