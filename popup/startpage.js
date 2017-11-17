@@ -290,7 +290,7 @@ function createBrowsingHistoryDiv(history) {
     }
      newFavouriteUrlTextField.value = history.url;
      newFavouriteTitleTextField.value = a.hostname;
-
+     updatePreviewForNewFavouriteTitle();
      var correctNode = e.target.classList.contains('browsing-history-item-icon');
 
      if(correctNode) {
