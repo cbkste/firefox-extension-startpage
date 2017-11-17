@@ -1,3 +1,16 @@
+/**
+--------TODO LIST-------
+TODO:
+- add debounce to certain eventLIsteners
+- in background image handle if same image is added twice,
+no need to delete
+- in background image use lastmodififeddate in IMage obkect to remove
+oldest image stored
+- use sanitizer to escape html on drag and drop.
+- moving favourite not updaing div id, onlyusing innerHTML
+- movings favourite using drag and drop does not add event listner for rollober.
+**/
+
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
 var global_id = "1";
