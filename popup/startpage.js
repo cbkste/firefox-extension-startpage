@@ -1143,7 +1143,7 @@ async function displayBackgroundImage(filename){
    setBackgroundContainerImage(objectURL);
    settingsCurrentSelectedBackground = filename;
    currentBackgroudnBlobUrl = objectURL;
-   storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename);
+   storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
  });
 }
 
