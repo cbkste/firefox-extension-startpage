@@ -1126,7 +1126,7 @@ DRAG AND DROP FAVOURITE CONTAINER FOR REORDERING
 
 function dragstart_handler(e) {
   console.log("IN EDIT MODE: "+inEditMode)
-  if(!inEditMode){
+  if(inEditMode){
     console.log("dragStart");
     dragSrcEl = this;
     e.dataTransfer.effectAllowed = 'move';
@@ -1135,7 +1135,7 @@ function dragstart_handler(e) {
 }
 
 function handleDragOver(e) {
-  if(!inEditMode){
+  if(inEditMode){
     if (e.preventDefault) {
       e.preventDefault(); // Necessary. Allows us to drop.
     }
@@ -1145,19 +1145,19 @@ function handleDragOver(e) {
 }
 
 function handleDragEnter(e) {
-  if(!inEditMode){
+  if(inEditMode){
     this.classList.add('over');
   }
 }
 
 function handleDragLeave(e) {
-  if(!inEditMode){
+  if(inEditMode){
     this.classList.remove('over');
   }
 }
 
 function handleDrop(e) {
-  if(!inEditMode){
+  if(inEditMode){
     e.preventDefault();
 
     // Don't do anything if dropping the same column we're dragging.
@@ -1173,7 +1173,7 @@ function handleDrop(e) {
 }
 
 function handleDragEnd(e) {
-  if(!inEditMode){
+  if(inEditMode){
     // this/e.target is the source node.
     console.log("handleDragEnd");
     favourtieArrayList = document.querySelectorAll('.favourite-container');
