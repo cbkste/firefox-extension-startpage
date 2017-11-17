@@ -1124,6 +1124,9 @@ JS SECTION FOR
 DRAG AND DROP FAVOURITE CONTAINER FOR REORDERING
 **/
 
+/**
+TODO: Escape html, Div Id not updadting when moving, only using inerHTML.
+**/
 function dragstart_handler(e) {
   console.log("IN EDIT MODE: "+inEditMode)
   if(inEditMode){
