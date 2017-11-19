@@ -1223,18 +1223,29 @@ async function displayBackgroundImage(filename){
  backgroundImageDisplayZone.appendChild(imageBoxBackground);
 
 
- imageBoxBackground.addEventListener('click',() => {
+ imageBoxBackground.addEventListener('click',(e) => {
    console.log("CLick imageBoxBackground");
-   var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
-   console.log(backgroundImageDivs);
-   for (i = 0; i < backgroundImageDivs.length; ++i) {
-     backgroundImageDivs[i].setAttribute("style", "display: none;");
+   console.log(e);
+   var display = e.target.children[0];
+   console.log(e.target.children[0]);
+   if(display.style.display === 'block'){
+     startpageContainerHTML.setAttribute("style", "background-image: url('')");
+     display.setAttribute("style", "display: none;");
+     // REmove blobl and current backgroudn filename
+    // currentBackgroudnBlobUrl = objectURL;
+    // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
+   } else {
+     var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
+     console.log(backgroundImageDivs);
+     for (i = 0; i < backgroundImageDivs.length; ++i) {
+       backgroundImageDivs[i].setAttribute("style", "display: none;");
+     }
+     imageBoxBackgroundSelected.setAttribute("style", "display: block;");
+     setBackgroundContainerImage(objectURL);
+     settingsCurrentSelectedBackground = filename;
+     currentBackgroudnBlobUrl = objectURL;
+     storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
    }
-   imageBoxBackgroundSelected.setAttribute("style", "display: block;");
-   setBackgroundContainerImage(objectURL);
-   settingsCurrentSelectedBackground = filename;
-   currentBackgroudnBlobUrl = objectURL;
-   storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
  });
 }
 
