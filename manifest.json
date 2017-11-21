@@ -22,5 +22,8 @@
     },
     "default_title": "Startpage"
   },
+  "chrome_url_overrides" : {
+    "newtab": "popup/startpage.html"
+  },
 "content_security_policy": "script-src 'self'; object-src 'self';"
 }
