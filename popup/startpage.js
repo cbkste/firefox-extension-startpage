@@ -1,6 +1,3 @@
-//import {sanitizer} from 'sanitizer';
-//import sanitizer from "./../utils/sanitizer.js";
-
 /**
 --------TODO LIST-------
 TODO:
@@ -9,9 +6,6 @@ TODO:
 no need to delete
 - in background image use lastmodififeddate in IMage obkect to remove
 oldest image stored
-- use sanitizer to escape html on drag and drop.
-- moving favourite not updaing div id, onlyusing innerHTML
-- movings favourite using drag and drop does not add event listner for rollober.
 **/
 
 var inputTitle = document.querySelector('.new-note input');
@@ -1263,9 +1257,6 @@ JS SECTION FOR
 DRAG AND DROP FAVOURITE CONTAINER FOR REORDERING
 **/
 
-/**
-TODO: Escape html, Div Id not updadting when moving, only using inerHTML.
-**/
 function dragstart_handler(e) {
   console.log("IN EDIT MODE: "+inEditMode)
   if(inEditMode){
@@ -1302,7 +1293,6 @@ function handleDragLeave(e) {
 function handleDrop(e) {
   if(inEditMode){
     e.preventDefault();
-
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
       var newPosition = this.getAttribute("style").split("order: ")[1].split(";")[0];
