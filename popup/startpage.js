@@ -1,3 +1,6 @@
+//import {sanitizer} from 'sanitizer';
+//import sanitizer from "./../utils/sanitizer.js";
+
 /**
 --------TODO LIST-------
 TODO:
@@ -1269,7 +1272,8 @@ function dragstart_handler(e) {
     console.log("dragStart");
     dragSrcEl = this;
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/html', this.innerHTML);
+    e.dataTransfer.setData('text', this.id);
+    console.log(this);
   }
 }
 
@@ -1301,11 +1305,38 @@ function handleDrop(e) {
 
     // Don't do anything if dropping the same column we're dragging.
     if (dragSrcEl != this) {
-      // Set the source column's HTML to the HTML of the column we dropped on.
-      dragSrcEl.innerHTML = this.innerHTML;
-      this.innerHTML = e.dataTransfer.getData('text/html');
-      //console.log(e.dataTransfer.getData('text/html'));
-    }
+      var newPosition = this.getAttribute("style").split("order: ")[1].split(";")[0];
+      var oldPosition = currentOrderPosition;
+
+      var favouriteId = e.dataTransfer.getData('text');
+      console.log(this.id);
+      console.log(newPosition);
+      console.log(favouriteId);
+      var gettingFirstItem = browser.storage.local.get(favouriteId);
+      gettingFirstItem.then((result) => {
+        var objTest = Object.keys(result);
+        document.getElementById(favouriteId).remove();
+        console.log(result);
+        console.log("URL: "+result.url);
+        var url = result[favouriteId].url;
+        var icon = result[favouriteId].icon;
+        var iconColour = result[favouriteId].iconColour;
+        var backgroundColour = result[favouriteId].backgroundColour;
+        oldPosition = result[favouriteId].Order;
+        updateFavourite(favouriteId, favouriteId, url, newPosition, icon, iconColour, backgroundColour);
+      }, onError);
+
+      var gettingSecondItem = browser.storage.local.get(this.id);
+      gettingSecondItem.then((result) => {
+        var objTest = Object.keys(result);
+        document.getElementById(this.id).remove();
+        var url = result[this.id].url;
+        var icon = result[this.id].icon;
+        var iconColour = result[this.id].iconColour;
+        var backgroundColour = result[this.id].backgroundColour;
+        updateFavourite(this.id, this.id, url, oldPosition, icon, iconColour, backgroundColour);
+      }, onError);
+     }
     handleDragEnd();
     return false;
   }
@@ -1413,6 +1444,76 @@ function dayToString(day){
             return day+"th";
     }
 }
+
+function createSafeDivHTML(html) {
+  var safeHTML = Sanitizer.createSafeHTML`<p>Hello ${username}</p>`;
+}
+
+// re-use the existing safe-HTML object
+function useGreeting(domNode) {
+  var htmlObj = cache.retrieve('greeting');
+  domNode.innerHTML = Sanitizer.unwrapSafeHTML(htmlObj);
+}
+
+
+var Sanitizer = {
+  _entity: /[&<>"'/]/g,
+
+  _entities: {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&apos;',
+    '/': '&#x2F;'
+  },
+
+  getEntity: function (s) {
+    return Sanitizer._entities[s];
+  },
+
+  /**
+   * Escapes HTML for all values in a tagged template string.
+   */
+  escapeHTML: function (strings, ...values) {
+    var result = '';
+
+    for (var i = 0; i < strings.length; i++) {
+      result += strings[i];
+      if (i < values.length) {
+        result += String(values[i]).replace(Sanitizer._entity,
+          Sanitizer.getEntity);
+      }
+    }
+
+    return result;
+  },
+  /**
+   * Escapes HTML and returns a wrapped object to be used during DOM insertion
+   */
+  createSafeHTML: function (strings, ...values) {
+    var escaped = Sanitizer.escapeHTML(strings, ...values);
+    return {
+      __html: escaped,
+      toString: function () {
+        return '[object WrappedHTMLObject]';
+      },
+      info: 'This is a wrapped HTML object. See https://developer.mozilla.or'+
+        'g/en-US/Firefox_OS/Security/Security_Automation for more.'
+    };
+  },
+  /**
+   * Unwrap safe HTML created by createSafeHTML or a custom replacement that
+   * underwent security review.
+   */
+  unwrapSafeHTML: function (...htmlObjects) {
+    var markupList = htmlObjects.map(function(obj) {
+      return obj.__html;
+    });
+    return markupList.join('');
+  }
+};
+
 
 /* Clear all notes from the display/storage */
 function clearAll() {
