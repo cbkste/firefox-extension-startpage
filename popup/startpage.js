@@ -274,11 +274,11 @@ function createBrowsingHistoryDiv(history) {
   var divIcon = document.createElement('div');
   var addIcon = document.createElement('i');
   var divLink = document.createElement('div');
-  divContainer.setAttribute('class','grid-50 browsing-history-item-container');
-  divIcon.setAttribute('class','grid-5 browsing-history-item-icon-container');
+  divContainer.setAttribute('class','grid-50 tablet-grid-50 mobile-grid-50 browsing-history-item-container');
+  divIcon.setAttribute('class','grid-5 tablet-grid-5 mobile-grid-5 browsing-history-item-icon-container');
   addIcon.setAttribute('class','fa fa-check-circle browsing-history-item-icon');
   addIcon.setAttribute('aria-hidden','true');
-  divLink.setAttribute('class','grid-95');
+  divLink.setAttribute('class','grid-95 tablet-grid-95 mobile-grid-95');
   var li = document.createElement('p');
   var a = document.createElement('a');
   var url = document.createTextNode(history.url);
