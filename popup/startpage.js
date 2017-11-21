@@ -1234,6 +1234,8 @@ async function displayBackgroundImage(filename){
      // REmove blobl and current backgroudn filename
     // currentBackgroudnBlobUrl = objectURL;
     // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
+    settingsCurrentSelectedBackground = void 0;
+    storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
    } else {
      var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
      console.log(backgroundImageDivs);
