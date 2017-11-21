@@ -69,7 +69,7 @@ var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
 var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
 var settingsMode = false;
 var inEditMode = false;
-var currentCssClassSize = "grid-25";
+var currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
 var changeLinksToHttps = true;
 var NoCurrentFavourites = false;
 var settingsBackgroundImageLimit = "6";
@@ -361,7 +361,7 @@ function updateDivOrderCount(){
 
 function updateUi(newCssClass){
   var allFavouritesDivs = document.querySelectorAll('.favourite-container');
-  var cssClass = newCssClass + " tablet-grid-33 favourite-container";
+  var cssClass = newCssClass + " favourite-container";
   for (i = 0; i < allFavouritesDivs.length; ++i) {
     allFavouritesDivs[i].setAttribute('class',cssClass);
   }
@@ -444,7 +444,7 @@ function displayAddNewFavourite() {
   var favouriteboximage = document.createElement('div');
   var favouriteIconbox = document.createElement('i');
   var favouriteboxtitle = document.createElement('div');
-  var cssClass = currentCssClassSize + " tablet-grid-33 new-favourite-container";
+  var cssClass = currentCssClassSize + " new-favourite-container";
   newfavouritecontainer.setAttribute('class',cssClass);
   newfavouritecontainer.setAttribute('style',"order:999");
   newfavouritebox.setAttribute('class','new-favourite-box');
@@ -684,7 +684,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   var deleteIconbox = document.createElement('i');
   var favouriteboxtitle = document.createElement('div');
   favouritecontainer.setAttribute('id',title);
-  var classList = currentCssClassSize + " tablet-grid-33 favourite-container";
+  var classList = currentCssClassSize + " favourite-container";
   favouritecontainer.setAttribute('class',classList);
   favouritecontainer.setAttribute('style',"order: "+order);
   favouritecontainer.setAttribute('draggable',"true");
@@ -696,9 +696,9 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
-  editdeleteiconfavouritebox.setAttribute('class','grid-100 edit-delete-icons');
+  editdeleteiconfavouritebox.setAttribute('class','grid-100 tablet-grid-100 mobile-grid-100 edit-delete-icons');
   //editdeleteiconfavouritebox.setAttribute('style','display: none');
-  editiconfavouritebox.setAttribute('class','grid-50 edit-favourite-icon');
+  editiconfavouritebox.setAttribute('class','grid-50 tablet-grid-50 mobile-grid-50 edit-favourite-icon');
   editiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
   deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
@@ -1021,22 +1021,22 @@ function getNewCssClass(rowCountRequired) {
   //console.log(rowCountRequired);
     switch(rowCountRequired) {
       case "1":
-        currentCssClassSize = "grid-100";
+        currentCssClassSize = "grid-100 tablet-grid-100 mobile-grid-100";
         return "grid-100";
       case "2":
-        currentCssClassSize = "grid-50";
+        currentCssClassSize = "grid-50 tablet-grid-50 mobile-grid-50";
         return "grid-50";
       case "3":
-        currentCssClassSize = "grid-33";
+        currentCssClassSize = "grid-33 tablet-grid-33 mobile-grid-33";
         return "grid-33";
       case "4":
-        currentCssClassSize = "grid-25";
+        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
         return "grid-25";
       case "5":
-        currentCssClassSize = "grid-20";
+        currentCssClassSize = "grid-20 tablet-grid-20 mobile-grid-20";
         return "grid-20";
       default:
-        currentCssClassSize = "grid-25";
+        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
         return "grid-25";
       }
 }
