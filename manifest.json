@@ -25,5 +25,10 @@
   "chrome_url_overrides" : {
     "newtab": "popup/startpage.html"
   },
+  "applications": {
+    "gecko": {
+      "id": "{ca6fa83e-3d6d-432d-a0d7-b060a69e8c68}"
+    }
+  },
 "content_security_policy": "script-src 'self'; object-src 'self';"
 }

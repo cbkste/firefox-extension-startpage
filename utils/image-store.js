@@ -1,7 +1,7 @@
 "use strict";
 
 // Import the `getFileStorage` helper from the idb-file-storage npm dependency.
-import {getFileStorage} from 'idb-file-storage/src/idb-file-storage';
+//import {getFileStorage} from 'idb-file-storage/src/idb-file-storage';
 
 export async function saveCollectedBlobs(collectionName, collectedBlobs) {
   // Retrieve a named file storage (it creates a new one if it doesn't exist yet).
