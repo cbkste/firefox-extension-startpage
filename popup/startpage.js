@@ -107,7 +107,7 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
-  newFavouriteIconColourTextField.addEventListener('keyup', updateIconColourExampleDiv);
+  //newFavouriteIconColourTextField.addEventListener('keyup', updateIconColourExampleDiv);
 }
 
 function defaultWelcomeEventListener() {
@@ -274,11 +274,11 @@ function createBrowsingHistoryDiv(history) {
   var divIcon = document.createElement('div');
   var addIcon = document.createElement('i');
   var divLink = document.createElement('div');
-  divContainer.setAttribute('class','grid-50 tablet-grid-50 mobile-grid-50 browsing-history-item-container');
-  divIcon.setAttribute('class','grid-5 tablet-grid-5 mobile-grid-5 browsing-history-item-icon-container');
+  divContainer.setAttribute('class','grid-50 tablet-grid-100 mobile-grid-50 browsing-history-item-container');
+  divIcon.setAttribute('class','grid-10 tablet-grid-10 mobile-grid-10 browsing-history-item-icon-container');
   addIcon.setAttribute('class','fa fa-check-circle browsing-history-item-icon');
   addIcon.setAttribute('aria-hidden','true');
-  divLink.setAttribute('class','grid-95 tablet-grid-95 mobile-grid-95');
+  divLink.setAttribute('class','grid-90 tablet-grid-90 mobile-grid-90 browsing-history-item-url-link');
   var li = document.createElement('p');
   var a = document.createElement('a');
   var url = document.createTextNode(history.url);
@@ -542,11 +542,11 @@ function createNewFavourite(){
 
 /* TODO: Add Debouce */
 function updateIconColourExampleDiv(){
-  var divColour = newFavouriteIconColourTextField.value;
-  if(!divColour.startsWith('#')){
-    divColour = '#'+divColour;
-  }
-  iconColourExampleDiv.setAttribute('style', "background-color:"+divColour);
+  // var divColour = newFavouriteIconColourTextField.value;
+  // if(!divColour.startsWith('#')){
+  //   divColour = '#'+divColour;
+  // }
+  //iconColourExampleDiv.setAttribute('style', "background-color:"+divColour);
 }
 
 /* function to store a new favourite in storage */
@@ -1021,23 +1021,17 @@ function getNewCssClass(rowCountRequired) {
   //console.log(rowCountRequired);
     switch(rowCountRequired) {
       case "1":
-        currentCssClassSize = "grid-100 tablet-grid-100 mobile-grid-100";
-        return "grid-100";
+        return "grid-100 tablet-grid-100 mobile-grid-100";
       case "2":
-        currentCssClassSize = "grid-50 tablet-grid-50 mobile-grid-50";
-        return "grid-50";
+        return "grid-50 tablet-grid-50 mobile-grid-50";
       case "3":
-        currentCssClassSize = "grid-33 tablet-grid-33 mobile-grid-33";
-        return "grid-33";
+        return "grid-33 tablet-grid-33 mobile-grid-33";
       case "4":
-        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
-        return "grid-25";
+        return "grid-25 tablet-grid-25 mobile-grid-25";
       case "5":
-        currentCssClassSize = "grid-20 tablet-grid-20 mobile-grid-20";
-        return "grid-20";
+        return "grid-20 tablet-grid-20 mobile-grid-20";
       default:
-        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
-        return "grid-25";
+        return "grid-25 tablet-grid-25 mobile-grid-25";
       }
 }
 
