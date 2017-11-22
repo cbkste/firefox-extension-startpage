@@ -147,6 +147,7 @@ async function initialise() {
 
   var gettingAllStorageItems = browser.storage.local.get(null);
   gettingAllStorageItems.then((results) => {
+    console.log("Getting CSS CLASS:"+settingsRowCountLimit);
     getNewCssClass(settingsRowCountLimit);
     console.log("INIT:"+currentCssClassSize);
     var noteKeys = Object.keys(results);
@@ -1019,19 +1020,25 @@ function updateSettingsForType(updatedValue, settingsType) {
 
 
 function getNewCssClass(rowCountRequired) {
-  //console.log(rowCountRequired);
+  console.log("getNewCssClass(rowCountRequired)"+rowCountRequired);
     switch(rowCountRequired) {
       case "1":
+        currentCssClassSize = "grid-100 tablet-grid-100 mobile-grid-100";
         return "grid-100 tablet-grid-100 mobile-grid-100";
       case "2":
+        currentCssClassSize = "grid-50 tablet-grid-50 mobile-grid-50";
         return "grid-50 tablet-grid-50 mobile-grid-50";
       case "3":
+        currentCssClassSize = "grid-33 tablet-grid-33 mobile-grid-33";
         return "grid-33 tablet-grid-33 mobile-grid-33";
       case "4":
+        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
         return "grid-25 tablet-grid-25 mobile-grid-25";
       case "5":
+        currentCssClassSize = "grid-20 tablet-grid-20 mobile-grid-20";
         return "grid-20 tablet-grid-20 mobile-grid-20";
       default:
+        currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
         return "grid-25 tablet-grid-25 mobile-grid-25";
       }
 }

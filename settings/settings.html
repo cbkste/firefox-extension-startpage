@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../popup/startpage.css"/>
+  <link rel="stylesheet" href="../popup/unemantic.css">
+  <link rel="stylesheet" href="../popup/settings.css">
+  <link rel="stylesheet" href="../popup/homepage.css">
+  <script src="/deps/idb-file-storage.js"></script>
+  <script src="/deps/uuidv4.js"></script>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+          rel="stylesheet" type='text/css'>
+</head>
+
+<body>
+
+<h1>SETTINGS PAGE:</h1>
+
+<div class="suffix-10 prefix-10 grid-80 settings-page-container">
+  <div class="grid-100 settings-title">
+    <p>Settings</p>
+  </div>
+  <div class="grid-100 tablet-grid-100">
+    <div class="grid-100 tablet-grid-100">
+      <div class="grid-50 tablet-grid-50">
+        <div class="tablet-grid-100 ItemsPerRowCountContainer">
+          <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
+          <div class="tooltip"><i class="fa fa-info"></i>
+            <span class="tooltiptext">Set Number of Favourites to appear on each Row</span>
+          </div>
+        </div>
+        <input type="text" name="ItemsPerRowCountTextBox" value="">
+        <input id="UpdateSettingsRowCountBtn" type="submit" value="Update Items">
+      </div>
+      <div class="grid-50 tablet-grid-50">
+        <div class="tablet-grid-100 StoredBackgroundImagesCountContainer">
+          <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
+            <div class="tooltip"><i class="fa fa-info"></i>
+              <span class="tooltiptext">Set Number of Stored Background Images, If Limit is exceeded oldest stored Image will be removed.</span>
+            </div>
+        </div>
+        <input type="text" name="StoredBackgroundImagesCountTextBox" value="">
+        <input id="UpdateStoredBackgroundImagesBtn" type="submit" value="Update Background Images">
+      </div>
+    </div>
+  </div>
+  <div class="grid-100 tablet-grid-50">
+    <div class="grid-35 BackgroundImageTextBlockContainer">
+      <p>Current Background Image</p>
+      <div class="tooltip"><i class="fa fa-info"></i>
+        <span class="tooltiptext">Drop Background IMages in the drop zone below.</span>
+      </div>
+    </div>
+    <div class="grid-60 suffix-5 background-image-info-block">
+      <div class="grid-10 background-image-info-block-icon"><i class="fa fa-info"></i></div>
+      <div class="grid-90 background-image-info-block-text"></div>
+    </div>
+    <div class="grid-100 image-drop-zone">
+        image dropzone
+    </div>
+    <div class="grid-100 image-display-zone">
+    </div>
+  </div>
+</div>
+<script src="settings.js"></script>
+</body>
+
+</html>
