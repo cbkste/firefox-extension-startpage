@@ -24,6 +24,7 @@ var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:ch
 var backgroundImageDropZone = document.querySelector('.image-drop-zone');
 var backgroundImageDisplayZone = document.querySelector('.image-display-zone');
 var startpageContainerHTML = document.querySelector('.startpage-container');
+var startpageImageContainerHTML = document.body;
 var backgroundImageInfoBlock = document.querySelector('.background-image-info-block');
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
 var welcomeContainer = document.querySelector('.welcome-container');
@@ -399,7 +400,7 @@ async function removeEditOverlay() {
   if (settingsCurrentSelectedBackground) {
     await setupbackgroundInit();
   } else {
-    startpageContainerHTML.setAttribute("style", "background-color: white;");
+    startpageImageContainerHTML.setAttribute("style", "background-color: white;");
   }
   editModeTitleContainer.setAttribute("style", "display: none;");
   startpageContainerHTML.setAttribute('class','startpage-container');
@@ -1220,7 +1221,7 @@ async function displayBackgroundImage(filename){
    var display = e.target.children[0];
    console.log(e.target.children[0]);
    if(display.style.display === 'block'){
-     startpageContainerHTML.setAttribute("style", "background-image: url('')");
+     startpageImageContainerHTML.setAttribute("style", "background-image: url('')");
      display.setAttribute("style", "display: none;");
      // REmove blobl and current backgroudn filename
     // currentBackgroudnBlobUrl = objectURL;
@@ -1243,7 +1244,7 @@ async function displayBackgroundImage(filename){
 }
 
 function setBackgroundContainerImage(url) {
-  startpageContainerHTML.setAttribute("style", "background-image: url("+url+')');
+  startpageImageContainerHTML.setAttribute("style", "background: url("+url+'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;');
 }
 
 /**
