@@ -150,6 +150,10 @@
   background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAEklEQVQImWNgYGD4z0AswK4SAFXuAf8EPy+xAAAAAElFTkSuQmCC) repeat;
 }
 
+.startpage-container {
+  padding-top: 30px;
+}
+
 .image-display-zone {
   height: 100%;
   border: 1px solid black;
@@ -516,6 +520,7 @@
     font-size: 2em;
   }
 
+
   .edit-mode-title p {
     font-size: 18px;
     padding: 2px 25px 0;
@@ -524,6 +529,15 @@
 
   .image-drop-zone {
     height: 150px;
+  }
+
+  .startpage-container {
+    padding-top: 10px;
+  }
+
+  .settings i{
+    padding-right: 10px;
+    margin-bottom: 15px;
   }
 }
 
@@ -587,5 +601,9 @@
 
   .image-drop-zone {
     height: 150px;
+  }
+
+  .startpage-container {
+    padding-top: 20px;
   }
 }
