@@ -28,10 +28,10 @@
 <div class="startpage-container">
  <div id="add-overlay" class="grid-100 add-overlay-container">
    <div class="suffix-15 prefix-15 grid-70 tablet-suffix-10 tablet-prefix-10 tablet-grid-80 mobile-suffix-10 mobile-prefix-10 mobile-grid-80 add-overlay-box">
-     <div class="grid-95 tablet-grid-95 mobile-grid-95 add-overlay-box-title">
+     <div class="grid-95 tablet-grid-95 mobile-grid-90 add-overlay-box-title">
        <p>Add New Favourite</p>
      </div>
-     <div class="grid-5 tablet-grid-5 mobile-grid-5 add-overlay-box-close">
+     <div class="grid-5 tablet-grid-5 mobile-grid-10 add-overlay-box-close">
        <i class="fa fa-times" aria-hidden="true"></i>
      </div>
      <div class="grid-50 tablet-grid-50 mobile-grid-50 add-favourite-details-input">
@@ -92,7 +92,7 @@
              <div class="grid-100 tablet-grid-100 mobile-grid-100 new-preview-favourite-box-title"></div></a></div>
        </div>
      </div>
-     <div class="grid-100 tablet-grid-100 mobile-grid-100 add-favourite-from-history">
+     <div class="grid-50 tablet-grid-100 mobile-grid-100 add-favourite-from-history">
        add-favourite-from-history
        <div id="browsing-history-container"></div>
      </div>
@@ -102,13 +102,13 @@
 
  <div id="edit-overlay" class="grid-100 edit-overlay-container">
    <div class="suffix-15 prefix-15 grid-70 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-suffix-5 mobile-prefix-5 mobile-grid-90 edit-overlay-box">
-     <div class="grid-95 tablet-grid-95 mobile-grid-95 edit-overlay-box-title">
+     <div class="grid-95 tablet-grid-95 mobile-grid-90 edit-overlay-box-title">
        <p>Edit Favourite</p>
      </div>
-     <div class="grid-5 tablet-grid-5 mobile-grid-5 edit-overlay-box-close">
+     <div class="grid-5 tablet-grid-5 mobile-grid-10 edit-overlay-box-close">
        <i class="fa fa-times" aria-hidden="true"></i>
      </div>
-     <div class="grid-70 tablet-grid-100 mobile-grid-100 edit-favourite-details-input">
+     <div class="grid-55 tablet-grid-100 mobile-grid-100 edit-favourite-details-input">
        <div class="edit-favourite-details-form-title">
          <p id="EditCurrentFavouriteTitle">Current Favourite Title: </p>
          <div class="tooltip"><i class="fa fa-info"></i>
@@ -123,42 +123,36 @@
          </div>
        </div>
        <input type="text" name="EditCurrentFavouriteUrl" value="">
-       <div class="edit-favourite-details-form-icon-container grid-50">
+       <div class="grid-100 edit-favourite-details-form-icon-container">
          <div class="edit-favourite-details-form-icon">
-         <p id="EditCurrentFavouriteIcon">Favourite Icon: </p>
-         <div class="tooltip"><i class="fa fa-info"></i>
-           <span class="tooltiptext">Set Icon of New Favourite, leave empty for none to be used</span>
+           <p id="EditCurrentFavouriteIcon">Favourite Icon: </p>
+           <div class="tooltip"><i class="fa fa-info"></i>
+             <span class="tooltiptext">Set Icon of New Favourite, leave empty for none to be used</span>
+           </div>
          </div>
-       </div>
-       <input type="text" name="EditCurrentFavouriteIcon" value="">
-        </div>
-       <div class="edit-favourite-details-form-icon-colour-container grid-50">
-       <div class="grid-80 edit-favourite-details-form-icon-colour">
-         <p id="EditCurrentFavouriteIconColour">Icon Colour #:</p>
-         <div class="tooltip"><i class="fa fa-info"></i>
-           <span class="tooltiptext">Set Colour of Icon, Default Black</span>
+         <input type="text" name="EditCurrentFavouriteIcon" value="">
+      </div>
+       <div class="grid-100 edit-favourite-details-form-icon-colour-container">
+         <div class="grid-100 edit-favourite-details-form-icon-colour">
+           <p id="EditCurrentFavouriteIconColour">Icon Colour #:</p>
+           <div class="tooltip"><i class="fa fa-info"></i>
+             <span class="tooltiptext">Set Colour of Icon, Default Black</span>
+           </div>
          </div>
+         <input type="text" name="EditCurrentFavouriteIconColour" value="">
        </div>
-       <div class="grid-20 icon-colour-example-edit">
-         <br>
-       </div>
-       <input type="text" name="EditCurrentFavouriteIconColour" value="">
-       </div>
-       <div class="edit-favourite-details-form-background-colour-container grid-50">
-         <div class="grid-80 edit-favourite-details-form-background-colour">
+       <div class="grid-100 edit-favourite-details-form-background-colour-container">
+         <div class="grid-100 edit-favourite-details-form-background-colour">
            <p id="EditCurrentFavouriteBackgroundColour">Background Colour #:</p>
            <div class="tooltip"><i class="fa fa-info"></i>
              <span class="tooltiptext">Set Colour of Background, Default White</span>
            </div>
          </div>
-         <div class="grid-20 background-colour-example-edit">
-           <br>
-         </div>
          <input type="text" name="EditCurrentFavouriteBackgroundColour" value="">
        </div>
        <input id="EditCurrentFavouriteBtn" type="submit" value="Update Favourite">
      </div>
-     <div class="grid-30 tablet-grid-100 mobile-grid-100 favourite-editmode-example">
+     <div class="grid-45 tablet-grid-100 mobile-grid-100 favourite-editmode-example">
        <div class="grid-100 tablet-grid-100 mobile-grid-100 favourite-editmode-example-edit">
          <h1>Preview</h1>
        </div>

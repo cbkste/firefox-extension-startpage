@@ -480,7 +480,6 @@
 
   .edit-overlay-box-close i {
     font-size: 18px;
-    padding: 2px 25px 0;
     line-height: 30px;
   }
 
@@ -500,6 +499,18 @@
 
   #AddNewFavouriteBtn {
     font-size: 1.1rem;
+  }
+
+  .edit-favourite-icon i {
+    font-size: 2em;
+  }
+
+  .delete-favourite-icon i {
+    font-size: 2em;
+  }
+
+  .new-favourite-box-image i {
+    font-size: 3em;
   }
 }
 
@@ -518,7 +529,6 @@
 
   .edit-overlay-box-close i {
     font-size: 22px;
-    padding: 2px 35px 0;
     line-height: 35px;
   }
 
@@ -538,5 +548,17 @@
 
   #AddNewFavouriteBtn {
     font-size: 1.1rem;
+  }
+
+  .edit-favourite-icon i {
+    font-size: 3em;
+  }
+
+  .delete-favourite-icon i {
+    font-size: 3em;
+  }
+
+  .new-favourite-box-image i {
+    font-size: 3em;
   }
 }
