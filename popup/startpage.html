@@ -185,7 +185,7 @@
     </div>
   </div>
   <div class="grid-100 edit-mode-title-container">
-    <div class="suffix-10 prefix-10 grid-80 edit-mode-title">
+    <div class="grid-80 prefix-10 suffix-10 tablet-grid-90 tablet-suffix-5 tablet-prefix-5 edit-mode-title">
       <p>EDIT MODE</p>
     </div>
   </div>
@@ -198,28 +198,32 @@
     <div class="grid-100 settings-title">
       <p>Settings</p>
     </div>
-    <div class="grid-50">
-      <div class="grid-100">
-        <div class="grid-100 radio-buttons">
+    <div class="grid-50 tablet-grid-100">
+      <div class="grid-100 tablet-grid-100">
+        <div class="grid-100 tablet-grid-100 radio-buttons">
           <input type="radio" name="itemsPerRowRadio" value="Single" checked> Single<br>
           <input type="radio" name="itemsPerRowRadio" value="Custom"> Custom<br>
         </div>
-        <div class="ItemsPerRowCountContainer">
-          <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
-          <div class="tooltip"><i class="fa fa-info"></i>
-            <span class="tooltiptext">Set Number of Favourites to appear on each Row</span>
-          </div>
-        </div>
-        <input type="text" name="ItemsPerRowCountTextBox" value="">
-        <input id="UpdateSettingsRowCountBtn" type="submit" value="Update Items">
-        <div class="StoredBackgroundImagesCountContainer">
-          <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
+        <div class="tablet-grid-50">
+          <div class="tablet-grid-100 ItemsPerRowCountContainer">
+            <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
             <div class="tooltip"><i class="fa fa-info"></i>
-              <span class="tooltiptext">Set Number of Stored Background Images, If Limit is exceeded oldest stored Image will be removed.</span>
+              <span class="tooltiptext">Set Number of Favourites to appear on each Row</span>
             </div>
+          </div>
+          <input type="text" name="ItemsPerRowCountTextBox" value="">
+          <input id="UpdateSettingsRowCountBtn" type="submit" value="Update Items">
         </div>
-        <input type="text" name="StoredBackgroundImagesCountTextBox" value="">
-        <input id="UpdateStoredBackgroundImagesBtn" type="submit" value="Update Background Images">
+        <div class="tablet-grid-50">
+          <div class="tablet-grid-100 StoredBackgroundImagesCountContainer">
+            <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
+              <div class="tooltip"><i class="fa fa-info"></i>
+                <span class="tooltiptext">Set Number of Stored Background Images, If Limit is exceeded oldest stored Image will be removed.</span>
+              </div>
+          </div>
+          <input type="text" name="StoredBackgroundImagesCountTextBox" value="">
+          <input id="UpdateStoredBackgroundImagesBtn" type="submit" value="Update Background Images">
+        </div>
       </div>
     </div>
     <div class="grid-50">

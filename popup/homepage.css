@@ -155,6 +155,8 @@
 .image-display-zone {
   height: 100%;
   border: 1px solid black;
+  padding-right: 0px;
+  padding-left: 0px;
 }
 
 .single-image-zone {
@@ -465,6 +467,15 @@
   padding-right: 0px;
 }
 
+.ItemsPerRowCountContainer {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.StoredBackgroundImagesCountContainer {
+  padding-right: 0px;
+  padding-left: 0px;
+}
 @media only screen and (max-width: 767px) {
   .edit-overlay-box-title p {
     font-size: 18px;
@@ -511,6 +522,20 @@
 
   .new-favourite-box-image i {
     font-size: 3em;
+  }
+
+  .favourite-box-image i {
+    font-size: 2em;
+  }
+
+  .edit-mode-title p {
+    font-size: 18px;
+    padding: 2px 25px 0;
+    line-height: 30px;
+  }
+
+  .image-drop-zone {
+    height: 150px;
   }
 }
 
@@ -560,5 +585,19 @@
 
   .new-favourite-box-image i {
     font-size: 3em;
+  }
+
+  .favourite-box-image i {
+    font-size: 3em;
+  }
+
+  .edit-mode-title p {
+    font-size: 22px;
+    padding: 2px 35px 0;
+    line-height: 35px;
+  }
+
+  .image-drop-zone {
+    height: 150px;
   }
 }

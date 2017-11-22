@@ -1196,7 +1196,7 @@ async function displayBackgroundImage(filename){
  var imageBoxBackground = document.createElement('div');
  var imageBoxBackgroundSelected = document.createElement('div');
  var selectedIconBox = document.createElement('i');
- imageBoxBackground.setAttribute("class", "grid-33 single-image-zone");
+ imageBoxBackground.setAttribute("class", "grid-50 tablet-grid-33 mobile-grid-33 single-image-zone");
  imageBoxBackground.setAttribute("id", filename);
  imageBoxBackground.setAttribute("style", "background-image: url("+objectURL+')');
  if(settingsCurrentSelectedBackground == filename){
