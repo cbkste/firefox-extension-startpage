@@ -296,16 +296,19 @@ async function displayBackgroundImage(filename){
   var divContextMenu = document.createElement('div');
   divContextMenu.setAttribute('class','dropdown-content');
   var menuItem1 = document.createElement('a');
+  menuItem1.setAttribute('class','remove-image-from-image-store');
   menuItem1.href = "#";
   menuItem1.textContent = "Delete Image";
-  // var menuItem2 = document.createElement('a');
-  // menuItem2.href = "#";
-  // menuItem2.textContent = "Link 2";
+  var menuItem2 = document.createElement('a');
+  menuItem1.setAttribute('class','set-image-as-background');
+  menuItem2.href = "#";
+  menuItem2.textContent = "Set Image as Background";
   // var menuItem3 = document.createElement('a');
   // menuItem3.href = "#";
   // menuItem3.textContent = "Link 3";
 
   divContextMenu.appendChild(menuItem1);
+  divContextMenu.appendChild(menuItem2);
   divContextMenuContainer.appendChild(divContextMenuButton);
   divContextMenuContainer.appendChild(divContextMenu);
 
@@ -313,38 +316,6 @@ async function displayBackgroundImage(filename){
 
   backgroundImageDisplayZone.appendChild(imageBoxBackground);
 
- imageBoxBackground.addEventListener('click',(e) => {
-   console.log("CLick imageBoxBackground");
-   console.log(e);
-   var display = e.target.children[0];
-   if(e.target.tagName == 'A'){
-     deletedStoredBackgroundImageData(filename);
-     // imageBoxBackground.removeEventListener("mouseenter", EditOverlay);
-     // imageBoxBackground.removeEventListener("mouseleave", EditOverlay);
-   } else {
-     if(display.style.display === 'block'){
-       display.setAttribute("style", "display: none;");
-       // REmove blobl and current backgroudn filename
-      // currentBackgroudnBlobUrl = objectURL;
-      // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
-      settingsCurrentSelectedBackground = void 0;
-      storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
-      onSettingsScreenSuccess("Background Deselected, Background Set back to default");
-     } else {
-       var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
-       console.log(backgroundImageDivs);
-       for (i = 0; i < backgroundImageDivs.length; ++i) {
-         backgroundImageDivs[i].setAttribute("style", "display: none;");
-       }
-       imageBoxBackgroundSelected.setAttribute("style", "display: block;");
-       //setBackgroundContainerImage(objectURL);
-       settingsCurrentSelectedBackground = filename;
-       currentBackgroudnBlobUrl = objectURL;
-       storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
-       onSettingsScreenSuccess("Background Set as "+filename);
-     }
-   }
- });
 
  imageBoxBackground.addEventListener('mouseenter',(e) => {
    divContextMenuContainer.setAttribute('style','display: flex');
@@ -354,6 +325,27 @@ async function displayBackgroundImage(filename){
    divContextMenuContainer.setAttribute('style','display: none');
  });
 
+menuItem1.addEventListener('click',(e) => {
+  deletedStoredBackgroundImageData(filename);
+});
+
+menuItem2.addEventListener('click',(e) => {
+    if(settingsCurrentSelectedBackground == filename){
+        onSettingsScreenSuccess("Background Deselected, Background Set back to default");
+      } else {
+        var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
+        console.log(backgroundImageDivs);
+        for (i = 0; i < backgroundImageDivs.length; ++i) {
+        backgroundImageDivs[i].setAttribute("style", "display: none;");
+      }
+        imageBoxBackgroundSelected.setAttribute("style", "display: block;");
+        //setBackgroundContainerImage(objectURL);
+        settingsCurrentSelectedBackground = filename;
+        currentBackgroudnBlobUrl = objectURL;
+        storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+        onSettingsScreenSuccess("Background Set as "+filename);
+    }
+  });
 }
 
 async function deletedStoredBackgroundImageData(filename){
