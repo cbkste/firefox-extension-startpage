@@ -364,8 +364,10 @@ async function deletedStoredBackgroundImageData(filename){
       console.log("stored file has been removed.");
       deletedStoredBackgroundImageDiv(filename);
       onSettingsScreenSuccess("Image Successfully Removed "+filename);
-      settingsCurrentSelectedBackground = void 0;
-      storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+      if(settingsCurrentSelectedBackground == filename){
+        settingsCurrentSelectedBackground = void 0;
+        storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+      }
     } catch (err) {
       onSettingsScreenError("Failed to Delete Image"+filename);
       console.log("ERROR: exception raised while clearing the stored file");
