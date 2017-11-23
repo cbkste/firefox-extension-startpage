@@ -539,6 +539,11 @@
     padding-right: 10px;
     margin-bottom: 15px;
   }
+
+  .welcome-text-icon {
+    left: 0px;
+    right: 50px;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
@@ -605,5 +610,9 @@
 
   .startpage-container {
     padding-top: 20px;
+  }
+
+  .welcome-text-icon {
+    left: -23px;
   }
 }

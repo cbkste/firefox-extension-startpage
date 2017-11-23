@@ -19,7 +19,6 @@ initialise();
 
 async function initialise() {
   defaultEventListener();
-  await setupBackgroundImages();
   var gettingSettingsItem = browser.storage.local.get("startpagesettings");
   console.log("Checking if Settings are in keys");
   gettingSettingsItem.then(async (result) => {
@@ -39,6 +38,7 @@ async function initialise() {
       console.log("INIT:currentOrderPosition"+currentOrderPosition);
       settingsRowCountTextField.value = result.startpagesettings.RowCount;
       settingsUpdateStoredBackgroundImageCountTextField.value = result.startpagesettings.storedBackgroundImageCount;
+      await setupBackgroundImages();
       await setupbackgroundInit();
     }
   }, onError);
@@ -279,42 +279,98 @@ async function displayBackgroundImage(filename){
    imageBoxBackgroundSelected.setAttribute("style", "display: none");
  }
 
- imageBoxBackgroundSelected.setAttribute('class','single-image-zone-icon');
+ imageBoxBackgroundSelected.setAttribute('class','grid-100 single-image-zone-icon');
  selectedIconBox.setAttribute('aria-hidden','true');
  selectedIconBox.setAttribute('class','fa fa-2x fa-check-circle');
  selectedIconBox.setAttribute("style", "color: green");
  imageBoxBackgroundSelected.appendChild(selectedIconBox);
  imageBoxBackground.appendChild(imageBoxBackgroundSelected);
- backgroundImageDisplayZone.appendChild(imageBoxBackground);
 
+  //Context menu
+  var divContextMenuContainer = document.createElement('div');
+  divContextMenuContainer.setAttribute('class','grid-15 dropdown');
+  divContextMenuContainer.setAttribute('style','display: none');
+  var divContextMenuButton = document.createElement('button');
+  divContextMenuButton.textContent= ". . .";
+  divContextMenuButton.setAttribute('class','dropbtn');
+  var divContextMenu = document.createElement('div');
+  divContextMenu.setAttribute('class','dropdown-content');
+  var menuItem1 = document.createElement('a');
+  menuItem1.href = "#";
+  menuItem1.textContent = "Delete Image";
+  // var menuItem2 = document.createElement('a');
+  // menuItem2.href = "#";
+  // menuItem2.textContent = "Link 2";
+  // var menuItem3 = document.createElement('a');
+  // menuItem3.href = "#";
+  // menuItem3.textContent = "Link 3";
+
+  divContextMenu.appendChild(menuItem1);
+  divContextMenuContainer.appendChild(divContextMenuButton);
+  divContextMenuContainer.appendChild(divContextMenu);
+
+  imageBoxBackground.appendChild(divContextMenuContainer);
+
+  backgroundImageDisplayZone.appendChild(imageBoxBackground);
 
  imageBoxBackground.addEventListener('click',(e) => {
    console.log("CLick imageBoxBackground");
    console.log(e);
    var display = e.target.children[0];
-   console.log(e.target.children[0]);
-   if(display.style.display === 'block'){
-     display.setAttribute("style", "display: none;");
-     // REmove blobl and current backgroudn filename
-    // currentBackgroudnBlobUrl = objectURL;
-    // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
-    settingsCurrentSelectedBackground = void 0;
-    storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
-    onSettingsScreenSuccess("Background Deselected, Background Set back to default");
+   if(e.target.tagName == 'A'){
+     deletedStoredBackgroundImageData(filename);
+     // imageBoxBackground.removeEventListener("mouseenter", EditOverlay);
+     // imageBoxBackground.removeEventListener("mouseleave", EditOverlay);
    } else {
-     var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
-     console.log(backgroundImageDivs);
-     for (i = 0; i < backgroundImageDivs.length; ++i) {
-       backgroundImageDivs[i].setAttribute("style", "display: none;");
+     if(display.style.display === 'block'){
+       display.setAttribute("style", "display: none;");
+       // REmove blobl and current backgroudn filename
+      // currentBackgroudnBlobUrl = objectURL;
+      // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
+      settingsCurrentSelectedBackground = void 0;
+      storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+      onSettingsScreenSuccess("Background Deselected, Background Set back to default");
+     } else {
+       var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
+       console.log(backgroundImageDivs);
+       for (i = 0; i < backgroundImageDivs.length; ++i) {
+         backgroundImageDivs[i].setAttribute("style", "display: none;");
+       }
+       imageBoxBackgroundSelected.setAttribute("style", "display: block;");
+       //setBackgroundContainerImage(objectURL);
+       settingsCurrentSelectedBackground = filename;
+       currentBackgroudnBlobUrl = objectURL;
+       storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+       onSettingsScreenSuccess("Background Set as "+filename);
      }
-     imageBoxBackgroundSelected.setAttribute("style", "display: block;");
-     //setBackgroundContainerImage(objectURL);
-     settingsCurrentSelectedBackground = filename;
-     currentBackgroudnBlobUrl = objectURL;
-     storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
-     onSettingsScreenSuccess("Background Set as "+filename);
    }
  });
+
+ imageBoxBackground.addEventListener('mouseenter',(e) => {
+   divContextMenuContainer.setAttribute('style','display: flex');
+ });
+
+ imageBoxBackground.addEventListener('mouseleave',(e) => {
+   divContextMenuContainer.setAttribute('style','display: none');
+ });
+
+}
+
+async function deletedStoredBackgroundImageData(filename){
+  try {
+    console.log(filename)
+      const tmpFiles = await IDBFiles.getFileStorage({name: "tmpFiles"});
+      await tmpFiles.remove(filename);
+      console.log("stored file has been removed.");
+      deletedStoredBackgroundImageDiv(filename);
+      onSettingsScreenSuccess("Image Successfully Removed "+filename);
+      settingsCurrentSelectedBackground = void 0;
+      storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+    } catch (err) {
+      onSettingsScreenError("Failed to Delete Image"+filename);
+      console.log("ERROR: exception raised while clearing the stored file");
+      console.log(err);
+    }
 }
 
 async function setupbackgroundInit(){
@@ -332,6 +388,11 @@ async function setupbackgroundInit(){
       //setBackgroundContainerImage(objectURL);
     }
   }
+}
+
+function deletedStoredBackgroundImageDiv(filename){
+  console.log(filename);
+  document.getElementById(filename).remove();
 }
 
 function onError(error) {
