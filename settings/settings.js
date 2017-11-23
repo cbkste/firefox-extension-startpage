@@ -201,6 +201,12 @@ async function createAndSaveImageStore(newFilename, newFile) {
     }
 }
 
+function getDateTime(){
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      return dateTime = date+' '+time;
+}
 
 async function deletedStoredBackgroundImageData(filename){
   try {
@@ -288,13 +294,13 @@ async function displayBackgroundImage(filename){
    var display = e.target.children[0];
    console.log(e.target.children[0]);
    if(display.style.display === 'block'){
-     startpageImageContainerHTML.setAttribute("style", "background-image: url('')");
      display.setAttribute("style", "display: none;");
      // REmove blobl and current backgroudn filename
     // currentBackgroudnBlobUrl = objectURL;
     // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
     settingsCurrentSelectedBackground = void 0;
     storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+    onSettingsScreenSuccess("Background Deselected, Background Set back to default");
    } else {
      var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
      console.log(backgroundImageDivs);
@@ -306,6 +312,7 @@ async function displayBackgroundImage(filename){
      settingsCurrentSelectedBackground = filename;
      currentBackgroudnBlobUrl = objectURL;
      storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+     onSettingsScreenSuccess("Background Set as "+filename);
    }
  });
 }

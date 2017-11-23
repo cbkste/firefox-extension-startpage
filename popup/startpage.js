@@ -6,6 +6,7 @@ TODO:
 no need to delete
 - in background image use lastmodififeddate in IMage obkect to remove
 oldest image stored
+- ability to create and change between multiple favourit lists.
 **/
 
 var inputTitle = document.querySelector('.new-note input');

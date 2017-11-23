@@ -17,13 +17,16 @@
 
 <h1>SETTINGS PAGE:</h1>
 
-<div class="suffix-10 prefix-10 grid-80 settings-page-container">
-  <div class="grid-100 settings-title">
+<div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-grid-100 settings-page-container">
+  <div class="grid-40 tablet-grid-40 mobile-grid-40 settings-title">
     <p>Settings</p>
   </div>
-  <div class="grid-100 tablet-grid-100">
-    <div class="grid-100 tablet-grid-100">
-      <div class="grid-50 tablet-grid-50">
+  <div class="grid-60 tablet-grid-60 mobile-grid-60 background-image-info-block">
+      <div class="grid-10 background-image-info-block-icon"><i class="fa fa-info"></i></div>
+      <div class="grid-90 background-image-info-block-text"></div>
+  </div>
+    <div class="grid-100 tablet-grid-100 mobile-grid-100 settings-input-container">
+      <div class="grid-50 tablet-grid-50 mobile-grid-100 settings-input-items-per-row">
         <div class="tablet-grid-100 ItemsPerRowCountContainer">
           <p id="ItemsPerRowCountLabel">Items Per Row: (1-5)</p>
           <div class="tooltip"><i class="fa fa-info"></i>
@@ -33,7 +36,7 @@
         <input type="text" name="ItemsPerRowCountTextBox" value="">
         <input id="UpdateSettingsRowCountBtn" type="submit" value="Update Items">
       </div>
-      <div class="grid-50 tablet-grid-50">
+      <div class="grid-50 tablet-grid-50 mobile-grid-100 settings-input-background-image-count">
         <div class="tablet-grid-100 StoredBackgroundImagesCountContainer">
           <p id="StoredBackgroundImagesCountLabel">Stored Background Image Count:</p>
             <div class="tooltip"><i class="fa fa-info"></i>
@@ -44,22 +47,17 @@
         <input id="UpdateStoredBackgroundImagesBtn" type="submit" value="Update Background Images">
       </div>
     </div>
-  </div>
-  <div class="grid-100 tablet-grid-50">
-    <div class="grid-35 BackgroundImageTextBlockContainer">
+  <div class="grid-100 tablet-grid-100">
+    <div class="grid-100 BackgroundImageTextBlockContainer">
       <p>Current Background Image</p>
       <div class="tooltip"><i class="fa fa-info"></i>
         <span class="tooltiptext">Drop Background IMages in the drop zone below.</span>
       </div>
     </div>
-    <div class="grid-60 suffix-5 background-image-info-block">
-      <div class="grid-10 background-image-info-block-icon"><i class="fa fa-info"></i></div>
-      <div class="grid-90 background-image-info-block-text"></div>
-    </div>
-    <div class="grid-100 image-drop-zone">
+    <div class="grid-100 tablet-grid-100 image-drop-zone">
         image dropzone
     </div>
-    <div class="grid-100 image-display-zone">
+    <div class="grid-100 tablet-grid-100 image-display-zone">
     </div>
   </div>
 </div>

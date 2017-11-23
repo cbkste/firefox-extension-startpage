@@ -5,3 +5,29 @@
   margin-bottom: 30px;
   background-color: rgba(255, 255, 255, 0.2);
 }
+
+.background-image-container {
+  padding-top: 20px;
+  border-top: 1px solid black;
+  margin-top: 20px;
+}
+
+.background-image-info-block {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.settings-input-background-image-count  {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.settings-input-items-per-row  {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.settings-input-container {
+  padding-left: 0px;
+  padding-right: 0px;
+}
