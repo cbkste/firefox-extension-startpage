@@ -191,16 +191,20 @@ async function initialise() {
 
   var list1array = [];
   var item1 = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-  var item2 = { ["list1-2"] : { "id" : "2", "title" : "list1-2", "url" : "url", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var item2 = { ["list1-2"] : { "id" : "2", "title" : "TEWST LIST 1 ITEM 2", "url" : "url", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var settings = { ["Settings"] : { "default" : "false" } };
   list1array.push(item1);
   list1array.push(item2);
+  list1array.push(settings);
   browser.storage.local.set({ ["list1"] : {list1array} });
 
   var list2array = [];
-  var item1 = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var item1 = { ["list2-1"] : { "id" : "1", "title" : "List 2 Item 1 oder 1", "url" : "testURLLLLL", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
   var item2 = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var settings = { ["Settings"] : { "default" : "true" } };
   list2array.push(item1);
   list2array.push(item2);
+  list2array.push(settings);
   browser.storage.local.set({ ["list2"] : {list2array} });
 
   browser.storage.local.set({ ["FavouriteList"] : { list1array, list2array } });
@@ -210,16 +214,35 @@ console.log("LIST1 GET");
 FavouriteListGet.then((results) => {
   var favouriteKeys = Object.keys(results);
   console.log(favouriteKeys);
-      var favouriteListKeys = Object.keys(results["FavouriteList"]);
-      for (let favListKey of favouriteListKeys) {
-        console.log(favListKey);
-        console.log(results["FavouriteList"][favListKey]);
-        for (let indiKet of results["FavouriteList"][favListKey]) {
-          var indiKetObject = Object.keys(indiKet);
-          console.log("inKey TITLE: "+indiKet[indiKetObject].title);
-          console.log("inKeyt ID: "+indiKet[indiKetObject].id);
+  var favouriteListKeys = Object.keys(results["FavouriteList"]);
+    for (let favListKey of favouriteListKeys) {
+      console.log(favListKey);
+      console.log(results["FavouriteList"][favListKey]);
+      for (let indiKet of results["FavouriteList"][favListKey]) {
+        var indiKetObject = Object.keys(indiKet);
+        if(indiKetObject == "Settings"){
+          console.log("IS DEFAULT LIST: "+indiKet[indiKetObject].default);
+          if(indiKet[indiKetObject].default == "true"){
+            for (let indiKett of results["FavouriteList"][favListKey]) {
+              var indiKetObject = Object.keys(indiKett);
+              if(indiKetObject !== "Settings"){
+                console.log("inKey TITLE: "+indiKett[indiKetObject].title);
+                console.log("inKeyt ID: "+indiKett[indiKetObject].id);
+
+                var id = indiKett[indiKetObject].ref;
+                var title = indiKett[indiKetObject].title;
+                var url = indiKett[indiKetObject].url;
+                var icon = indiKett[indiKetObject].icon;
+                var iconColour = indiKett[indiKetObject].iconColour;
+                var backgroundColour = indiKett[indiKetObject].backgroundColour;
+                var order = indiKett[indiKetObject].Order;
+                displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+              }
+            }
+          }
         }
       }
+  }
 }, onError);
 }
 
