@@ -8,6 +8,7 @@ no need to delete
 oldest image stored
 - ability to create and change between multiple favourit lists.
 - ability to add own icon image.
+- add ability to load backup.
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
