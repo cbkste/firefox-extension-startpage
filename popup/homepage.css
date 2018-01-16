@@ -616,3 +616,10 @@
     left: -23px;
   }
 }
+
+.current-list-active-name,
+.current-favourite-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
