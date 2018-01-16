@@ -119,8 +119,26 @@ function defaultEventListener() {
 }
 
 function changeSelectionLeft() {
-  console.log("Change List CLick LEFT");
-  getAndDisplayNewList("1");
+  console.log("Change List CLick RIGHT");
+  var FavouriteListGet = browser.storage.local.get("FavouriteList");
+  console.log("LIST1 GET");
+  FavouriteListGet.then((results) => {
+    var favouriteKeys = Object.keys(results);
+    console.log(favouriteKeys);
+    var favouriteListKeys = Object.keys(results["FavouriteList"]);
+    var currentInUseList = currentListSelection.textContent;
+    var currentPosition = favouriteListKeys.indexOf(currentInUseList);
+    console.log(currentPosition);
+    var movingToPosition = --currentPosition;
+    console.log("movingToPosition: "+ movingToPosition);
+    console.log("length: "+ favouriteListKeys.length);
+    if(movingToPosition < 0){
+      movingToPosition = --favouriteListKeys.length;
+      getAndDisplayNewList(movingToPosition);
+    } else {
+      getAndDisplayNewList(movingToPosition);
+    }
+  }, onError);
 }
 
 function changeSelectionRight(){
@@ -137,23 +155,23 @@ function changeSelectionRight(){
     var movingToPosition = ++currentPosition;
     console.log("movingToPosition: "+ movingToPosition);
     console.log("length: "+ favouriteListKeys.length);
-    if(movingToPosition == favouriteListKeys.length){
+    if(movingToPosition >= favouriteListKeys.length){
       movingToPosition = 0;
-      getAndDisplayNewList(movingToPosition, results);
+      getAndDisplayNewList(movingToPosition, currentPosition);
     } else {
-      getAndDisplayNewList(movingToPosition, results);
+      getAndDisplayNewList(movingToPosition, currentPosition);
     }
   }, onError);
 }
 
 function getAndDisplayNewList(newPosition){
-  newPosition = 1;
-  console.log("newPosition: "+ newPosition);
+  console.log("getAndDisplayNewList ** POSITION: "+ newPosition);
   var FavouriteListGet = browser.storage.local.get("FavouriteList");
   FavouriteListGet.then((results) => {
     var favouriteKeys = Object.keys(results);
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
     var removed = favouriteListKeys.splice(newPosition, 1);
+    console.log("removed ** removed: "+removed);
     favouriteListKeys.splice(newPosition, 0, removed);
     for (let favListKey of favouriteListKeys) {
     console.log(favListKey);
@@ -168,10 +186,10 @@ function getAndDisplayNewList(newPosition){
 
           var id = indiKett[indiKetObject].ref;
           var title = indiKett[indiKetObject].title;
-          var url = "NEWWWW";
+          var url = indiKett[indiKetObject].url;
           var icon = indiKett[indiKetObject].icon;
           var iconColour = indiKett[indiKetObject].iconColour;
-          var backgroundColour = "fff";
+          var backgroundColour = indiKett[indiKetObject].backgroundColour;
           var order = indiKett[indiKetObject].Order;
           displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
         }
@@ -268,8 +286,8 @@ async function initialise() {
   browser.storage.local.set({ ["list1"] : {list1array} });
 
   var list2array = [];
-  var item1 = { ["list2-1"] : { "id" : "1", "title" : "List 2 Item 1 oder 1", "url" : "testURLLLLL", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-  var item2 = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var item1 = { ["list2-1"] : { "id" : "1", "title" : "List 2 Item 1 oder 1", "url" : "testURLLLLL", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
+  var item2 = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
   var settings = { ["Settings"] : { "default" : "false" } };
   list2array.push(item1);
   list2array.push(item2);
