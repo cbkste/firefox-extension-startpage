@@ -7,6 +7,7 @@ no need to delete
 - in background image use lastmodififeddate in IMage obkect to remove
 oldest image stored
 - ability to create and change between multiple favourit lists.
+- ability to add own icon image.
 **/
 
 var inputTitle = document.querySelector('.new-note input');
@@ -187,41 +188,8 @@ async function initialise() {
     }
   }, onError);
   defaultEventListener();
-  //writeTime();
-  //writeDate();
 }
 
-function writeTime() {
-    var today = new Date();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds();
-    var month = today.getMonth();
-    var weekDay = today.getDay();
-    var day = today.getDate();
-    if(m==0 && s==0)
-        writeDate();
-      m = checkTime(m);
-      s = checkTime(s);
-    document.getElementById('clock').innerHTML = h + ":" + m + ":" + s;
-    var t = setTimeout(writeTime, 500);
-}
-
-function checkTime(i) {
-    if (i < 10) {i = "0" + i};
-    return i;
-}
-
-function writeDate() {
-    var today = new Date();
-    var month = today.getMonth();
-    var weekDay = today.getDay();
-    var day = today.getDate();
-    var year = today.getFullYear();
-    document.getElementById('weekday').innerHTML = weekdayToString(weekDay);
-    document.getElementById('date').innerHTML = monthToString(month)+" "+dayToString(day)+", "+year;
-    var t = setTimeout(writeTime, 500);
-}
 
 async function setupbackgroundInit(){
   console.log("Setup Background:"+settingsCurrentSelectedBackground);
