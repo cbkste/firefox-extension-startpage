@@ -177,6 +177,12 @@ function getAndDisplayNewList(newPosition){
     console.log(favListKey);
     console.log(results["FavouriteList"][favListKey]);
     if(favListKey == removed){
+
+      var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
+      for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
+        removedCurrentFavouriteDivs[i].remove();
+      }
+
       currentListSelection.textContent = favListKey;
       for (let indiKett of results["FavouriteList"][favListKey]) {
       var indiKetObject = Object.keys(indiKett);
