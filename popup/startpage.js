@@ -188,6 +188,42 @@ async function initialise() {
     }
   }, onError);
   defaultEventListener();
+
+  var list1array = [];
+  var item1 = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var item2 = { ["list1-2"] : { "id" : "2", "title" : "list1-2", "url" : "url", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  list1array.push(item1);
+  list1array.push(item2);
+  browser.storage.local.set({ ["list1"] : {list1array} });
+
+  var list2array = [];
+  var item1 = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  var item2 = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  list2array.push(item1);
+  list2array.push(item2);
+  browser.storage.local.set({ ["list2"] : {list2array} });
+
+  browser.storage.local.set({ ["FavouriteList"] : { list1array, list2array } });
+
+var FavouriteListGet = browser.storage.local.get("FavouriteList");
+console.log("LIST1 GET");
+FavouriteListGet.then((results) => {
+  var favouriteKeys = Object.keys(results);
+  console.log(favouriteKeys);
+    for (let favKey of favouriteKeys) {
+      console.log(results[favKey]);
+      var favouriteListKeys = Object.keys(results[favKey]);
+      for (let favListKey of favouriteListKeys) {
+        console.log(favListKey);
+        console.log(results[favKey][favListKey]);
+        for (let indiKet of results[favKey][favListKey]) {
+          var indiKetObject = Object.keys(indiKet);
+          console.log("inKey TITLE: "+indiKet[indiKetObject].title);
+          console.log("inKeyt ID: "+indiKet[indiKetObject].id);
+        }
+      }
+    }
+}, onError);
 }
 
 
