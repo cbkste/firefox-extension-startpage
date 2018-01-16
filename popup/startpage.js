@@ -10,6 +10,7 @@ oldest image stored
 - ability to add own icon image.
 **/
 
+var currentListSelection = document.querySelector('.current-favourite-list');
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
 var global_id = "1";
@@ -223,6 +224,7 @@ FavouriteListGet.then((results) => {
         if(indiKetObject == "Settings"){
           console.log("IS DEFAULT LIST: "+indiKet[indiKetObject].default);
           if(indiKet[indiKetObject].default == "true"){
+            currentListSelection.textContent = favListKey;
             for (let indiKett of results["FavouriteList"][favListKey]) {
               var indiKetObject = Object.keys(indiKett);
               if(indiKetObject !== "Settings"){
