@@ -210,19 +210,16 @@ console.log("LIST1 GET");
 FavouriteListGet.then((results) => {
   var favouriteKeys = Object.keys(results);
   console.log(favouriteKeys);
-    for (let favKey of favouriteKeys) {
-      console.log(results[favKey]);
-      var favouriteListKeys = Object.keys(results[favKey]);
+      var favouriteListKeys = Object.keys(results["FavouriteList"]);
       for (let favListKey of favouriteListKeys) {
         console.log(favListKey);
-        console.log(results[favKey][favListKey]);
-        for (let indiKet of results[favKey][favListKey]) {
+        console.log(results["FavouriteList"][favListKey]);
+        for (let indiKet of results["FavouriteList"][favListKey]) {
           var indiKetObject = Object.keys(indiKet);
           console.log("inKey TITLE: "+indiKet[indiKetObject].title);
           console.log("inKeyt ID: "+indiKet[indiKetObject].id);
         }
       }
-    }
 }, onError);
 }
 
