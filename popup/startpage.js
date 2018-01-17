@@ -169,8 +169,8 @@ function getAndDisplayNewList(newPosition){
 
 var newListToDisplay = browser.storage.local.get(newFavoureiteListInUse);
 newListToDisplay.then((result) => {
-  //console.log(result);
-  for (let dataObject of result[newFavoureiteListInUse][newFavoureiteListInUse]){
+  console.log(result);
+  for (let dataObject of result[newFavoureiteListInUse]["data"]){
     var dataObjectKeys = Object.keys(dataObject);
     //console.log(dataObject);
     var dataObjectKeyss = Object.keys(dataObject);
@@ -306,17 +306,17 @@ async function initialise() {
   data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
   browser.storage.local.set({ ["data"] : {data} });
 
-  var data2 = [];
-  data2[0] = { ["Settings"] : { "default" : "false" } };
-  data2[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#f8f8f8", "backgroundColour" : "#f8f8f8" } };
-  data2[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
-  browser.storage.local.set({ ["data2"] : {data2} });
+  var data = [];
+  data[0] = { ["Settings"] : { "default" : "false" } };
+  data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#f8f8f8", "backgroundColour" : "#f8f8f8" } };
+  data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
+  browser.storage.local.set({ ["data2"] : {data} });
 
-  var data3 = [];
-  data3[0] = { ["Settings"] : { "default" : "false" } };
-  data3[1] = { ["li3333"] : { "id" : "1", "title" : "li3333", "url" : "33", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-  data3[2] = { ["l33333"] : { "id" : "2", "title" : "l33333", "url" : "3", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
-  browser.storage.local.set({ ["data3"] : {data3} });
+  var data = [];
+  data[0] = { ["Settings"] : { "default" : "false" } };
+  data[1] = { ["li3333"] : { "id" : "1", "title" : "li3333", "url" : "33", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+  data[2] = { ["l33333"] : { "id" : "2", "title" : "l33333", "url" : "3", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
+  browser.storage.local.set({ ["data3"] : {data} });
 
   var FavouriteList = [];
   // FavouriteList.push("list1array");
@@ -343,8 +343,8 @@ FavouriteListGet.then((results) => {
         var FavouriteListDataGet = browser.storage.local.get(indiKet);
         FavouriteListDataGet.then((result) => {
           //console.log(result);
-          var arrayLength = result[indiKet][indiKet].length;
-          for (let dataObject of result[indiKet][indiKet]){
+          var arrayLength = result[indiKet]["data"].length;
+          for (let dataObject of result[indiKet]["data"]){
             var dataObjectKeys = Object.keys(dataObject);
             //console.log(dataObject);
             var dataObjectKeyss = Object.keys(dataObject);
@@ -708,6 +708,21 @@ function updateIconColourExampleDiv(){
 /* function to store a new favourite in storage */
 function storeFavourite(id, title, url, order, icon, iconColour, backgroundColour, inEditMode) {
   var storingNote = browser.storage.local.set({ [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+
+  var currentInUseList = currentListSelection.textContent;
+  var currentInUseListArrayName = currentInUseList;
+  var storingNewFavourite = browser.storage.local.get(currentInUseList);
+
+  storingNewFavourite.then((results) => {
+    var areLength = results[currentInUseList]["data"].length;
+    console.log(areLength);
+    console.log(results[currentInUseList]["data"]);
+    results[currentInUseList]["data"][areLength] = { [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } };
+    var data = results[currentInUseList]["data"];
+    browser.storage.local.set({ [currentInUseList] : { data } });
+  }, onError);
+
+
   storingNote.then(() => {
     displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
   }, onError);
