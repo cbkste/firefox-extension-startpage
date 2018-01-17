@@ -132,7 +132,6 @@ function changeSelectionLeft() {
   FavouriteListGet.then((results) => {
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
     if(results["FavouriteList"]["FavouriteList"].length != 1){
-      console.log("**************");
       var currentInUseList = currentListSelection.textContent;
       var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
       var movingToPosition = --currentPosition;
@@ -152,8 +151,6 @@ function changeSelectionRight(){
   var FavouriteListGet = browser.storage.local.get("FavouriteList");
   FavouriteListGet.then((results) => {
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
-    if(results["FavouriteList"]["FavouriteList"].length != 1){
-      console.log("**************");
       var currentInUseList = currentListSelection.textContent;
       var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
       var movingToPosition = ++currentPosition;
@@ -166,7 +163,6 @@ function changeSelectionRight(){
       } else {
         getAndDisplayNewList(movingToPosition);
       }
-    }
     }, onError);
 }
 
@@ -594,6 +590,48 @@ async function openFavouriteList() {
 
             deleteIconbox.addEventListener('click',(e) => {
               //browser.storage.local.remove(indiKet);
+              var currentInUseList = currentListSelection.textContent;
+                //TODO: Handle this, Display next List if another list exists, if non exists create blank List
+                // Update FavouriteList to remove deleted List.
+                var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
+                for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
+                  removedCurrentFavouriteDivs[i].remove();
+                }
+
+                var FavouriteListGet = browser.storage.local.get("FavouriteList");
+                  FavouriteListGet.then((results) => {
+                    var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(indiKet);
+                    var removed = results["FavouriteList"]["FavouriteList"].splice(currentPosition, 1);
+                    var FavouriteList = results["FavouriteList"]["FavouriteList"]
+                    console.log(FavouriteList);
+                    browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+
+                if(currentInUseList == indiKet){
+                  console.log("click Delete Icon");
+                  changeSelectionRight();
+                }
+
+                if(results["FavouriteList"]["FavouriteList"].length == 1){
+                  console.log("1 List left");
+                  var newDefaultListName = results["FavouriteList"]["FavouriteList"][0];
+                  var newDefaultList = browser.storage.local.get(newDefaultListName);
+                  newDefaultList.then((result) => {
+                    console.log(result);
+                    for (let dataObject of result[newDefaultListName]["data"]){
+                      var dataObjectKeys = Object.keys(dataObject);
+                      //console.log(dataObject);
+                      var dataObjectKeyss = Object.keys(dataObject);
+                        currentListSelection.textContent = newDefaultListName;
+                        if(dataObjectKeyss == "Settings"){
+                          dataObject[dataObjectKeys] = { "default" : "true" };
+                          console.log(dataObject[dataObjectKeys].default);
+                          var data = result[newDefaultListName]["data"];
+                          browser.storage.local.set({ [newDefaultListName] : {data} });
+                        }
+                    }
+                  }, onError);
+                }
+              }, onError);
               const evtTgt = e.target;
               evtTgt.parentNode.parentNode.remove();
               console.log("click Delete Icon");
