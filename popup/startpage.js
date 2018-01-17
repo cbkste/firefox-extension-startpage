@@ -676,7 +676,7 @@ function storeFavourite(id, title, url, order, icon, iconColour, backgroundColou
     console.log(results[currentInUseList]["data"]);
     results[currentInUseList]["data"][areLength] = { [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } };
     var data = results[currentInUseList]["data"];
-    browser.storage.local.set({ [currentInUseList] :   { data } });
+    browser.storage.local.set({ [currentInUseList] : { data } });
     displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
   }, onError);
 }
@@ -921,7 +921,25 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
       currentOrderPosition--;
       storeSettings("1",settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
     }
-    browser.storage.local.remove(title);
+    //browser.storage.local.remove(title);
+    var currentInUseList = currentListSelection.textContent;
+    var favouriteToDelete = browser.storage.local.get(currentInUseList);
+    favouriteToDelete.then((result) => {
+      var position = 0;
+      for (let dataObject of result[currentInUseList]["data"]){
+        ++position;
+        var dataObjectKeys = Object.keys(dataObject);
+        //console.log(dataObject);
+        var dataObjectKeyss = Object.keys(dataObject);
+          if(dataObjectKeyss != "Settings"){
+            if(dataObjectKeys == title){
+              result[currentInUseList]["data"].splice(--position, 1);
+              var data = result[currentInUseList]["data"]
+              browser.storage.local.set({ [currentInUseList] : { data } });
+            }
+          }
+      }
+    }, onError);
   })
 
   favouritebox.addEventListener('mouseenter',(e) => {
