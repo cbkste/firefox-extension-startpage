@@ -260,9 +260,17 @@ async function initialise() {
         data[3] = { ["list2-3"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
         browser.storage.local.set({ ["Favourite list 2"] : {data} });
 
+        var data = [];
+        data[0] = { ["Settings"] : { "default" : "false" } };
+        data[1] = { ["list3-1"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[2] = { ["list3-2"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
+        data[3] = { ["list3-3"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        browser.storage.local.set({ ["Favourite list 3"] : {data} });
+
         var FavouriteList = [];
         FavouriteList.push("Favourite list 1");
         FavouriteList.push("Favourite list 2");
+        FavouriteList.push("Favourite list 3");
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
         var newListToDisplay = browser.storage.local.get("Favourite list 1");
@@ -589,15 +597,16 @@ async function openFavouriteList() {
             });
 
             deleteIconbox.addEventListener('click',(e) => {
-              //browser.storage.local.remove(indiKet);
+              var lastList = false;
               var currentInUseList = currentListSelection.textContent;
                 //TODO: Handle this, Display next List if another list exists, if non exists create blank List
                 // Update FavouriteList to remove deleted List.
-                var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
-                for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
-                  removedCurrentFavouriteDivs[i].remove();
+                if(currentInUseList == indiKet) {
+                  var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
+                  for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
+                    removedCurrentFavouriteDivs[i].remove();
+                  }
                 }
-
                 var FavouriteListGet = browser.storage.local.get("FavouriteList");
                   FavouriteListGet.then((results) => {
                     var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(indiKet);
@@ -606,31 +615,45 @@ async function openFavouriteList() {
                     console.log(FavouriteList);
                     browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
-                if(currentInUseList == indiKet){
-                  console.log("click Delete Icon");
-                  changeSelectionRight();
+                if(results["FavouriteList"]["FavouriteList"].length == 0){
+                  console.log("NO LIST LEFT CREATE BLANK ONE");
+                } else {
+                  if(currentInUseList == indiKet){
+                    console.log("click Delete Icon");
+                      changeSelectionRight();
+                  } else {
+
+                  }
+                }
+                console.log(indiKet);
+                var deledtData = browser.storage.local.get(indiKet);
+                deledtData.then((result) => {
+                  console.log(result);
+                  for (let dataObject of result[indiKet]["data"]){
+                    var dataObjectKeys = Object.keys(dataObject);
+                    //console.log(dataObject);
+                    var dataObjectKeyss = Object.keys(dataObject);
+                      if(dataObjectKeyss == "Settings"){
+                        if(dataObject[dataObjectKeys].default == "true"){
+                          if(results["FavouriteList"]["FavouriteList"].length == 1){
+                              lastList == true;
+                          } else {
+                              setNewDefaultList(0);
+                          }
+                        }
+                        browser.storage.local.remove(indiKet);
+                      }
+                  }
+                }, onError);
+
+                console.log("LAST CHECKJ");
+                console.log(lastList);
+                console.log(results["FavouriteList"]["FavouriteList"].length);
+                if(results["FavouriteList"]["FavouriteList"].length == 1 || lastList){
+                  setNewDefaultList(0);
                 }
 
-                if(results["FavouriteList"]["FavouriteList"].length == 1){
-                  console.log("1 List left");
-                  var newDefaultListName = results["FavouriteList"]["FavouriteList"][0];
-                  var newDefaultList = browser.storage.local.get(newDefaultListName);
-                  newDefaultList.then((result) => {
-                    console.log(result);
-                    for (let dataObject of result[newDefaultListName]["data"]){
-                      var dataObjectKeys = Object.keys(dataObject);
-                      //console.log(dataObject);
-                      var dataObjectKeyss = Object.keys(dataObject);
-                        currentListSelection.textContent = newDefaultListName;
-                        if(dataObjectKeyss == "Settings"){
-                          dataObject[dataObjectKeys] = { "default" : "true" };
-                          console.log(dataObject[dataObjectKeys].default);
-                          var data = result[newDefaultListName]["data"];
-                          browser.storage.local.set({ [newDefaultListName] : {data} });
-                        }
-                    }
-                  }, onError);
-                }
+
               }, onError);
               const evtTgt = e.target;
               evtTgt.parentNode.parentNode.remove();
@@ -643,6 +666,29 @@ async function openFavouriteList() {
         FavouriteListsViewMode = true;
     }, onError);
   }
+}
+
+function setNewDefaultList(position){
+  var FavouriteListGet = browser.storage.local.get("FavouriteList");
+    FavouriteListGet.then((results) => {
+      var newDefaultListName = results["FavouriteList"]["FavouriteList"][position];
+      var newDefaultList = browser.storage.local.get(newDefaultListName);
+      newDefaultList.then((result) => {
+        console.log(result);
+        for (let dataObject of result[newDefaultListName]["data"]){
+          var dataObjectKeys = Object.keys(dataObject);
+          //console.log(dataObject);
+          var dataObjectKeyss = Object.keys(dataObject);
+          currentListSelection.textContent = newDefaultListName;
+          if(dataObjectKeyss == "Settings"){
+            dataObject[dataObjectKeys] = { "default" : "true" };
+            console.log(dataObject[dataObjectKeys].default);
+            var data = result[newDefaultListName]["data"];
+            browser.storage.local.set({ [newDefaultListName] : {data} });
+          }
+      }
+    }, onError);
+  }, onError);
 }
 
 async function removeEditOverlay() {
