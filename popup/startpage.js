@@ -10,6 +10,7 @@ oldest image stored
 - ability to add own icon image.
 - add ability to load backup.
 - disable left & right favourite list if only single list currently exists
+- fix Drag and Drag, stil using old method of single use not miultiple lists.
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
@@ -291,6 +292,11 @@ async function initialise() {
         }, onError);
         favouriteListSelectorLeft.setAttribute("style", "color: grey;");
         favouriteListSelectorRight.setAttribute("style", "color: grey;");
+        NoCurrentFavourites = true;
+        InWelcomeMode = true;
+        welcomeContainer.setAttribute("style", "display: block;");
+        welcomeMainContainer.setAttribute("style", "display: block;");
+        defaultWelcomeEventListener();
     } else {
     var favouriteKeys = Object.keys(results);
     //console.log(favouriteKeys);
