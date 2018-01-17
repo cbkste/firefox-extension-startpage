@@ -255,14 +255,37 @@ async function initialise() {
         browser.storage.local.set({ ["data3"] : {data} });
 
         var FavouriteList = [];
-        // FavouriteList.push("list1array");
-        // FavouriteList.push("list2array");
-        // FavouriteList.push("list3array");
         FavouriteList.push("data");
         FavouriteList.push("data2");
         FavouriteList.push("data3");
 
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+
+        var newListToDisplay = browser.storage.local.get("data");
+        newListToDisplay.then((result) => {
+          console.log(result);
+          for (let dataObject of result["data"]["data"]){
+            var dataObjectKeys = Object.keys(dataObject);
+            //console.log(dataObject);
+            var dataObjectKeyss = Object.keys(dataObject);
+              currentListSelection.textContent = "data";
+              if(dataObjectKeyss != "Settings"){
+                console.log(dataObject);
+                console.log(dataObjectKeys);
+
+                var id = dataObject[dataObjectKeys].id;
+                var title = dataObject[dataObjectKeys].title;
+                var id = dataObject[dataObjectKeys].ref;
+                var title = dataObject[dataObjectKeys].title;
+                var url = dataObject[dataObjectKeys].url;
+                var icon = dataObject[dataObjectKeys].icon;
+                var iconColour = dataObject[dataObjectKeys].iconColour;
+                var backgroundColour = dataObject[dataObjectKeys].backgroundColour;
+                var order = dataObject[dataObjectKeys].Order;
+                displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+              }
+          }
+        }, onError);
     } else {
     var favouriteKeys = Object.keys(results);
     //console.log(favouriteKeys);
