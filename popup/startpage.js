@@ -78,6 +78,7 @@ var favouriteListBtn = document.querySelector('.favourite-list');
 var settingsBtn = document.querySelector('.settings-icon');
 var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
 var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
+var favouriteListWelcomeBtn = document.querySelector('.welcome-favourite-list');
 var settingsMode = false;
 var inEditMode = false;
 var FavouriteListsViewMode = false;
@@ -211,11 +212,13 @@ newListToDisplay.then((result) => {
 function defaultWelcomeEventListener() {
   editModeWelcomeBtn.addEventListener('click', EditOverlay);
   settingsWelcomeBtn.addEventListener('click', OpenSettings);
+  favouriteListWelcomeBtn.addEventListener('click', openFavouriteList);
 }
 
 function RemoveDefaultWelcomeEventListener() {
   editModeWelcomeBtn.removeEventListener("click", EditOverlay);
   settingsWelcomeBtn.removeEventListener("click", OpenSettings);
+  favouriteListWelcomeBtn.removeEventListener('click', openFavouriteList);
 }
 
 /* display previously-saved stored notes on startup */
