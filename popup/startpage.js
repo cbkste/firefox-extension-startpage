@@ -22,6 +22,7 @@ var favouritesContainer = document.querySelector('.startpage-favourites-containe
 var dateTimeContainer = document.querySelector('.timeDateValue');
 var settingsContainer = document.querySelector('.settings-container');
 var favouriteListContainer = document.querySelector('.favourite-lists-container');
+var favouriteList = document.querySelector('.favourite-lists');
 var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateRowCountBtn = document.querySelector('input[id="UpdateSettingsRowCountBtn"]');
@@ -256,16 +257,16 @@ async function initialise() {
         data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
-        // var data = [];
-        // data[0] = { ["Settings"] : { "default" : "true" } };
-        // data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        // data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        // data[3] = { ["list2-3"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        // browser.storage.local.set({ ["Favourite list 2"] : {data} });
+        var data = [];
+        data[0] = { ["Settings"] : { "default" : "false" } };
+        data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
+        data[3] = { ["list2-3"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        browser.storage.local.set({ ["Favourite list 2"] : {data} });
 
         var FavouriteList = [];
         FavouriteList.push("Favourite list 1");
-        //FavouriteList.push("Favourite list 2");
+        FavouriteList.push("Favourite list 2");
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
         var newListToDisplay = browser.storage.local.get("Favourite list 1");
@@ -553,13 +554,57 @@ async function openFavouriteList() {
   }
 
   if(FavouriteListsViewMode){
-      favouriteListContainer.setAttribute("style", "display: none;");
-      FavouriteListsViewMode = false;
+    favouriteListContainer.setAttribute("style", "display: none;");
+    FavouriteListsViewMode = false;
   } else {
-      favouriteListContainer.setAttribute("style", "display: block;");
-      FavouriteListsViewMode = true;
-  }
+    favouriteList.textContent = "";
+    var FavouriteListGet = browser.storage.local.get("FavouriteList");
+      FavouriteListGet.then((results) => {
+        var favouriteListKeys = Object.keys(results["FavouriteList"]);
+        for (let favListKey of favouriteListKeys) {
+          for (let indiKet of results["FavouriteList"][favListKey]) {
+            var favouriteListDivContainer = document.createElement('div');
+            var favouriteListDiv = document.createElement('div');
+            var editdeleteicontainer = document.createElement('div');
+            var editIconbox = document.createElement('div');
+            var deleteIconbox = document.createElement('div');
 
+
+            favouriteListDivContainer.setAttribute("class", "grid-33 favourite-list-main-container");
+            editdeleteicontainer.setAttribute("class", "grid-100 icon-favourite-list-container");
+            favouriteListDiv.setAttribute("class", "grid-100 favourite-list-main");
+            editIconbox.setAttribute("class", "grid-50 edit-icon-favourite-list");
+            deleteIconbox.setAttribute("class", "grid-50 delete-icon-favourite-list");
+            editIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+            deleteIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+            favouriteListDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+
+            favouriteListDiv.textContent = indiKet;
+            editIconbox.textContent = "Rename List";
+            deleteIconbox.textContent = "Delete List";
+            editdeleteicontainer.appendChild(editIconbox);
+            editdeleteicontainer.appendChild(deleteIconbox);
+            favouriteListDivContainer.appendChild(favouriteListDiv);
+            favouriteListDivContainer.appendChild(editdeleteicontainer);
+            favouriteList.appendChild(favouriteListDivContainer);
+
+            editIconbox.addEventListener('click',(e) => {
+              console.log("click Edit Icon");
+            });
+
+            deleteIconbox.addEventListener('click',(e) => {
+              //browser.storage.local.remove(indiKet);
+              const evtTgt = e.target;
+              evtTgt.parentNode.parentNode.remove();
+              console.log("click Delete Icon");
+            });
+
+          }
+        }
+        favouriteListContainer.setAttribute("style", "display: block;");
+        FavouriteListsViewMode = true;
+    }, onError);
+  }
 }
 
 async function removeEditOverlay() {
@@ -769,10 +814,6 @@ function displayEditCurrentFavouriteOverlay(currentTitle) {
     var currentIconColour = results[objectKeys].iconColour;
     var currentBackgroundColour = results[objectKeys].backgroundColour;
     var currentOrder = results[objectKeys].Order;
-    // console.log(currentTitle);
-    // console.log(currentUrl);
-    // console.log(currentIcon);
-    // console.log(currentIconColour);
     createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour);
   }, onError);
 }

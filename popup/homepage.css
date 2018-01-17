@@ -624,3 +624,30 @@
   justify-content: center;
   align-items: center;
 }
+
+.edit-icon-favourite-list,
+.delete-icon-favourite-list  {
+  height: 50px;
+}
+
+.edit-icon-favourite-list:hover,
+.delete-icon-favourite-list:hover  {
+  background-color: red;
+}
+
+.favourite-list-main {
+  height: 170px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.icon-favourite-list-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.favourite-list-main-container {
+  border:  1px solid black;
+  padding-left: 0;
+  padding-right: 0;
+}
