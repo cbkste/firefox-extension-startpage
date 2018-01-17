@@ -123,16 +123,19 @@ function changeSelectionLeft() {
   var FavouriteListGet = browser.storage.local.get("FavouriteList");
   FavouriteListGet.then((results) => {
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
-    var currentInUseList = currentListSelection.textContent;
-    var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
-    var movingToPosition = --currentPosition;
-    console.log("movingToPosition: "+ movingToPosition);
-    console.log("length: "+ results["FavouriteList"]["FavouriteList"].length);
-    if(movingToPosition < 0){
-      movingToPosition = --results["FavouriteList"]["FavouriteList"].length;
-      getAndDisplayNewList(movingToPosition);
-    } else {
-      getAndDisplayNewList(movingToPosition);
+    if(results["FavouriteList"]["FavouriteList"].length != 1){
+      console.log("**************");
+      var currentInUseList = currentListSelection.textContent;
+      var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
+      var movingToPosition = --currentPosition;
+      console.log("movingToPosition: "+ movingToPosition);
+      console.log("length: "+ results["FavouriteList"]["FavouriteList"].length);
+      if(movingToPosition < 0){
+        movingToPosition = --results["FavouriteList"]["FavouriteList"].length;
+        getAndDisplayNewList(movingToPosition);
+      } else {
+        getAndDisplayNewList(movingToPosition);
+      }
     }
   }, onError);
 }
@@ -141,19 +144,22 @@ function changeSelectionRight(){
   var FavouriteListGet = browser.storage.local.get("FavouriteList");
   FavouriteListGet.then((results) => {
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
-    var currentInUseList = currentListSelection.textContent;
-    var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
-    var movingToPosition = ++currentPosition;
-    console.log("currentPosition: "+ currentPosition);
-    console.log("movingToPosition: "+ movingToPosition);
-    console.log("length: "+ results["FavouriteList"]["FavouriteList"].length);
-    if(movingToPosition >= results["FavouriteList"]["FavouriteList"].length){
-      movingToPosition = 0;
-      getAndDisplayNewList(movingToPosition);
-    } else {
-      getAndDisplayNewList(movingToPosition);
+    if(results["FavouriteList"]["FavouriteList"].length != 1){
+      console.log("**************");
+      var currentInUseList = currentListSelection.textContent;
+      var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
+      var movingToPosition = ++currentPosition;
+      console.log("currentPosition: "+ currentPosition);
+      console.log("movingToPosition: "+ movingToPosition);
+      console.log("length: "+ results["FavouriteList"]["FavouriteList"].length);
+      if(movingToPosition >= results["FavouriteList"]["FavouriteList"].length){
+        movingToPosition = 0;
+        getAndDisplayNewList(movingToPosition);
+      } else {
+        getAndDisplayNewList(movingToPosition);
+      }
     }
-  }, onError);
+    }, onError);
 }
 
 function getAndDisplayNewList(newPosition){
@@ -234,7 +240,6 @@ async function initialise() {
   console.log("LIST1 GET");
   FavouriteListGet.then((results) => {
     if(results["FavouriteList"] === undefined){
-      console.log("NOTHING HERE");
         var data = [];
         data[0] = { ["Settings"] : { "default" : "true" } };
         data[1] = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
@@ -242,23 +247,16 @@ async function initialise() {
         data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
-        var data = [];
-        data[0] = { ["Settings"] : { "default" : "false" } };
-        data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#f8f8f8", "backgroundColour" : "#f8f8f8" } };
-        data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
-        browser.storage.local.set({ ["Favourite list 2"] : {data} });
-
-        var data = [];
-        data[0] = { ["Settings"] : { "default" : "false" } };
-        data[1] = { ["li3333"] : { "id" : "1", "title" : "li3333", "url" : "33", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["l33333"] : { "id" : "2", "title" : "l33333", "url" : "3", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#fff", "backgroundColour" : "#fff" } };
-        browser.storage.local.set({ ["Favourite list 3"] : {data} });
+        // var data = [];
+        // data[0] = { ["Settings"] : { "default" : "true" } };
+        // data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        // data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
+        // data[3] = { ["list2-3"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        // browser.storage.local.set({ ["Favourite list 2"] : {data} });
 
         var FavouriteList = [];
         FavouriteList.push("Favourite list 1");
-        FavouriteList.push("Favourite list 2");
-        FavouriteList.push("Favourite list 3");
-
+        //FavouriteList.push("Favourite list 2");
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
         var newListToDisplay = browser.storage.local.get("Favourite list 1");
