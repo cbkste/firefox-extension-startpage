@@ -132,7 +132,8 @@
   text-align: center;
 }
 
-.settings-container {
+.settings-container,
+.favourite-lists-container {
   display: none;
   padding-bottom: 30px;
   border-bottom: 2px solid black;

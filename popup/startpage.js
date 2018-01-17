@@ -20,6 +20,7 @@ var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
 var dateTimeContainer = document.querySelector('.timeDateValue');
 var settingsContainer = document.querySelector('.settings-container');
+var favouriteListContainer = document.querySelector('.favourite-lists-container');
 var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateRowCountBtn = document.querySelector('input[id="UpdateSettingsRowCountBtn"]');
@@ -72,11 +73,13 @@ var favouriteListSelectorLeft = document.querySelector('.change-selected-favouri
 var favouriteListSelectorRight = document.querySelector('.change-selected-favourite-list-right');
 var addBtn = document.querySelector('.add');
 var editModeBtn = document.querySelector('.edit-icon');
+var favouriteListBtn = document.querySelector('.favourite-list');
 var settingsBtn = document.querySelector('.settings-icon');
 var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
 var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
 var settingsMode = false;
 var inEditMode = false;
+var FavouriteListsViewMode = false;
 var currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
 var changeLinksToHttps = true;
 var NoCurrentFavourites = false;
@@ -109,6 +112,7 @@ function defaultEventListener() {
   clearBtn.addEventListener('click', clearAll);
   editModeBtn.addEventListener('click', EditOverlay);
   settingsBtn.addEventListener('click', OpenSettings);
+  favouriteListBtn.addEventListener('click', openFavouriteList);
   settingsUpdateRowCountBtn.addEventListener('click', updateRowCountAndUiWithSettings);
   settingsUpdateStoredBackgroundImageCountBtn.addEventListener('click', updateBackgroundWithSettings);
   backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
@@ -439,6 +443,11 @@ async function OpenSettings() {
     switchIconsToLogo();
   }
 
+  if(FavouriteListsViewMode){
+      favouriteListContainer.setAttribute("style", "display: none;");
+      FavouriteListsViewMode = false;
+  }
+
   if(settingsMode){
     settingsContainer.setAttribute("style", "display: none;");
     settingsMode = false;
@@ -490,6 +499,11 @@ function updateUi(newCssClass){
 async function EditOverlay() {
   var hasEditModeClass = startpageContainerHTML.classList.contains('edit-mode');
 
+  if(FavouriteListsViewMode){
+      favouriteListContainer.setAttribute("style", "display: none;");
+      FavouriteListsViewMode = false;
+  }
+
   if(NoCurrentFavourites){
     welcomeContainer.setAttribute("style", "display: none;");
     NoCurrentFavourites = false;
@@ -513,6 +527,30 @@ if(settingsMode){
     switchIconsToEditAndDelete();
     inEditMode = true;
   }
+}
+
+async function openFavouriteList() {
+  var hasEditModeClass = startpageContainerHTML.classList.contains('edit-mode');
+  var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
+
+  if(inEditMode){
+    await removeEditOverlay();
+    switchIconsToLogo();
+  }
+
+  if(settingsMode){
+    settingsContainer.setAttribute("style", "display: none;");
+    settingsMode = false;
+  }
+
+  if(FavouriteListsViewMode){
+      favouriteListContainer.setAttribute("style", "display: none;");
+      FavouriteListsViewMode = false;
+  } else {
+      favouriteListContainer.setAttribute("style", "display: block;");
+      FavouriteListsViewMode = true;
+  }
+
 }
 
 async function removeEditOverlay() {
