@@ -9,6 +9,7 @@ oldest image stored
 - ability to create and change between multiple favourit lists.
 - ability to add own icon image.
 - add ability to load backup.
+- disable left & right favourite list if only single list currently exists
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
@@ -284,10 +285,16 @@ async function initialise() {
               }
           }
         }, onError);
+        favouriteListSelectorLeft.setAttribute("style", "color: grey;");
+        favouriteListSelectorRight.setAttribute("style", "color: grey;");
     } else {
     var favouriteKeys = Object.keys(results);
     //console.log(favouriteKeys);
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
+    if(results["FavouriteList"]["FavouriteList"].length == 1){
+      favouriteListSelectorLeft.setAttribute("style", "color: grey;");
+      favouriteListSelectorRight.setAttribute("style", "color: grey;");
+    }
       for (let favListKey of favouriteListKeys) {
         //console.log(favListKey);
         //console.log(results["FavouriteList"][favListKey]);
