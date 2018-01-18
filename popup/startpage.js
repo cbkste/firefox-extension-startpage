@@ -11,6 +11,8 @@ oldest image stored
 - add ability to load backup.
 - disable left & right favourite list if only single list currently exists
 - fix Drag and Drag, stil using old method of single use not miultiple lists.
+- In edit mode and you click the left and right arrows, stay in edit mode on
+next List.
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
@@ -248,9 +250,9 @@ async function initialise() {
     if(results["FavouriteList"] === undefined){
         var data = [];
         data[0] = { ["Settings"] : { "default" : "true" } };
-        data[1] = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["list1-2"] : { "id" : "2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[1] = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[2] = { ["list1-2"] : { "id" : "2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } };
+        data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } };
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
         var data = [];
@@ -262,9 +264,9 @@ async function initialise() {
 
         var data = [];
         data[0] = { ["Settings"] : { "default" : "false" } };
-        data[1] = { ["list3-1"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["list3-2"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        data[3] = { ["list3-3"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[1] = { ["list3-1"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        data[2] = { ["list3-2"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } };
+        data[3] = { ["list3-3"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } };
         browser.storage.local.set({ ["Favourite list 3"] : {data} });
 
         var FavouriteList = [];
@@ -616,6 +618,7 @@ async function openFavouriteList() {
                     browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
                 if(results["FavouriteList"]["FavouriteList"].length == 0){
+                // TODO: Create Blank List.
                   console.log("NO LIST LEFT CREATE BLANK ONE");
                 } else {
                   if(currentInUseList == indiKet){
@@ -631,7 +634,6 @@ async function openFavouriteList() {
                   console.log(result);
                   for (let dataObject of result[indiKet]["data"]){
                     var dataObjectKeys = Object.keys(dataObject);
-                    //console.log(dataObject);
                     var dataObjectKeyss = Object.keys(dataObject);
                       if(dataObjectKeyss == "Settings"){
                         if(dataObject[dataObjectKeys].default == "true"){
@@ -646,9 +648,6 @@ async function openFavouriteList() {
                   }
                 }, onError);
 
-                console.log("LAST CHECKJ");
-                console.log(lastList);
-                console.log(results["FavouriteList"]["FavouriteList"].length);
                 if(results["FavouriteList"]["FavouriteList"].length == 1 || lastList){
                   setNewDefaultList(0);
                 }

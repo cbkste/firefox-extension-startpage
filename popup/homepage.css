@@ -651,3 +651,11 @@
   padding-left: 0;
   padding-right: 0;
 }
+
+.favourite-lists-button-new {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border: 1px solid black;
+  margin-top: 20px;
+}
