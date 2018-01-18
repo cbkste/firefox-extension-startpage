@@ -1011,7 +1011,15 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   var editIconbox = document.createElement('i');
   var deleteIconbox = document.createElement('i');
   var favouriteboxtitle = document.createElement('div');
-  favouritecontainer.setAttribute('id',title);
+  var newID = id.toString();
+  if(newID.startsWith('Entry')){
+      console.log("HERE");
+      var divID = newID;
+  } else {
+      var divID = "Entry"+id;
+  }
+
+  favouritecontainer.setAttribute('id',divID);
   var classList = currentCssClassSize + " favourite-container";
   favouritecontainer.setAttribute('class',classList);
   favouritecontainer.setAttribute('style',"order: "+order);
@@ -1641,6 +1649,8 @@ function handleDrop(e) {
       var newPosition = this.getAttribute("style").split("order: ")[1].split(";")[0];
       var oldPosition = currentOrderPosition;
 
+      var favouriteId = e.dataTransfer.getData('text');
+      console.log(favouriteId);
       console.log(this.id);
       console.log(newPosition);
       var gettingFirstItem = browser.storage.local.get(favouriteId);
@@ -1650,23 +1660,26 @@ function handleDrop(e) {
         console.log(result);
         console.log("URL: "+result.url);
         var id = result[favouriteId].id;
+        var title = result[favouriteId].title;
         var url = result[favouriteId].url;
         var icon = result[favouriteId].icon;
         var iconColour = result[favouriteId].iconColour;
         var backgroundColour = result[favouriteId].backgroundColour;
         oldPosition = result[favouriteId].Order;
-        updateFavourite(id, favouriteId, favouriteId, url, newPosition, icon, iconColour, backgroundColour);
+        updateFavourite(favouriteId, favouriteId, title, url, newPosition, icon, iconColour, backgroundColour);
       }, onError);
 
       var gettingSecondItem = browser.storage.local.get(this.id);
       gettingSecondItem.then((result) => {
         var objTest = Object.keys(result);
         document.getElementById(this.id).remove();
+        var id = result[this.id].id;
+        var title = result[this.id].title;
         var url = result[this.id].url;
         var icon = result[this.id].icon;
         var iconColour = result[this.id].iconColour;
         var backgroundColour = result[this.id].backgroundColour;
-        updateFavourite(id, this.id, this.id, url, oldPosition, icon, iconColour, backgroundColour);
+        updateFavourite(this.id, this.id, title, url, oldPosition, icon, iconColour, backgroundColour);
       }, onError);
      }
     handleDragEnd();
