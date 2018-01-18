@@ -228,7 +228,10 @@ async function initialise() {
       console.log("Settings Not Found");
       storeSettings("10", "4","6","","1");
     } else {
+      console.log("SETTINGS FOUND: ID: "+result.startpagesettings.id);
+      console.log("SETTINGS FOUND: BGCOUNT: "+result.startpagesettings.storedBackgroundImageCount);
       global_id = result.startpagesettings.id;
+      console.log("SETTINGS FOUND: GLOBALID: "+global_id);
       settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
       settingsRowCountLimit = result.startpagesettings.RowCount;
       console.log(result.startpagesettings.SelectedBackgroundImage);
@@ -244,44 +247,45 @@ async function initialise() {
   FavouriteListGet.then((results) => {
     if(results["FavouriteList"] === undefined){
         var data = [];
-        var Settings = { ["Settings"] : { "default" : "false" } };
-        data.push(Settings);
-        data.push("Entry1");
-        data.push("Entry2");
-        data.push("Entry3");
-        browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry2"] : { "id" : "Entry2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry3"] : { "id" : "Entry3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Favourite list 1"] : {data} });
-
-        var data = [];
         var Settings = { ["Settings"] : { "default" : "true" } };
         data.push(Settings);
-        data.push("Entry4");
-        data.push("Entry5");
-        data.push("Entry6");
-        browser.storage.local.set({ ["Entry4"] : { "id" : "Entry4", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry5"] : { "id" : "Entry5", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry6"] : { "id" : "Entry6", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Favourite list 2"] : {data} });
+        // data.push("Entry1");
+        // data.push("Entry2");
+        // data.push("Entry3");
+        // browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        // browser.storage.local.set({ ["Entry2"] : { "id" : "Entry2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        // browser.storage.local.set({ ["Entry3"] : { "id" : "Entry3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
-        var data = [];
-        var Settings = { ["Settings"] : { "default" : "false" } };
-        data.push(Settings);
-        data.push("Entry7");
-        data.push("Entry8");
-        data.push("Entry9");
-        browser.storage.local.set({ ["Entry7"] : { "id" : "Entry7", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry8"] : { "id" : "Entry8", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry9"] : { "id" : "Entry9", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Favourite list 3"] : {data} });
+        // var data = [];
+        // var Settings = { ["Settings"] : { "default" : "true" } };
+        // data.push(Settings);
+        // data.push("Entry4");
+        // data.push("Entry5");
+        // data.push("Entry6");
+        // browser.storage.local.set({ ["Entry4"] : { "id" : "Entry4", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        // browser.storage.local.set({ ["Entry5"] : { "id" : "Entry5", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        // browser.storage.local.set({ ["Entry6"] : { "id" : "Entry6", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        // browser.storage.local.set({ ["Favourite list 2"] : {data} });
+        //
+        // var data = [];
+        // var Settings = { ["Settings"] : { "default" : "false" } };
+        // data.push(Settings);
+        // data.push("Entry7");
+        // data.push("Entry8");
+        // data.push("Entry9");
+        // browser.storage.local.set({ ["Entry7"] : { "id" : "Entry7", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        // browser.storage.local.set({ ["Entry8"] : { "id" : "Entry8", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        // browser.storage.local.set({ ["Entry9"] : { "id" : "Entry9", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        // browser.storage.local.set({ ["Favourite list 3"] : {data} });
 
         var FavouriteList = [];
         FavouriteList.push("Favourite list 1");
-        FavouriteList.push("Favourite list 2");
-        FavouriteList.push("Favourite list 3");
+        // FavouriteList.push("Favourite list 2");
+        // FavouriteList.push("Favourite list 3");
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
 
+        currentListSelection.textContent = "Favourite list 1";
         var newListToDisplay = browser.storage.local.get("Favourite list 1");
         newListToDisplay.then((result) => {
           for (let dataObject of result["Favourite list 1"]["data"]){
@@ -319,30 +323,31 @@ async function initialise() {
          for (let indiKet of results["FavouriteList"][favListKey]) {
            var getEntriesInList = browser.storage.local.get(indiKet);
            getEntriesInList.then((result) => {
-            var defaultList = false;
-            console.log(result);
-            console.log(result[indiKet]);
-            console.log(result[indiKet]["data"]);
-             for (let dataObject of result[indiKet]["data"]){
-               var getEntry = browser.storage.local.get(dataObject);
-               getEntry.then((entry) => {
-                 if(entry[dataObject] === undefined){
-                   if(entry["Settings"].default == "true"){
-                     defaultList = true;
-                     currentListSelection.textContent = indiKet;
+             if(result[indiKet]["data"].length !== 1){
+              var defaultList = false;
+               for (let dataObject of result[indiKet]["data"]){
+                 var getEntry = browser.storage.local.get(dataObject);
+                 getEntry.then((entry) => {
+                   if(entry[dataObject] === undefined){
+                     if(entry["Settings"].default == "true"){
+                       defaultList = true;
+                       currentListSelection.textContent = indiKet;
+                     }
                    }
-                 }
-                 if(defaultList && entry[dataObject] !== undefined){
-                   var id = entry[dataObject].id;
-                   var title = entry[dataObject].title;
-                   var url = entry[dataObject].url;
-                   var icon = entry[dataObject].icon;
-                   var iconColour = entry[dataObject].iconColour;
-                   var backgroundColour = entry[dataObject].backgroundColour;
-                   var order = entry[dataObject].Order;
-                   displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
-                 }
-               }, onError);
+                   if(defaultList && entry[dataObject] !== undefined){
+                     var id = entry[dataObject].id;
+                     var title = entry[dataObject].title;
+                     var url = entry[dataObject].url;
+                     var icon = entry[dataObject].icon;
+                     var iconColour = entry[dataObject].iconColour;
+                     var backgroundColour = entry[dataObject].backgroundColour;
+                     var order = entry[dataObject].Order;
+                     displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
+                   }
+                 }, onError);
+               }
+             } else {
+               currentListSelection.textContent = indiKet;
              }
           }, onError);
        }
@@ -654,8 +659,6 @@ function setNewDefaultList(position){
         var Settings = { ["Settings"] : { "default" : "true" } };
         data.push(Settings);
         data.push("Entry1");
-        data.push("Entry2");
-        data.push("Entry3");
         browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "NEW LIST", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
         var FavouriteList = [];
