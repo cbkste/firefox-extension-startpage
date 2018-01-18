@@ -11,6 +11,7 @@ The extension includes:
 * a content script
 * Uses the WebExtensions Storage API to persist the website data.
 
-## What it shows
 
-* How to persist data in a WebExtension using the Storage API.
+![Main Page with 4 default tiles](https://raw.githubusercontent.com/cbkste/firefox-extension-startpage/master/images/startpage.jpg)
+![Settings](https://raw.githubusercontent.com/cbkste/firefox-extension-startpage/master/images/startpage2.jpg)
+![Edit Mode](https://raw.githubusercontent.com/cbkste/firefox-extension-startpage/master/images/startpage3.jpg)
