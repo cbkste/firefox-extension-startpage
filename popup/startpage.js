@@ -18,7 +18,7 @@ next List.
 var currentListSelection = document.querySelector('.current-favourite-list');
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
-var global_id;
+var global_id = "10";
 var idToEdit;
 var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
@@ -831,6 +831,7 @@ function addNewFavourite(id, title,url,icon,iconColour,backgroundColour) {
 }
 
 function createNewFavourite(){
+  console.log(global_id);
   var title = newFavouriteTitleTextField.value;
   var url = newFavouriteUrlTextField.value;
   var icon = NewFavouriteIconTextField.value;
@@ -870,7 +871,8 @@ function updateIconColourExampleDiv(){
 /* function to store a new favourite in storage */
 function storeFavourite(id, title, url, order, icon, iconColour, backgroundColour, inEditMode) {
   var entryTitle = "Entry"+id;
-  browser.storage.local.set({ [entryTitle] : { "id" : entryTitle, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+  console.log("storeFavourite: "+id);
+  browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
 
   var currentInUseList = currentListSelection.textContent;
   var currentInUseListArrayName = currentInUseList;
@@ -1097,13 +1099,13 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     var bool = startpageContainerHTML.classList.contains('edit-mode');
     if(bool){
       e.preventDefault();
-      //alert("Edit mode");
     }
   })
 
   editiconfavouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
-    displayEditCurrentFavouriteOverlay(id);
+    var newId = "Entry"+id;
+    displayEditCurrentFavouriteOverlay(newId);
   })
 
   deleteiconfavouritebox.addEventListener('click',(e) => {
