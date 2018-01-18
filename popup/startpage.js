@@ -19,6 +19,7 @@ var currentListSelection = document.querySelector('.current-favourite-list');
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
 var global_id;
+var idToEdit;
 var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
 var dateTimeContainer = document.querySelector('.timeDateValue');
@@ -864,21 +865,22 @@ function generateValidUrl(url) {
 }
 
 
-function displayEditCurrentFavouriteOverlay(currentTitle) {
-  var item = browser.storage.local.get(currentTitle);
-  item.then((results) => {
+function displayEditCurrentFavouriteOverlay(id) {
+  var entry = browser.storage.local.get(id);
+  entry.then((results) => {
+    console.log(results)
     var objectKeys = Object.keys(results);
-    //currentTitle = results[objectKeys].title;
+    var currentTitle = results[objectKeys].title;
     var currentUrl = results[objectKeys].url;
     var currentIcon = results[objectKeys].icon;
     var currentIconColour = results[objectKeys].iconColour;
     var currentBackgroundColour = results[objectKeys].backgroundColour;
     var currentOrder = results[objectKeys].Order;
-    createEditCurrentFavouriteDivOverlay(currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour);
+    createEditCurrentFavouriteDivOverlay(id, currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour);
   }, onError);
 }
 
-function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColour, backgroundColour) {
+function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconColour, backgroundColour) {
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
   editCurrentFavouriteIconTextField.value = icon;
@@ -907,12 +909,14 @@ function createEditCurrentFavouriteDivOverlay(title, url, order, icon, iconColou
 
   editUpdateFavouriteBtn.title = title;
   editUpdateFavouriteBtn.order = order;
+  idToEdit = id;
   editUpdateFavouriteBtn.addEventListener('click',ProcessUpdateFavourite, false);
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
 }
 
 function ProcessUpdateFavourite(evt)
 {
+  console.log(idToEdit);
   console.log("Div to inital Remove: TITLE: "+evt.target.title )
   console.log("Div Order: "+evt.target.order )
   var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
@@ -925,7 +929,8 @@ function ProcessUpdateFavourite(evt)
   }
   console.log(document.getElementById(evt.target.title));
   document.getElementById(evt.target.title).remove();
-  updateFavourite(evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
+
+  updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
   editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   console.log("ProcessUpdateFavourite")
   eventListnerForNewUpdateDiv(evt.target.order);
@@ -1053,7 +1058,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
   editiconfavouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
-    displayEditCurrentFavouriteOverlay(title);
+    displayEditCurrentFavouriteOverlay(id);
   })
 
   deleteiconfavouritebox.addEventListener('click',(e) => {
@@ -1077,13 +1082,22 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     var currentInUseList = currentListSelection.textContent;
     var listFavouriteIsOnToBeRemoved = browser.storage.local.get(currentInUseList);
     listFavouriteIsOnToBeRemoved.then((entry) => {
-      console.log(id);
+      var entryToRemove = "Entry"+id;
       var entryPositionInFavouriteList = entry[currentInUseList]["data"].indexOf(id);
       console.log(entry[currentInUseList]["data"]);
       var removed = entry[currentInUseList]["data"].splice(entryPositionInFavouriteList, 1);
       var data = entry[currentInUseList]["data"];
       console.log(data);
       browser.storage.local.set({ [currentInUseList] : { data } });
+      var allData = browser.storage.local.get(null);
+      allData.then((entry) => {
+        }, onError);
+      console.log(entryToRemove);
+      browser.storage.local.remove(entryToRemove);
+      var allData2 = browser.storage.local.get(null);
+      allData2.then((entry) => {
+
+      }, onError);
       }, onError);
   })
 
@@ -1155,17 +1169,12 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 /* function to update notes */
 
 function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour) {
-  //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
-  var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+  console.log(id);
+  console.log(delNote);
+  var storingFavourite = browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
-    if(delNote !== title) {
-      var removingNote = browser.storage.local.remove(delNote);
-      removingNote.then(() => {
-        displayFavourite(id,title, url, order,icon,iconColour,backgroundColour,true);
-      }, onError);
-    } else {
-      displayFavourite(id,title, url, order,icon,iconColour,backgroundColour,true);
-    }
+    console.log("INSIDE");
+      displayFavourite(id,title, url, order,icon, iconColour, backgroundColour,true);
   }, onError);
 }
 
