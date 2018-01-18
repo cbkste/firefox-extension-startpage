@@ -179,29 +179,24 @@ function getAndDisplayNewList(newPosition){
   FavouriteListGet.then((results) => {
     var newFavoureiteListInUse = results["FavouriteList"]["FavouriteList"][newPosition];
 
-var newListToDisplay = browser.storage.local.get(newFavoureiteListInUse);
-newListToDisplay.then((result) => {
-  console.log(result);
+var newListToDisplayEntries = browser.storage.local.get(newFavoureiteListInUse);
+newListToDisplayEntries.then((result) => {
+  currentListSelection.textContent = newFavoureiteListInUse;
   for (let dataObject of result[newFavoureiteListInUse]["data"]){
-    var dataObjectKeys = Object.keys(dataObject);
-    //console.log(dataObject);
-    var dataObjectKeyss = Object.keys(dataObject);
-      currentListSelection.textContent = newFavoureiteListInUse;
-      if(dataObjectKeyss != "Settings"){
-        console.log(dataObject);
-        console.log(dataObjectKeys);
-
-        var id = dataObject[dataObjectKeys].id;
-        var title = dataObject[dataObjectKeys].title;
-        var id = dataObject[dataObjectKeys].ref;
-        var title = dataObject[dataObjectKeys].title;
-        var url = dataObject[dataObjectKeys].url;
-        var icon = dataObject[dataObjectKeys].icon;
-        var iconColour = dataObject[dataObjectKeys].iconColour;
-        var backgroundColour = dataObject[dataObjectKeys].backgroundColour;
-        var order = dataObject[dataObjectKeys].Order;
+    var getEntry = browser.storage.local.get(dataObject);
+    getEntry.then((entry) => {
+      if(entry[dataObject] !== undefined){
+        var id = entry[dataObject].id;
+        var id = entry[dataObject].ref;
+        var title = entry[dataObject].title;
+        var url = entry[dataObject].url;
+        var icon = entry[dataObject].icon;
+        var iconColour = entry[dataObject].iconColour;
+        var backgroundColour = entry[dataObject].backgroundColour;
+        var order = entry[dataObject].Order;
         displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
       }
+    }, onError);
   }
 }, onError);
   }, onError);
@@ -249,24 +244,36 @@ async function initialise() {
   FavouriteListGet.then((results) => {
     if(results["FavouriteList"] === undefined){
         var data = [];
-        data[0] = { ["Settings"] : { "default" : "true" } };
-        data[1] = { ["list1-1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["list1-2"] : { "id" : "2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        data[3] = { ["list1-3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        var Settings = { ["Settings"] : { "default" : "true" } };
+        data.push(Settings);
+        data.push("Entry1");
+        data.push("Entry2");
+        data.push("Entry3");
+        browser.storage.local.set({ ["Entry1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry2"] : { "id" : "2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
         var data = [];
-        data[0] = { ["Settings"] : { "default" : "false" } };
-        data[1] = { ["list2-1"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["list2-2"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        data[3] = { ["list2-3"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        var Settings = { ["Settings"] : { "default" : "false" } };
+        data.push(Settings);
+        data.push("Entry4");
+        data.push("Entry5");
+        data.push("Entry6");
+        browser.storage.local.set({ ["Entry4"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry5"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry6"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 2"] : {data} });
 
         var data = [];
-        data[0] = { ["Settings"] : { "default" : "false" } };
-        data[1] = { ["list3-1"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } };
-        data[2] = { ["list3-2"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } };
-        data[3] = { ["list3-3"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } };
+        var Settings = { ["Settings"] : { "default" : "false" } };
+        data.push(Settings);
+        data.push("Entry7");
+        data.push("Entry8");
+        data.push("Entry9");
+        browser.storage.local.set({ ["Entry7"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry8"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry9"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 3"] : {data} });
 
         var FavouriteList = [];
@@ -316,49 +323,40 @@ async function initialise() {
       favouriteListSelectorRight.setAttribute("style", "color: grey;");
     }
       for (let favListKey of favouriteListKeys) {
-        //console.log(favListKey);
-        //console.log(results["FavouriteList"][favListKey]);
-        for (let indiKet of results["FavouriteList"][favListKey]) {
-          //console.log(indiKet);
-          var defaultInUse = false;
-          var FavouriteListDataGet = browser.storage.local.get(indiKet);
-          FavouriteListDataGet.then((result) => {
-            //console.log(result);
-            var arrayLength = result[indiKet]["data"].length;
-            for (let dataObject of result[indiKet]["data"]){
-              var dataObjectKeys = Object.keys(dataObject);
-              //console.log(dataObject);
-              var dataObjectKeyss = Object.keys(dataObject);
-              console.log(defaultInUse);
-              if(dataObject[dataObjectKeys].default  == "true" || indiKet == defaultInUse){
-                defaultInUse = indiKet;
-                currentListSelection.textContent = indiKet;
-                if(dataObjectKeyss != "Settings"){
-                  console.log(dataObject);
-                  console.log(dataObjectKeys);
-
-                  var id = dataObject[dataObjectKeys].id;
-                  var title = dataObject[dataObjectKeys].title;
-                  var id = dataObject[dataObjectKeys].ref;
-                  var title = dataObject[dataObjectKeys].title;
-                  var url = dataObject[dataObjectKeys].url;
-                  var icon = dataObject[dataObjectKeys].icon;
-                  var iconColour = dataObject[dataObjectKeys].iconColour;
-                  var backgroundColour = dataObject[dataObjectKeys].backgroundColour;
-                  var order = dataObject[dataObjectKeys].Order;
-                  displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
-                }
-            }
-          }
+         for (let indiKet of results["FavouriteList"][favListKey]) {
+           var getEntriesInList = browser.storage.local.get(indiKet);
+           getEntriesInList.then((result) => {
+            var defaultList = false;
+             for (let dataObject of result[indiKet]["data"]){
+               var getEntry = browser.storage.local.get(dataObject);
+               getEntry.then((entry) => {
+                 if(entry[dataObject] === undefined){
+                   if(entry["Settings"].default == "true"){
+                     defaultList = true;
+                     currentListSelection.textContent = indiKet;
+                   }
+                 }
+                 if(defaultList && entry[dataObject] !== undefined){
+                   var id = entry[dataObject].id;
+                   var id = entry[dataObject].ref;
+                   var title = entry[dataObject].title;
+                   var url = entry[dataObject].url;
+                   var icon = entry[dataObject].icon;
+                   var iconColour = entry[dataObject].iconColour;
+                   var backgroundColour = entry[dataObject].backgroundColour;
+                   var order = entry[dataObject].Order;
+                   displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+                 }
+               }, onError);
+             }
           }, onError);
-        }
+       }
     }
   }
   }, onError);
 
   defaultEventListener();
 }
-
 
 async function setupbackgroundInit(){
   console.log("Setup Background:"+settingsCurrentSelectedBackground);
@@ -964,7 +962,6 @@ function eventListnerForNewUpdateDiv(order){
 
 function displayFavourite(id, title, url,order, icon, iconColour, backgroundColour, inEditMode) {
   var createCorrectUrl = generateValidUrl(url);
-  console.log("displayFavourite: "+currentCssClassSize);
   var note = document.createElement('div');
   var noteDisplay = document.createElement('div');
   var noteH = document.createElement('h2');
