@@ -18,7 +18,7 @@ next List.
 var currentListSelection = document.querySelector('.current-favourite-list');
 var inputTitle = document.querySelector('.new-note input');
 var inputBody = document.querySelector('.new-note textarea');
-var global_id = "1";
+var global_id;
 var noteContainer = document.querySelector('.note-container');
 var favouritesContainer = document.querySelector('.startpage-favourites-container');
 var dateTimeContainer = document.querySelector('.timeDateValue');
@@ -113,7 +113,6 @@ function onSettingsScreenError(message) {
 }
 
 function defaultEventListener() {
-  addBtn.addEventListener('click', addFavourite);
   clearBtn.addEventListener('click', clearAll);
   editModeBtn.addEventListener('click', EditOverlay);
   settingsBtn.addEventListener('click', OpenSettings);
@@ -227,8 +226,9 @@ async function initialise() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1", "4","6","","1");
+      storeSettings("10", "4","6","","1");
     } else {
+      global_id = result.startpagesettings.id;
       settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
       settingsRowCountLimit = result.startpagesettings.RowCount;
       console.log(result.startpagesettings.SelectedBackgroundImage);
@@ -249,9 +249,9 @@ async function initialise() {
         data.push("Entry1");
         data.push("Entry2");
         data.push("Entry3");
-        browser.storage.local.set({ ["Entry1"] : { "id" : "1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry2"] : { "id" : "2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry3"] : { "id" : "3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "list1-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry2"] : { "id" : "Entry2", "title" : "list1-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry3"] : { "id" : "Entry3", "title" : "list1-3", "url" : "url33", "Order" : "2", "icon" : "fa-github", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
 
         var data = [];
@@ -260,9 +260,9 @@ async function initialise() {
         data.push("Entry4");
         data.push("Entry5");
         data.push("Entry6");
-        browser.storage.local.set({ ["Entry4"] : { "id" : "1", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry5"] : { "id" : "2", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry6"] : { "id" : "3", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry4"] : { "id" : "Entry4", "title" : "list2-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry5"] : { "id" : "Entry5", "title" : "list2-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry6"] : { "id" : "Entry6", "title" : "list2-3", "url" : "url33", "Order" : "2", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 2"] : {data} });
 
         var data = [];
@@ -271,9 +271,9 @@ async function initialise() {
         data.push("Entry7");
         data.push("Entry8");
         data.push("Entry9");
-        browser.storage.local.set({ ["Entry7"] : { "id" : "1", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
-        browser.storage.local.set({ ["Entry8"] : { "id" : "2", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } });
-        browser.storage.local.set({ ["Entry9"] : { "id" : "3", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry7"] : { "id" : "Entry7", "title" : "list3-1", "url" : "url111111111111", "Order" : "1", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry8"] : { "id" : "Entry8", "title" : "list3-2", "url" : "url222222222222", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#fff" } });
+        browser.storage.local.set({ ["Entry9"] : { "id" : "Entry9", "title" : "list3-3", "url" : "url33", "Order" : "2", "icon" : "fa-bank", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 3"] : {data} });
 
         var FavouriteList = [];
@@ -321,6 +321,9 @@ async function initialise() {
            var getEntriesInList = browser.storage.local.get(indiKet);
            getEntriesInList.then((result) => {
             var defaultList = false;
+            console.log(result);
+            console.log(result[indiKet]);
+            console.log(result[indiKet]["data"]);
              for (let dataObject of result[indiKet]["data"]){
                var getEntry = browser.storage.local.get(dataObject);
                getEntry.then((entry) => {
@@ -461,7 +464,7 @@ async function OpenSettings() {
     settingsMode = false;
   } else {
        if(!settingsRowCountLimit) {
-         storeSettings("1","4","6","","1");
+         storeSettings(global_id,"4","6","","1");
          settingsRowCountTextField.value = "4";
        } else {
          settingsRowCountTextField.value = settingsRowCountLimit;
@@ -655,7 +658,7 @@ function setNewDefaultList(position){
         data.push("Entry1");
         data.push("Entry2");
         data.push("Entry3");
-        browser.storage.local.set({ ["Entry1"] : { "id" : "1", "title" : "NEW LIST", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
+        browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "NEW LIST", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
         var FavouriteList = [];
         FavouriteList.push("Favourite list 1");
@@ -764,26 +767,8 @@ function displayAddNewFavourite() {
   })
 }
 
-/* Add a note to the display, and storage */
-/*TODO: Remove me once addNewFavourite is Complete **/
-function addFavourite() {
-  var noteTitle = inputTitle.value;
-  var noteBody = inputBody.value;
-  var icon = "fa-steam-square";
-  var gettingItem = browser.storage.local.get(noteTitle);
-  gettingItem.then((result) => {
-    var objTest = Object.keys(result);
-    if(objTest.length < 1 && noteTitle !== '' && noteBody !== '') {
-      inputTitle.value = '';
-      inputBody.value = '';
-      storeFavourite("1",noteTitle,noteBody,"1",icon, "#000000", "#fff", false);
-    }
-  }, onError);
-}
-
-function addNewFavourite(title,url,icon,iconColour,backgroundColour) {
+function addNewFavourite(id, title,url,icon,iconColour,backgroundColour) {
   var gettingItem = browser.storage.local.get(title);
-  console.log(icon);
   gettingItem.then((result) => {
     var objTest = Object.keys(result);
     if(objTest.length < 1 && title !== '' && url !== '') {
@@ -791,7 +776,7 @@ function addNewFavourite(title,url,icon,iconColour,backgroundColour) {
       newFavouriteUrlTextField.value = '';
       currentOrderPosition++;
       console.log("addNewFavourite Updaed Order Position"+currentOrderPosition);
-      storeFavourite("1",title,url,currentOrderPosition,icon,iconColour, backgroundColour,true);
+      storeFavourite(id,title,url,currentOrderPosition,icon,iconColour, backgroundColour,true);
       updateDivOrderCount();
 
       if(InWelcomeMode){
@@ -808,6 +793,8 @@ function createNewFavourite(){
   var icon = NewFavouriteIconTextField.value;
   var iconColour = newFavouriteIconColourTextField.value;
   var backgroundColour = newFavouriteBackgroundColourTextField.value;
+  var id = ++global_id;
+  console.log(id);
 
   if(iconColour != ''){
     if(!iconColour.startsWith('#')){
@@ -825,7 +812,7 @@ function createNewFavourite(){
     backgroundColour = '#fff'
   }
 
-  addNewFavourite(title,url,icon,iconColour,backgroundColour)
+  addNewFavourite(id, title,url,icon,iconColour,backgroundColour)
 }
 
 /* TODO: Add Debouce */
@@ -839,24 +826,24 @@ function updateIconColourExampleDiv(){
 
 /* function to store a new favourite in storage */
 function storeFavourite(id, title, url, order, icon, iconColour, backgroundColour, inEditMode) {
+  var entryTitle = "Entry"+id;
+  browser.storage.local.set({ [entryTitle] : { "id" : entryTitle, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+
   var currentInUseList = currentListSelection.textContent;
   var currentInUseListArrayName = currentInUseList;
-  var storingNewFavourite = browser.storage.local.get(currentInUseList);
 
+  var storingNewFavourite = browser.storage.local.get(currentInUseListArrayName);
   storingNewFavourite.then((results) => {
-    var areLength = results[currentInUseList]["data"].length;
-    console.log(areLength);
-    console.log(results[currentInUseList]["data"]);
-    results[currentInUseList]["data"][areLength] = { [title] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } };
-    var data = results[currentInUseList]["data"];
-    browser.storage.local.set({ [currentInUseList] : { data } });
-    displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
+    var data = results[currentInUseListArrayName]["data"];
+    data.push(entryTitle);
+    browser.storage.local.set({ [currentInUseList] : {data} });
   }, onError);
+  displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
 }
 
 function storeSettings(id, rowCount, backgroundCount, backgroundImage, order) {
   console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order);
-  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order } });
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
   settingsCurrentSelectedBackground = backgroundImage;
@@ -1087,27 +1074,16 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     if(order === currentOrderPosition) {
       console.log("Last Div Removed, reduce current order Position");
       currentOrderPosition--;
-      storeSettings("1",settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+      storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
     }
     //browser.storage.local.remove(title);
     var currentInUseList = currentListSelection.textContent;
-    var favouriteToDelete = browser.storage.local.get(currentInUseList);
-    favouriteToDelete.then((result) => {
-      var position = 0;
-      for (let dataObject of result[currentInUseList]["data"]){
-        ++position;
-        var dataObjectKeys = Object.keys(dataObject);
-        //console.log(dataObject);
-        var dataObjectKeyss = Object.keys(dataObject);
-          if(dataObjectKeyss != "Settings"){
-            if(dataObjectKeys == title){
-              result[currentInUseList]["data"].splice(--position, 1);
-              var data = result[currentInUseList]["data"]
-              browser.storage.local.set({ [currentInUseList] : { data } });
-            }
-          }
-      }
-    }, onError);
+    var listFavouriteIsOnToBeRemoved = browser.storage.local.get(currentInUseList);
+    listFavouriteIsOnToBeRemoved.then((result) => {
+      console.log(id);
+      var entryPositionInFavouriteList = result[currentInUseList]["data"].indexOf(id);
+      console.log(entryPositionInFavouriteList);
+      }, onError);
   })
 
   favouritebox.addEventListener('mouseenter',(e) => {
@@ -1281,15 +1257,15 @@ function updateSettingsForType(updatedValue, settingsType) {
     if(objTest.length < 1) {
       switch (settingsType) {
           case "rowCount":
-              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings(global_id, updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition);
               settingsRowCountTextField.value = newRowCount;
               break;
           case "backgroundImageCount":
-              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings(global_id, settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition);
               settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
               break;
           case "DivOrderUpdate":
-              storeSettings("1", settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue);
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue);
               break;
       }
     } else {
@@ -1298,7 +1274,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.RowCount !== updatedValue)
               {
                 console.log("Updated Row Count Settings");
-                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings(global_id,updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
                 settingsRowCountTextField.value = updatedValue;
                 updateUi(getNewCssClass(updatedValue));
                 onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
@@ -1308,7 +1284,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
               {
                 console.log("Updated BackgrondImage Count Settings");
-                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings(global_id,settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
               }
@@ -1317,7 +1293,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.Order !== updatedValue)
               {
                 console.log("Updated Order");
-                storeSettings("1",settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue);
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue);
                 onSettingsScreenSuccess("Updated Order to "+updatedValue);
               }
               break;
@@ -1542,7 +1518,7 @@ async function displayBackgroundImage(filename){
     // currentBackgroudnBlobUrl = objectURL;
     // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
     settingsCurrentSelectedBackground = void 0;
-    storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+    storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
    } else {
      var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
      console.log(backgroundImageDivs);
@@ -1553,7 +1529,7 @@ async function displayBackgroundImage(filename){
      setBackgroundContainerImage(objectURL);
      settingsCurrentSelectedBackground = filename;
      currentBackgroudnBlobUrl = objectURL;
-     storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+     storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
    }
  });
 }
