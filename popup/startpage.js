@@ -186,14 +186,13 @@ newListToDisplayEntries.then((result) => {
     getEntry.then((entry) => {
       if(entry[dataObject] !== undefined){
         var id = entry[dataObject].id;
-        var id = entry[dataObject].ref;
         var title = entry[dataObject].title;
         var url = entry[dataObject].url;
         var icon = entry[dataObject].icon;
         var iconColour = entry[dataObject].iconColour;
         var backgroundColour = entry[dataObject].backgroundColour;
         var order = entry[dataObject].Order;
-        displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+        displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
       }
     }, onError);
   }
@@ -289,14 +288,13 @@ async function initialise() {
             getEntry.then((entry) => {
               if(entry[dataObject] !== undefined){
                 var id = entry[dataObject].id;
-                var id = entry[dataObject].ref;
                 var title = entry[dataObject].title;
                 var url = entry[dataObject].url;
                 var icon = entry[dataObject].icon;
                 var iconColour = entry[dataObject].iconColour;
                 var backgroundColour = entry[dataObject].backgroundColour;
                 var order = entry[dataObject].Order;
-                displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+                displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
               }
             }, onError);
           }
@@ -335,14 +333,13 @@ async function initialise() {
                  }
                  if(defaultList && entry[dataObject] !== undefined){
                    var id = entry[dataObject].id;
-                   var id = entry[dataObject].ref;
                    var title = entry[dataObject].title;
                    var url = entry[dataObject].url;
                    var icon = entry[dataObject].icon;
                    var iconColour = entry[dataObject].iconColour;
                    var backgroundColour = entry[dataObject].backgroundColour;
                    var order = entry[dataObject].Order;
-                   displayFavourite("2",title,url,order,icon,iconColour,backgroundColour,false);
+                   displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
                  }
                }, onError);
              }
@@ -1079,10 +1076,14 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     //browser.storage.local.remove(title);
     var currentInUseList = currentListSelection.textContent;
     var listFavouriteIsOnToBeRemoved = browser.storage.local.get(currentInUseList);
-    listFavouriteIsOnToBeRemoved.then((result) => {
+    listFavouriteIsOnToBeRemoved.then((entry) => {
       console.log(id);
-      var entryPositionInFavouriteList = result[currentInUseList]["data"].indexOf(id);
-      console.log(entryPositionInFavouriteList);
+      var entryPositionInFavouriteList = entry[currentInUseList]["data"].indexOf(id);
+      console.log(entry[currentInUseList]["data"]);
+      var removed = entry[currentInUseList]["data"].splice(entryPositionInFavouriteList, 1);
+      var data = entry[currentInUseList]["data"];
+      console.log(data);
+      browser.storage.local.set({ [currentInUseList] : { data } });
       }, onError);
   })
 
@@ -1153,17 +1154,17 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
 /* function to update notes */
 
-function updateFavourite(delNote,title, url, order, icon, iconColour, backgroundColour) {
+function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour) {
   //var storingFavourite = browser.storage.local.set({ [newTitle] : newBody });
   var storingFavourite = browser.storage.local.set({ [title] : { "id" : "1", "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
     if(delNote !== title) {
       var removingNote = browser.storage.local.remove(delNote);
       removingNote.then(() => {
-        displayFavourite("1",title, url, order,icon,iconColour,backgroundColour,true);
+        displayFavourite(id,title, url, order,icon,iconColour,backgroundColour,true);
       }, onError);
     } else {
-      displayFavourite("1",title, url, order,icon,iconColour,backgroundColour,true);
+      displayFavourite(id,title, url, order,icon,iconColour,backgroundColour,true);
     }
   }, onError);
 }
@@ -1584,22 +1585,21 @@ function handleDrop(e) {
       var newPosition = this.getAttribute("style").split("order: ")[1].split(";")[0];
       var oldPosition = currentOrderPosition;
 
-      var favouriteId = e.dataTransfer.getData('text');
       console.log(this.id);
       console.log(newPosition);
-      console.log(favouriteId);
       var gettingFirstItem = browser.storage.local.get(favouriteId);
       gettingFirstItem.then((result) => {
         var objTest = Object.keys(result);
         document.getElementById(favouriteId).remove();
         console.log(result);
         console.log("URL: "+result.url);
+        var id = result[favouriteId].id;
         var url = result[favouriteId].url;
         var icon = result[favouriteId].icon;
         var iconColour = result[favouriteId].iconColour;
         var backgroundColour = result[favouriteId].backgroundColour;
         oldPosition = result[favouriteId].Order;
-        updateFavourite(favouriteId, favouriteId, url, newPosition, icon, iconColour, backgroundColour);
+        updateFavourite(id, favouriteId, favouriteId, url, newPosition, icon, iconColour, backgroundColour);
       }, onError);
 
       var gettingSecondItem = browser.storage.local.get(this.id);
@@ -1610,7 +1610,7 @@ function handleDrop(e) {
         var icon = result[this.id].icon;
         var iconColour = result[this.id].iconColour;
         var backgroundColour = result[this.id].backgroundColour;
-        updateFavourite(this.id, this.id, url, oldPosition, icon, iconColour, backgroundColour);
+        updateFavourite(id, this.id, this.id, url, oldPosition, icon, iconColour, backgroundColour);
       }, onError);
      }
     handleDragEnd();
