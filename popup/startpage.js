@@ -38,6 +38,8 @@ var startpageContainerHTML = document.querySelector('.startpage-container');
 var startpageImageContainerHTML = document.body;
 var backgroundImageInfoBlock = document.querySelector('.background-image-info-block');
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
+var createNewFavouriteListBtn = document.querySelector('.favourite-lists-new');
+var createNewFavouriteListCloseBtn = document.querySelector('.new-list-overlay-box-close');
 var welcomeContainer = document.querySelector('.welcome-container');
 var welcomeMainContainer = document.querySelector('.welcome-main-container');
 var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
@@ -45,6 +47,7 @@ var newFavouriteOverlayContainer = document.querySelector('.add-overlay-containe
 var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-box-close');
 var editCurrentFavouriteOverlayContainer = document.querySelector('.edit-overlay-container');
 var editCurrentFavouriteOverlayCloseContainerBtn = document.querySelector('.edit-overlay-box-close');
+var newListOverlayContainer = document.querySelector('.new-list-overlay-container');
 
 /** Edit/Update Favourite Box Preview Selectors **/
 //input
@@ -72,6 +75,8 @@ var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteU
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
 var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
 var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
+var NewListTitleTextField = document.querySelector('input[name="NewListTitle"]');
+var addNewListBtn = document.querySelector('input[id="AddNewListBtn"]');
 
 var clearBtn = document.querySelector('.clear');
 var favouriteListSelectorLeft = document.querySelector('.change-selected-favourite-list-left');
@@ -460,6 +465,7 @@ async function OpenSettings() {
   if(FavouriteListsViewMode){
       favouriteListContainer.setAttribute("style", "display: none;");
       FavouriteListsViewMode = false;
+      createNewFavouriteListBtn.removeEventListener('click', createNewFavouriteListOverlay);
   }
 
   if(settingsMode){
@@ -516,6 +522,7 @@ async function EditOverlay() {
   if(FavouriteListsViewMode){
       favouriteListContainer.setAttribute("style", "display: none;");
       FavouriteListsViewMode = false;
+      createNewFavouriteListBtn.removeEventListener('click', createNewFavouriteListOverlay);
   }
 
   if(NoCurrentFavourites){
@@ -543,6 +550,37 @@ if(settingsMode){
   }
 }
 
+function createNewFavouriteList(){
+  var newListTitle = NewListTitleTextField.value;
+  if(newListTitle !== ""){
+    var data = [];
+    var Settings = { ["Settings"] : { "default" : "false" } };
+    data.push(Settings);
+    browser.storage.local.set({ [newListTitle] : {data} });
+
+    var listOfFavourites = browser.storage.local.get("FavouriteList");
+    listOfFavourites.then((result) => {
+      if(result["FavouriteList"]["FavouriteList"].length == 1){
+        favouriteListSelectorLeft.setAttribute("style", "color: black;");
+        favouriteListSelectorRight.setAttribute("style", "color: black;");
+      }
+      var FavouriteList = [];
+      var FavouriteList = result["FavouriteList"]["FavouriteList"];
+      FavouriteList.push(newListTitle);
+      browser.storage.local.set({ ["FavouriteList"] : {FavouriteList} });
+    }, onError);
+  }
+}
+
+function createNewFavouriteListOverlay(){
+  newListOverlayContainer.setAttribute("style", "display: block;");
+  addNewListBtn.addEventListener('click', createNewFavouriteList);
+
+  createNewFavouriteListCloseBtn.addEventListener('click',(e) => {
+    newListOverlayContainer.setAttribute("style", "display: none;");
+  })
+}
+
 async function openFavouriteList() {
   var hasEditModeClass = startpageContainerHTML.classList.contains('edit-mode');
   var inEditMode = startpageContainerHTML.classList.contains('edit-mode');
@@ -560,7 +598,11 @@ async function openFavouriteList() {
   if(FavouriteListsViewMode){
     favouriteListContainer.setAttribute("style", "display: none;");
     FavouriteListsViewMode = false;
+    createNewFavouriteListBtn.removeEventListener('click', createNewFavouriteListOverlay);
+    addNewListBtn.removeEventListener('click', createNewFavouriteList);
   } else {
+    createNewFavouriteListBtn.addEventListener('click', createNewFavouriteListOverlay);
+
     favouriteList.textContent = "";
     var FavouriteListGet = browser.storage.local.get("FavouriteList");
       FavouriteListGet.then((results) => {

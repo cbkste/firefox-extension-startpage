@@ -168,6 +168,27 @@
      </div>
    </div>
  </div>
+ <div id="new-list-overlay" class="grid-100 new-list-overlay-container">
+    <div class="suffix-15 prefix-15 grid-70 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-suffix-5 mobile-prefix-5 mobile-grid-90 new-list-overlay-box">
+      <div class="grid-95 tablet-grid-95 mobile-grid-90 new-list-overlay-box-title">
+        <p>New List </p>
+      </div>
+      <div class="grid-5 tablet-grid-5 mobile-grid-10 new-list-overlay-box-close">
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </div>
+      <div class="grid-50 suffix-50 tablet-grid-60 tablet-suffix-40 mobile-grid-100 new-list-overlay-box-name-container">
+        <div class="new-list-overlay-box-name">
+          <p id="NewFavouriteTitle">Favourite List Name: </p>
+        <div class="tooltip"><i class="fa fa-info"></i>
+          <span class="tooltiptext">Set Name of New Favourite List</span>
+        </div>
+      </div>
+      <input type="text" name="NewListTitle" value="">
+      <input id="AddNewListBtn" type="submit" value="Add New Favourite">
+    </div>
+  </div>
+</div>
+ </div>
   <div class="grid-20 prefix-10 current-list-active-name">
     <div class="grid-20">
       <i class="fa fa-arrow-left change-selected-favourite-list-left" aria-hidden="true"></i>
@@ -179,7 +200,7 @@
     </div>
   </div>
   <div class="prefix-45 grid-15 tablet-prefix-80 tablet-grid-20 mobile-prefix-60 mobile-grid-40 settings">
-    <div class="grid-100 tablet-grid-100 mobile-grid-100">
+    <div class="grid-100 tablet-grid-100 mobile-grid-100 icon-containers">
       <i class="fa fa-2x fa-sliders settings-icon" aria-hidden="true"></i>
       <i class="fa fa-2x fa-pencil-square-o edit-icon" aria-hidden="true"></i>
       <i class="fa fa-2x fa fa-list favourite-list" aria-hidden="true"></i>
@@ -197,14 +218,14 @@
   </div>
   <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 favourite-lists-container">
     <div class="grid-100 settings-title">
-      <p>Favourite Lists</p>
+        <div class=" settings-title">
+        <p>Favourite Lists</p>
+      </div>
+      <div class="grid-5 tablet-grid-5 mobile-grid-10 favourite-lists-new">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </div>
     </div>
     <div class="grid-100 favourite-lists">
-    </div>
-    <div class="grid-33 prefix-33 suffix-33 favourite-lists-button">
-      <div class="grid-100 favourite-lists-button-new">
-        CREATE NEW FAVOURITE LIST
-      </div>
     </div>
   </div>
   <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 settings-container">

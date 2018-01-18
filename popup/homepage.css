@@ -282,12 +282,18 @@
 .edit-mode-title,
 .add-overlay-box-title,
 .edit-overlay-box-title,
+.new-list-overlay-box-title,
 .add-overlay-box-close,
-.edit-overlay-box-close {
+.favourite-lists-new,
+.edit-overlay-box-close,
+.new-list-overlay-box-close {
   display: flex;
 }
 
-.add-overlay-box-close, .edit-overlay-box-close {
+.add-overlay-box-close,
+.favourite-lists-new,
+.edit-overlay-box-close,
+.new-list-overlay-box-close {
   justify-content: center;
   align-items: center;
 }
@@ -295,7 +301,8 @@
 .settings-title p,
 .edit-mode-title p,
 .add-overlay-box-title p,
-.edit-overlay-box-title p {
+.edit-overlay-box-title p,
+.new-list-overlay-box-title p {
   color: white;
   background: #ce2745;
   padding: 2px 40px 0;
@@ -308,7 +315,10 @@
   margin-top: 10px;
 }
 
-.add-overlay-box-close i, .edit-overlay-box-close i {
+.add-overlay-box-close i,
+.favourite-lists-new i,
+.edit-overlay-box-close i,
+.new-list-overlay-box-close i {
   color: white;
   background: #ce2745;
   padding: 2px 10px 0;
@@ -373,6 +383,7 @@
 .add-favourite-details-form-url,
 .edit-favourite-details-form-url,
 .add-favourite-details-form-icon,
+.new-list-overlay-box-name,
 .edit-favourite-details-form-icon,
 .add-favourite-details-form-background-colour,
 .add-favourite-details-form-icon-colour,
@@ -383,7 +394,9 @@
   display: flex;
 }
 
-.add-overlay-container, .edit-overlay-container {
+.add-overlay-container,
+.edit-overlay-container,
+.new-list-overlay-container {
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
@@ -396,7 +409,9 @@
   z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
 }
 
-.add-overlay-box, .edit-overlay-box {
+.add-overlay-box,
+.edit-overlay-box,
+.new-list-overlay-box {
   position: fixed;
   display: block;
   background-color: rgba(255, 255, 255, 0.9);
@@ -455,7 +470,8 @@
 
 .add-favourite-details-form-background-colour-container,
 .add-favourite-details-form-icon-colour-container,
-.add-favourite-details-form-icon-container {
+.add-favourite-details-form-icon-container,
+.new-list-overlay-box-name-container {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -470,7 +486,8 @@
   padding-left: 0px;
 }
 @media only screen and (max-width: 767px) {
-  .edit-overlay-box-title p {
+  .edit-overlay-box-title p,
+  .new-list-overlay-box-title p {
     font-size: 18px;
     padding: 2px 25px 0;
     line-height: 30px;
@@ -482,12 +499,14 @@
     line-height: 30px;
   }
 
-  .edit-overlay-box-close i {
+  .edit-overlay-box-close i,
+  .new-list-overlay-box-close i {
     font-size: 18px;
     line-height: 30px;
   }
 
-  .add-overlay-box-close i {
+  .add-overlay-box-close i,
+  .favourite-lists-new i {
     font-size: 18px;
     padding: 2px 10px 0;
     line-height: 30px;
@@ -548,7 +567,8 @@
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
-  .edit-overlay-box-title p {
+  .edit-overlay-box-title p,
+  .new-list-overlay-box-title p {
     font-size: 22px;
     padding: 2px 35px 0;
     line-height: 35px;
@@ -560,12 +580,14 @@
     line-height: 35px;
   }
 
-  .edit-overlay-box-close i {
+  .edit-overlay-box-close i,
+  .new-list-overlay-box-close i {
     font-size: 22px;
     line-height: 35px;
   }
 
-  .add-overlay-box-close i {
+  .add-overlay-box-close i,
+  .favourite-lists-new i, {
     font-size: 22px;
     padding: 2px 10px 0;
     line-height: 35px;
@@ -658,4 +680,10 @@
   display: flex;
   border: 1px solid black;
   margin-top: 20px;
+}
+
+.top-icon-containers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
