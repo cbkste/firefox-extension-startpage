@@ -157,6 +157,27 @@ function changeSelectionRight(){
   var FavouriteListGet = browser.storage.local.get("FavouriteList");
   FavouriteListGet.then((results) => {
     var favouriteListKeys = Object.keys(results["FavouriteList"]);
+      if(results["FavouriteList"]["FavouriteList"].length != 1){
+        var currentInUseList = currentListSelection.textContent;
+        var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
+        var movingToPosition = ++currentPosition;
+        console.log("currentPosition: "+ currentPosition);
+        console.log("movingToPosition: "+ movingToPosition);
+        console.log("length: "+ results["FavouriteList"]["FavouriteList"].length);
+        if(movingToPosition >= results["FavouriteList"]["FavouriteList"].length){
+          movingToPosition = 0;
+          getAndDisplayNewList(movingToPosition);
+        } else {
+          getAndDisplayNewList(movingToPosition);
+        }
+      }
+    }, onError);
+}
+
+function changeSelection(){
+  var FavouriteListGet = browser.storage.local.get("FavouriteList");
+  FavouriteListGet.then((results) => {
+    var favouriteListKeys = Object.keys(results["FavouriteList"]);
       var currentInUseList = currentListSelection.textContent;
       var currentPosition = results["FavouriteList"]["FavouriteList"].indexOf(currentInUseList);
       var movingToPosition = ++currentPosition;
@@ -650,7 +671,7 @@ async function openFavouriteList() {
 
             favouriteListDiv.textContent = indiKet;
             favouriteListInfoDiv.textContent = "Contains";
-            favouriteListInfoEntriesTextDiv.textContent = "Entires";
+            favouriteListInfoEntriesTextDiv.textContent = "Entries";
             //favouriteListInfoNumberDiv.textContent = count;
             editIconbox.textContent = "Rename List";
             deleteIconbox.textContent = "Delete List";
@@ -704,7 +725,7 @@ async function openFavouriteList() {
                       if(entry["Settings"].default == "true"){
                           setNewDefaultList(0);
                         } else {
-                          changeSelectionRight();
+                          changeSelection();
                         }
                       }
                   }, onError);
