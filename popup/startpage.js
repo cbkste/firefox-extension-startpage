@@ -119,7 +119,6 @@ function onSettingsScreenError(message) {
 }
 
 function defaultEventListener() {
-  clearBtn.addEventListener('click', clearAll);
   editModeBtn.addEventListener('click', EditOverlay);
   settingsBtn.addEventListener('click', OpenSettings);
   favouriteListBtn.addEventListener('click', openFavouriteList);
@@ -913,6 +912,8 @@ function generateValidUrl(url) {
 
 
 function displayEditCurrentFavouriteOverlay(id) {
+  console.log(id);
+  var searchID = "Entry"+id;
   var entry = browser.storage.local.get(id);
   entry.then((results) => {
     console.log(results)
@@ -974,8 +975,7 @@ function ProcessUpdateFavourite(evt)
   if(!updatedBackgroundColour.startsWith('#')){
     updatedBackgroundColour = '#'+updatedBackgroundColour;
   }
-  console.log(document.getElementById(evt.target.title));
-  document.getElementById(evt.target.title).remove();
+  document.getElementById(idToEdit).remove();
 
   updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
   editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
@@ -989,18 +989,9 @@ function eventListnerForNewUpdateDiv(order){
   editUpdateFavouriteBtn.addEventListener('click',ProcessUpdateFavourite, false);
 }
 
-/* function to display a note in the note box */
-
+/* function to display a favourite */
 function displayFavourite(id, title, url,order, icon, iconColour, backgroundColour, inEditMode) {
   var createCorrectUrl = generateValidUrl(url);
-  var note = document.createElement('div');
-  var noteDisplay = document.createElement('div');
-  var noteH = document.createElement('h2');
-  var notePara = document.createElement('p');
-  var notePid = document.createElement('p');
-  var deleteBtn = document.createElement('button');
-  var clearFix = document.createElement('div');
-
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
   var favouriteboximage = document.createElement('div');
@@ -1049,7 +1040,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     editdeleteiconfavouritebox.setAttribute('style','display: none');
   }
 
-  console.log(iconColour);
   favouriteIconbox.setAttribute('aria-hidden','true');
   editIconbox.setAttribute('class','fa fa-4x fa-pencil-square-o');
   editIconbox.setAttribute('aria-hidden','true');
@@ -1076,31 +1066,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     favouritesContainer.appendChild(favouritecontainer);
   }
 
-  note.setAttribute('class','note');
-
-  noteH.textContent = title;
-  notePara.textContent = url;
-  notePid.textContent = id;
-  deleteBtn.setAttribute('class','delete');
-  deleteBtn.textContent = 'Delete note';
-  clearFix.setAttribute('class','clearfix');
-
-  noteDisplay.appendChild(noteH);
-  noteDisplay.appendChild(notePara);
-  noteDisplay.appendChild(notePid);
-  noteDisplay.appendChild(deleteBtn);
-  noteDisplay.appendChild(clearFix);
-
-  note.appendChild(noteDisplay);
-
-  /* set up listener for the delete functionality */
-
-  deleteBtn.addEventListener('click',(e) => {
-    const evtTgt = e.target;
-    evtTgt.parentNode.parentNode.parentNode.removeChild(evtTgt.parentNode.parentNode);
-    browser.storage.local.remove(title);
-  })
-
   favouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
     console.log("Favourites Box"+evtTgt);
@@ -1112,8 +1077,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
   editiconfavouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
-    var newId = "Entry"+id;
-    displayEditCurrentFavouriteOverlay(newId);
+    displayEditCurrentFavouriteOverlay(id);
   })
 
   deleteiconfavouritebox.addEventListener('click',(e) => {
@@ -1170,54 +1134,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     var backgroundImgBox = evtTgt.firstChild;
     backgroundImgBox.setAttribute("style", "background-color: none");
   });
-
-  /* create note edit box */
-  var noteEdit = document.createElement('div');
-  var noteTitleEdit = document.createElement('input');
-  var noteBodyEdit = document.createElement('textarea');
-  var clearFix2 = document.createElement('div');
-
-  var updateBtn = document.createElement('button');
-  var cancelBtn = document.createElement('button');
-
-  updateBtn.setAttribute('class','update');
-  updateBtn.textContent = 'Update note';
-  cancelBtn.setAttribute('class','cancel');
-  cancelBtn.textContent = 'Cancel update';
-
-  noteEdit.appendChild(noteTitleEdit);
-  noteTitleEdit.value = title;
-  noteEdit.appendChild(noteBodyEdit);
-  noteBodyEdit.textContent = url;
-  noteEdit.appendChild(updateBtn);
-  noteEdit.appendChild(cancelBtn);
-
-  noteEdit.appendChild(clearFix2);
-  clearFix2.setAttribute('class','clearfix');
-
-  note.appendChild(noteEdit);
-
-  noteContainer.appendChild(note);
-  noteEdit.style.display = 'none';
-
-  /* set up listeners for the update functionality */
-
-  noteH.addEventListener('click',() => {
-    noteDisplay.style.display = 'none';
-    noteEdit.style.display = 'block';
-  })
-
-  notePara.addEventListener('click',() => {
-    noteDisplay.style.display = 'none';
-    noteEdit.style.display = 'block';
-  })
-
-  cancelBtn.addEventListener('click',() => {
-    noteDisplay.style.display = 'block';
-    noteEdit.style.display = 'none';
-    noteTitleEdit.value = title;
-    noteBodyEdit.value = url;
-  })
 }
 
 
@@ -1788,13 +1704,4 @@ function dayToString(day){
         default:
             return day+"th";
     }
-}
-
-
-/* Clear all notes from the display/storage */
-function clearAll() {
-  while (noteContainer.firstChild) {
-      noteContainer.removeChild(noteContainer.firstChild);
-  }
-  browser.storage.local.clear();
 }
