@@ -283,17 +283,20 @@
 .add-overlay-box-title,
 .edit-overlay-box-title,
 .new-list-overlay-box-title,
+.rename-list-overlay-box-title,
 .add-overlay-box-close,
 .favourite-lists-new,
 .edit-overlay-box-close,
-.new-list-overlay-box-close {
+.new-list-overlay-box-close,
+.rename-list-overlay-box-close {
   display: flex;
 }
 
 .add-overlay-box-close,
 .favourite-lists-new,
 .edit-overlay-box-close,
-.new-list-overlay-box-close {
+.new-list-overlay-box-close,
+.rename-list-overlay-box-close {
   justify-content: center;
   align-items: center;
 }
@@ -302,7 +305,8 @@
 .edit-mode-title p,
 .add-overlay-box-title p,
 .edit-overlay-box-title p,
-.new-list-overlay-box-title p {
+.new-list-overlay-box-title p,
+.rename-list-overlay-box-title p {
   color: white;
   background: #ce2745;
   padding: 2px 40px 0;
@@ -318,7 +322,8 @@
 .add-overlay-box-close i,
 .favourite-lists-new i,
 .edit-overlay-box-close i,
-.new-list-overlay-box-close i {
+.new-list-overlay-box-close i,
+.rename-list-overlay-box-close i {
   color: white;
   background: #ce2745;
   padding: 2px 10px 0;
@@ -384,6 +389,7 @@
 .edit-favourite-details-form-url,
 .add-favourite-details-form-icon,
 .new-list-overlay-box-name,
+.rename-list-overlay-box-name,
 .edit-favourite-details-form-icon,
 .add-favourite-details-form-background-colour,
 .add-favourite-details-form-icon-colour,
@@ -396,7 +402,8 @@
 
 .add-overlay-container,
 .edit-overlay-container,
-.new-list-overlay-container {
+.new-list-overlay-container,
+.rename-list-overlay-container {
   position: fixed; /* Sit on top of the page content */
   display: none; /* Hidden by default */
   width: 100%; /* Full width (cover the whole page) */
@@ -411,7 +418,8 @@
 
 .add-overlay-box,
 .edit-overlay-box,
-.new-list-overlay-box {
+.new-list-overlay-box,
+.rename-list-overlay-box {
   position: fixed;
   display: block;
   background-color: rgba(255, 255, 255, 0.9);
@@ -471,7 +479,8 @@
 .add-favourite-details-form-background-colour-container,
 .add-favourite-details-form-icon-colour-container,
 .add-favourite-details-form-icon-container,
-.new-list-overlay-box-name-container {
+.new-list-overlay-box-name-container,
+.rename-list-overlay-box-name-container {
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -487,7 +496,8 @@
 }
 @media only screen and (max-width: 767px) {
   .edit-overlay-box-title p,
-  .new-list-overlay-box-title p {
+  .new-list-overlay-box-title p,
+  .rename-list-overlay-box-title p {
     font-size: 18px;
     padding: 2px 25px 0;
     line-height: 30px;
@@ -500,7 +510,8 @@
   }
 
   .edit-overlay-box-close i,
-  .new-list-overlay-box-close i {
+  .new-list-overlay-box-close i,
+  .rename-list-overlay-box-close i {
     font-size: 18px;
     line-height: 30px;
   }
@@ -568,7 +579,8 @@
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
   .edit-overlay-box-title p,
-  .new-list-overlay-box-title p {
+  .new-list-overlay-box-title p,
+  .rename-list-overlay-box-title p {
     font-size: 22px;
     padding: 2px 35px 0;
     line-height: 35px;
@@ -581,7 +593,8 @@
   }
 
   .edit-overlay-box-close i,
-  .new-list-overlay-box-close i {
+  .new-list-overlay-box-close i,
+  .rename-list-overlay-box-close i {
     font-size: 22px;
     line-height: 35px;
   }

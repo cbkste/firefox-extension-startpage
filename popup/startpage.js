@@ -38,6 +38,7 @@ var backgroundImageInfoBlock = document.querySelector('.background-image-info-bl
 var backgroundImageInfoBlockText = document.querySelector('.background-image-info-block-text');
 var createNewFavouriteListBtn = document.querySelector('.favourite-lists-new');
 var createNewFavouriteListCloseBtn = document.querySelector('.new-list-overlay-box-close');
+var renameFavouriteListCloseBtn = document.querySelector('.rename-list-overlay-box-close');
 var welcomeContainer = document.querySelector('.welcome-container');
 var welcomeMainContainer = document.querySelector('.welcome-main-container');
 var editModeTitleContainer = document.querySelector('.edit-mode-title-container');
@@ -46,6 +47,7 @@ var newFavouriteOverlayCloseContainerBtn = document.querySelector('.add-overlay-
 var editCurrentFavouriteOverlayContainer = document.querySelector('.edit-overlay-container');
 var editCurrentFavouriteOverlayCloseContainerBtn = document.querySelector('.edit-overlay-box-close');
 var newListOverlayContainer = document.querySelector('.new-list-overlay-container');
+var renameListOverlayContainer = document.querySelector('.rename-list-overlay-container');
 
 /** Edit/Update Favourite Box Preview Selectors **/
 //input
@@ -70,11 +72,13 @@ var newFavouritePreviewUrl = document.querySelector('.new-preview-favourite-box'
 
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
 var newFavouriteUrlTextField = document.querySelector('input[name="NewFavouriteUrl"]');
+var renameFavouriteListTitleTextField = document.querySelector('input[name="RenameListTitle"]');
 var addNewFavouriteBtn = document.querySelector('input[id="AddNewFavouriteBtn"]');
 var editUpdateFavouriteBtn = document.querySelector('input[id="EditCurrentFavouriteBtn"]');
 var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 var NewListTitleTextField = document.querySelector('input[name="NewListTitle"]');
 var addNewListBtn = document.querySelector('input[id="AddNewListBtn"]');
+var renameListBtn = document.querySelector('input[id="RenamedListBtn"]');
 
 var clearBtn = document.querySelector('.clear');
 var favouriteListSelectorLeft = document.querySelector('.change-selected-favourite-list-left');
@@ -683,8 +687,39 @@ async function openFavouriteList() {
             favouriteList.appendChild(favouriteListDivContainer);
 
             editIconbox.addEventListener('click',(e) => {
-              console.log("click Edit Icon");
+              console.log("RENAMEING");
+              renameListOverlayContainer.setAttribute("style", "display: block");
+              renameFavouriteListCloseBtn.addEventListener('click', removeRenameOverlay);
+              renameListBtn.addEventListener('click',(e) => {
+                // Rename Current List in Use if same is being Renamed
+                // Get list rename, storage.setData
+                // Delete old
+                // Update favourit list
+                var newListTitle = renameFavouriteListTitleTextField.value;
+                console.log(indiKet);
+                console.log(newListTitle);
+                var currentListData = browser.storage.local.get(indiKet);
+                  currentListData.then((results) => {
+                    console.log(results);
+                    var data = results[indiKet]["data"];
+                    browser.storage.local.set({ [newListTitle] : {data} });
+                    browser.storage.local.remove(indiKet);
+                  }, onError);
+
+                var FavouriteListGet = browser.storage.local.get("FavouriteList");
+                  FavouriteListGet.then((results) => {
+                    var listPositionInFavourites = results["FavouriteList"]["FavouriteList"].indexOf(indiKet);
+                    results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1, newListTitle);
+                    var FavouriteList = results["FavouriteList"]["FavouriteList"];
+    -               console.log(FavouriteList);
+    -               browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+                  }, onError);
+
+                  if(currentListSelection.textContent == indiKet){
+                    currentListSelection.textContent = newListTitle;
+                  }
             });
+        });
 
             deleteIconbox.addEventListener('click',(e) => {
               var lastList = false;
@@ -737,6 +772,11 @@ async function openFavouriteList() {
         FavouriteListsViewMode = true;
     }, onError);
   }
+}
+
+function removeRenameOverlay(){
+  renameListOverlayContainer.setAttribute("style", "display: none;");
+  renameFavouriteListCloseBtn.removeEventListener('click', removeRenameOverlay);
 }
 
 function setNewDefaultList(position){
@@ -1124,7 +1164,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
   editiconfavouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
-    displayEditCurrentFavouriteOverlay(id);
+    displayEditCurrentFavouriteOverlay(divID);
   })
 
   deleteiconfavouritebox.addEventListener('click',(e) => {
