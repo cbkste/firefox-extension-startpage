@@ -652,7 +652,7 @@ async function openFavouriteList() {
             favouriteListInfoDiv.textContent = "Contains";
             favouriteListInfoEntriesTextDiv.textContent = "Entires";
             //favouriteListInfoNumberDiv.textContent = count;
-            editIconbox.textContent = "Rename List"+indiKet;
+            editIconbox.textContent = "Rename List"+;
             deleteIconbox.textContent = "Delete List";
             editdeleteicontainer.appendChild(editIconbox);
             editdeleteicontainer.appendChild(deleteIconbox);
