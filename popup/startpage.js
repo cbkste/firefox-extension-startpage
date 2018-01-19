@@ -407,6 +407,8 @@ function getListCount(key) {
     var count = browser.storage.local.get(key);
     var countAmount;
     count.then(async (results) => {
+      console.log(results);
+      console.log(key);
       countAmount = results[key]["data"].length;
       resolve(--countAmount);
     });
@@ -641,131 +643,9 @@ async function openFavouriteList() {
       FavouriteListGet.then(async (results) => {
         var favouriteListKeys = Object.keys(results["FavouriteList"]);
         for (let favListKey of favouriteListKeys) {
+          console.log(favouriteListKeys);
           for (let indiKet of results["FavouriteList"][favListKey]) {
-
-            var favouriteListDivContainer = document.createElement('div');
-            var favouriteListDiv = document.createElement('div');
-            var favouriteListInfoDiv = document.createElement('div');
-            var favouriteListInfoNumberDiv = document.createElement('div');
-            var favouriteListInfoEntriesTextDiv = document.createElement('div');
-            var editdeleteicontainer = document.createElement('div');
-            var editIconbox = document.createElement('div');
-            var deleteIconbox = document.createElement('div');
-
-
-            favouriteListDivContainer.setAttribute("class", "grid-33 favourite-list-main-container");
-            editdeleteicontainer.setAttribute("class", "grid-100 icon-favourite-list-container");
-            favouriteListDiv.setAttribute("class", "grid-100 favourite-list-main");
-            favouriteListInfoDiv.setAttribute("class", "grid-100 favourite-list-main-info");
-            favouriteListInfoNumberDiv.setAttribute("class", "grid-100 favourite-list-main-info-number");
-            favouriteListInfoEntriesTextDiv.setAttribute("class", "grid-100 favourite-list-main-info-entries-text");
-            editIconbox.setAttribute("class", "grid-50 edit-icon-favourite-list");
-            deleteIconbox.setAttribute("class", "grid-50 delete-icon-favourite-list");
-            editIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-            deleteIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-            favouriteListDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-            favouriteListInfoDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-            favouriteListInfoNumberDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-            favouriteListInfoEntriesTextDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
-
-            var count = await getListCount(indiKet);
-            favouriteListInfoNumberDiv.textContent = count;
-
-            favouriteListDiv.textContent = indiKet;
-            favouriteListInfoDiv.textContent = "Contains";
-            favouriteListInfoEntriesTextDiv.textContent = "Entries";
-            //favouriteListInfoNumberDiv.textContent = count;
-            editIconbox.textContent = "Rename List";
-            deleteIconbox.textContent = "Delete List";
-            editdeleteicontainer.appendChild(editIconbox);
-            editdeleteicontainer.appendChild(deleteIconbox);
-            favouriteListDivContainer.appendChild(favouriteListDiv);
-            favouriteListDivContainer.appendChild(favouriteListInfoDiv);
-            favouriteListDivContainer.appendChild(favouriteListInfoNumberDiv);
-            favouriteListDivContainer.appendChild(favouriteListInfoEntriesTextDiv);
-            favouriteListDivContainer.appendChild(editdeleteicontainer);
-            favouriteList.appendChild(favouriteListDivContainer);
-
-            editIconbox.addEventListener('click',(e) => {
-              console.log("RENAMEING");
-              renameListOverlayContainer.setAttribute("style", "display: block");
-              renameFavouriteListCloseBtn.addEventListener('click', removeRenameOverlay);
-              renameListBtn.addEventListener('click',(e) => {
-                // Rename Current List in Use if same is being Renamed
-                // Get list rename, storage.setData
-                // Delete old
-                // Update favourit list
-                var newListTitle = renameFavouriteListTitleTextField.value;
-                console.log(indiKet);
-                console.log(newListTitle);
-                var currentListData = browser.storage.local.get(indiKet);
-                  currentListData.then((results) => {
-                    console.log(results);
-                    var data = results[indiKet]["data"];
-                    browser.storage.local.set({ [newListTitle] : {data} });
-                    browser.storage.local.remove(indiKet);
-                  }, onError);
-
-                var FavouriteListGet = browser.storage.local.get("FavouriteList");
-                  FavouriteListGet.then((results) => {
-                    var listPositionInFavourites = results["FavouriteList"]["FavouriteList"].indexOf(indiKet);
-                    results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1, newListTitle);
-                    var FavouriteList = results["FavouriteList"]["FavouriteList"];
-    -               console.log(FavouriteList);
-    -               browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
-                  }, onError);
-
-                  if(currentListSelection.textContent == indiKet){
-                    currentListSelection.textContent = newListTitle;
-                  }
-            });
-        });
-
-            deleteIconbox.addEventListener('click',(e) => {
-              var lastList = false;
-              var currentInUseList = currentListSelection.textContent;
-                if(currentInUseList == indiKet) {
-                  var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
-                  for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
-                    removedCurrentFavouriteDivs[i].remove();
-                  }
-                }
-              console.log(indiKet);
-
-              var FavouriteListGet = browser.storage.local.get("FavouriteList");
-              FavouriteListGet.then((results) => {
-                var listPositionInFavourites = results["FavouriteList"]["FavouriteList"].indexOf(indiKet);
-                console.log(listPositionInFavourites);
-                var removed = results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1);
-                var FavouriteList = results["FavouriteList"]["FavouriteList"];
--               console.log(FavouriteList);
--               browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
-              }, onError);
-              const evtTgt = e.target;
--             evtTgt.parentNode.parentNode.remove();
-
-              var listDataToRemove = browser.storage.local.get(indiKet);
-              listDataToRemove.then(async (result) => {
-                for (let dataObject of result[indiKet]["data"]){
-                  var getEntry = browser.storage.local.get(dataObject);
-                  getEntry.then(async (entry) => {
-                    if(entry[dataObject] !== undefined){
-                      console.log("Removing Entry:"+ dataObject);
-                      browser.storage.local.remove(dataObject);
-                    } else {
-                      if(entry["Settings"].default == "true"){
-                          setNewDefaultList(0);
-                        } else {
-                          changeSelection();
-                        }
-                      }
-                  }, onError);
-                }
-                console.log("Removing List:"+ indiKet);
-                browser.storage.local.remove(indiKet);
-                console.log("Removal of list:"+ indiKet+" complete.");
-              }, onError);
-            });
+            renderFavouritListDivWithInfo(indiKet);
           }
         }
         favouriteListContainer.setAttribute("style", "display: block;");
@@ -773,6 +653,139 @@ async function openFavouriteList() {
     }, onError);
   }
 }
+
+async function renderFavouritListDivWithInfo(listKey){
+var favouriteListDivContainer = document.createElement('div');
+var favouriteListDiv = document.createElement('div');
+var favouriteListInfoDiv = document.createElement('div');
+var favouriteListInfoNumberDiv = document.createElement('div');
+var favouriteListInfoEntriesTextDiv = document.createElement('div');
+var editdeleteicontainer = document.createElement('div');
+var editIconbox = document.createElement('div');
+var deleteIconbox = document.createElement('div');
+
+
+favouriteListDivContainer.setAttribute("class", "grid-33 favourite-list-main-container");
+favouriteListDivContainer.setAttribute("id", listKey);
+editdeleteicontainer.setAttribute("class", "grid-100 icon-favourite-list-container");
+favouriteListDiv.setAttribute("class", "grid-100 favourite-list-main");
+favouriteListInfoDiv.setAttribute("class", "grid-100 favourite-list-main-info");
+favouriteListInfoNumberDiv.setAttribute("class", "grid-100 favourite-list-main-info-number");
+favouriteListInfoEntriesTextDiv.setAttribute("class", "grid-100 favourite-list-main-info-entries-text");
+editIconbox.setAttribute("class", "grid-50 edit-icon-favourite-list");
+deleteIconbox.setAttribute("class", "grid-50 delete-icon-favourite-list");
+editIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+deleteIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+favouriteListDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+favouriteListInfoDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+favouriteListInfoNumberDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+favouriteListInfoEntriesTextDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+
+var count = await getListCount(listKey);
+favouriteListInfoNumberDiv.textContent = count;
+
+favouriteListDiv.textContent = listKey;
+favouriteListInfoDiv.textContent = "Contains";
+favouriteListInfoEntriesTextDiv.textContent = "Entries";
+//favouriteListInfoNumberDiv.textContent = count;
+editIconbox.textContent = "Rename List";
+deleteIconbox.textContent = "Delete List";
+editdeleteicontainer.appendChild(editIconbox);
+editdeleteicontainer.appendChild(deleteIconbox);
+favouriteListDivContainer.appendChild(favouriteListDiv);
+favouriteListDivContainer.appendChild(favouriteListInfoDiv);
+favouriteListDivContainer.appendChild(favouriteListInfoNumberDiv);
+favouriteListDivContainer.appendChild(favouriteListInfoEntriesTextDiv);
+favouriteListDivContainer.appendChild(editdeleteicontainer);
+favouriteList.appendChild(favouriteListDivContainer);
+
+editIconbox.addEventListener('click',(e) => {
+  console.log("RENAMEING");
+  renameListOverlayContainer.setAttribute("style", "display: block");
+  renameFavouriteListCloseBtn.addEventListener('click', removeRenameOverlay);
+  renameListBtn.addEventListener('click',(e) => {
+    // Remobve and rerende Div
+    var newListTitle = renameFavouriteListTitleTextField.value;
+    console.log(listKey);
+    console.log(newListTitle);
+    var currentListData = browser.storage.local.get(listKey);
+      currentListData.then(async (results) => {
+        console.log(results);
+        var data = results[listKey]["data"];
+        browser.storage.local.set({ [newListTitle] : {data} });
+        browser.storage.local.remove(listKey);
+      }, onError);
+
+      var newListWithData = browser.storage.local.get(newListTitle);
+      newListWithData.then(async (results) => {
+        console.log(results);
+      }, onError);
+
+    var FavouriteListGet = browser.storage.local.get("FavouriteList");
+      FavouriteListGet.then(async (results) => {
+        var listPositionInFavourites = results["FavouriteList"]["FavouriteList"].indexOf(listKey);
+        results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1, newListTitle);
+        var FavouriteList = results["FavouriteList"]["FavouriteList"];
+        console.log(FavouriteList);
+        browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+      }, onError);
+
+      if(currentListSelection.textContent == listKey){
+        currentListSelection.textContent = newListTitle;
+      }
+      document.getElementById(listKey).remove();
+      // Handle Rerender.
+      //renderFavouritListDivWithInfo(newListTitle);
+});
+});
+
+deleteIconbox.addEventListener('click',(e) => {
+  var lastList = false;
+  var currentInUseList = currentListSelection.textContent;
+    if(currentInUseList == listKey) {
+      var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
+      for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
+        removedCurrentFavouriteDivs[i].remove();
+      }
+    }
+  console.log(listKey);
+
+  var FavouriteListGet = browser.storage.local.get("FavouriteList");
+  FavouriteListGet.then((results) => {
+    var listPositionInFavourites = results["FavouriteList"]["FavouriteList"].indexOf(listKey);
+    console.log(listPositionInFavourites);
+    var removed = results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1);
+    var FavouriteList = results["FavouriteList"]["FavouriteList"];
+-               console.log(FavouriteList);
+-               browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+  }, onError);
+  const evtTgt = e.target;
+-             evtTgt.parentNode.parentNode.remove();
+
+  var listDataToRemove = browser.storage.local.get(listKey);
+  listDataToRemove.then(async (result) => {
+    for (let dataObject of result[listKey]["data"]){
+      var getEntry = browser.storage.local.get(dataObject);
+      getEntry.then(async (entry) => {
+        if(entry[dataObject] !== undefined){
+          console.log("Removing Entry:"+ dataObject);
+          browser.storage.local.remove(dataObject);
+        } else {
+          if(entry["Settings"].default == "true"){
+              setNewDefaultList(0);
+            } else {
+              changeSelection();
+            }
+          }
+      }, onError);
+    }
+    console.log("Removing List:"+ listKey);
+    browser.storage.local.remove(listKey);
+    console.log("Removal of list:"+ listKey+" complete.");
+  }, onError);
+});
+}
+
 
 function removeRenameOverlay(){
   renameListOverlayContainer.setAttribute("style", "display: none;");
