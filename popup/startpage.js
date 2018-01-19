@@ -6,11 +6,9 @@ TODO:
 no need to delete
 - in background image use lastmodififeddate in IMage obkect to remove
 oldest image stored
-- ability to create and change between multiple favourit lists.
 - ability to add own icon image.
 - add ability to load backup.
 - disable left & right favourite list if only single list currently exists
-- fix Drag and Drag, stil using old method of single use not miultiple lists.
 - In edit mode and you click the left and right arrows, stay in edit mode on
 next List.
 **/
@@ -691,8 +689,6 @@ async function openFavouriteList() {
             deleteIconbox.addEventListener('click',(e) => {
               var lastList = false;
               var currentInUseList = currentListSelection.textContent;
-                //TODO: Handle this, Display next List if another list exists, if non exists create blank List
-                // Update FavouriteList to remove deleted List.
                 if(currentInUseList == indiKet) {
                   var removedCurrentFavouriteDivs = document.querySelectorAll('.favourite-container');
                   for (i = 0; i < removedCurrentFavouriteDivs.length; ++i) {
