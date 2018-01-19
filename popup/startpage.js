@@ -385,7 +385,7 @@ function getListCount(key) {
     var countAmount;
     count.then(async (results) => {
       countAmount = results[key]["data"].length;
-      resolve(countAmount);
+      resolve(--countAmount);
     });
   });
 }
@@ -652,7 +652,7 @@ async function openFavouriteList() {
             favouriteListInfoDiv.textContent = "Contains";
             favouriteListInfoEntriesTextDiv.textContent = "Entires";
             //favouriteListInfoNumberDiv.textContent = count;
-            editIconbox.textContent = "Rename List"+;
+            editIconbox.textContent = "Rename List";
             deleteIconbox.textContent = "Delete List";
             editdeleteicontainer.appendChild(editIconbox);
             editdeleteicontainer.appendChild(deleteIconbox);
