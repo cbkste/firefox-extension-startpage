@@ -379,6 +379,17 @@ async function setupbackgroundInit(){
   }
 }
 
+function getListCount(key) {
+  return new Promise(resolve => {
+    var count = browser.storage.local.get(key);
+    var countAmount;
+    count.then(async (results) => {
+      countAmount = results[key]["data"].length;
+      resolve(countAmount);
+    });
+  });
+}
+
 function CloseAddNewFavouritesOverlay() {
   addNewFavouriteBtn.removeEventListener('click', createNewFavourite);
   newFavouriteTitleTextField.removeEventListener('keyup', updatePreviewForNewFavouriteTitle);
@@ -604,12 +615,16 @@ async function openFavouriteList() {
 
     favouriteList.textContent = "";
     var FavouriteListGet = browser.storage.local.get("FavouriteList");
-      FavouriteListGet.then((results) => {
+      FavouriteListGet.then(async (results) => {
         var favouriteListKeys = Object.keys(results["FavouriteList"]);
         for (let favListKey of favouriteListKeys) {
           for (let indiKet of results["FavouriteList"][favListKey]) {
+
             var favouriteListDivContainer = document.createElement('div');
             var favouriteListDiv = document.createElement('div');
+            var favouriteListInfoDiv = document.createElement('div');
+            var favouriteListInfoNumberDiv = document.createElement('div');
+            var favouriteListInfoEntriesTextDiv = document.createElement('div');
             var editdeleteicontainer = document.createElement('div');
             var editIconbox = document.createElement('div');
             var deleteIconbox = document.createElement('div');
@@ -618,18 +633,33 @@ async function openFavouriteList() {
             favouriteListDivContainer.setAttribute("class", "grid-33 favourite-list-main-container");
             editdeleteicontainer.setAttribute("class", "grid-100 icon-favourite-list-container");
             favouriteListDiv.setAttribute("class", "grid-100 favourite-list-main");
+            favouriteListInfoDiv.setAttribute("class", "grid-100 favourite-list-main-info");
+            favouriteListInfoNumberDiv.setAttribute("class", "grid-100 favourite-list-main-info-number");
+            favouriteListInfoEntriesTextDiv.setAttribute("class", "grid-100 favourite-list-main-info-entries-text");
             editIconbox.setAttribute("class", "grid-50 edit-icon-favourite-list");
             deleteIconbox.setAttribute("class", "grid-50 delete-icon-favourite-list");
             editIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
             deleteIconbox.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
             favouriteListDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+            favouriteListInfoDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+            favouriteListInfoNumberDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+            favouriteListInfoEntriesTextDiv.setAttribute("style", "justify-content: center; align-items: center; display: flex;");
+
+            var count = await getListCount(indiKet);
+            favouriteListInfoNumberDiv.textContent = count;
 
             favouriteListDiv.textContent = indiKet;
-            editIconbox.textContent = "Rename List";
+            favouriteListInfoDiv.textContent = "Contains";
+            favouriteListInfoEntriesTextDiv.textContent = "Entires";
+            //favouriteListInfoNumberDiv.textContent = count;
+            editIconbox.textContent = "Rename List"+indiKet;
             deleteIconbox.textContent = "Delete List";
             editdeleteicontainer.appendChild(editIconbox);
             editdeleteicontainer.appendChild(deleteIconbox);
             favouriteListDivContainer.appendChild(favouriteListDiv);
+            favouriteListDivContainer.appendChild(favouriteListInfoDiv);
+            favouriteListDivContainer.appendChild(favouriteListInfoNumberDiv);
+            favouriteListDivContainer.appendChild(favouriteListInfoEntriesTextDiv);
             favouriteListDivContainer.appendChild(editdeleteicontainer);
             favouriteList.appendChild(favouriteListDivContainer);
 
