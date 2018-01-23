@@ -20,7 +20,14 @@
   align-self: center;
 }
 
-.options-title p {
+.import-export-data i {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.options-title p,
+.import-export-data i {
   color: white;
   padding: 2px 40px 0;
   font-size: 32px;

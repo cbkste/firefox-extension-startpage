@@ -19,10 +19,17 @@
       <div class="grid-40 tablet-grid-40 mobile-grid-40 options-title">
         <p>Startpage Settings</p>
       </div>
-      <div class="grid-60 tablet-grid-60 mobile-grid-60 background-image-info-block">
+      <div class="prefix-30 grid-30 tablet-prefix-20 tablet-grid-40 mobile-prefix-10 mobile-grid-50 import-export-data">
+        <div class="grid-25 import-data-icon"><i class="fa fa-chevron-up"></i></div>
+        <div class="grid-25 export-data-icon"><i class="fa fa-chevron-down"></i></div>
+      </div>
+      </div>
+    </div>
+    <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-grid-100">
+    <div class="grid-40 tablet-grid-40 mobile-grid-40 options-title">
+      <div class="grid-30 tablet-grid-60 mobile-grid-60 background-image-info-block">
           <div class="grid-10 background-image-info-block-icon"><i class="fa fa-info"></i></div>
           <div class="grid-90 background-image-info-block-text"></div>
-      </div>
       </div>
     </div>
 <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-grid-100 settings-page-container">
@@ -61,6 +68,26 @@
     <div class="grid-100 tablet-grid-100 image-display-zone">
     </div>
   </div>
+</div>
+<div id="export-overlay" class="grid-100 export-overlay-overlay-container">
+   <div class="suffix-15 prefix-15 grid-70 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-suffix-5 mobile-prefix-5 mobile-grid-90 export-overlay-box">
+     <div class="grid-95 tablet-grid-95 mobile-grid-90 export-box-title">
+       <p>Export Favourite List</p>
+     </div>
+     <div class="grid-5 tablet-grid-5 mobile-grid-10 export-overlay-box-close">
+       <i class="fa fa-times" aria-hidden="true"></i>
+     </div>
+     <div class="grid-50 suffix-50 tablet-grid-60 tablet-suffix-40 mobile-grid-100 export-overlay-box-save-location">
+       <div class="rename-list-overlay-box-name">
+         <p id="RenameFavouriteTitle">Favourite List Name: </p>
+       <div class="tooltip"><i class="fa fa-info"></i>
+         <span class="tooltiptext">Set New Name of Favourite List</span>
+       </div>
+     </div>
+     <input type="text" name="RenameListTitle" value="">
+     <input id="RenamedListBtn" type="submit" value="Rename Favourite List">
+   </div>
+ </div>
 </div>
 <script src="settings.js"></script>
 </body>

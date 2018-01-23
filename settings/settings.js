@@ -14,6 +14,10 @@ var settingsUpdateStoredBackgroundImageCountTextField = document.querySelector('
 var settingsUpdateStoredBackgroundImageCountBtn = document.querySelector('input[id="UpdateStoredBackgroundImagesBtn"]');
 var settingsUpdateRowCountBtn = document.querySelector('input[id="UpdateSettingsRowCountBtn"]');
 
+//import/export button selectors
+var importDataIcon = document.querySelector('.import-data-icon');
+var exportDataIcon = document.querySelector('.export-data-icon');
+
 initialise();
 
 
@@ -50,6 +54,8 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
   settingsUpdateRowCountBtn.addEventListener('click', updateRowCountWithSettings);
   settingsUpdateStoredBackgroundImageCountBtn.addEventListener('click', updateBackgroundWithSettings);
+  importDataIcon.addEventListener('click', importData);
+  exportDataIcon.addEventListener('click', exportData);
 }
 
 function updateRowCountWithSettings(){
@@ -59,6 +65,15 @@ function updateRowCountWithSettings(){
 
 function updateBackgroundWithSettings(){
   updateSettings("backgroundImageCount");
+}
+
+
+function importData(){
+  console.log("importData");
+}
+
+function exportData(){
+  console.log("exportData");
 }
 
 function updateSettings(updatedSettingsType){
