@@ -19,6 +19,8 @@ var importDataIcon = document.querySelector('.import-data-icon');
 var exportDataIcon = document.querySelector('.export-data-icon');
 var importDataOverlay = document.querySelector('.import-list-overlay-container');
 var importDataOverlayClose = document.querySelector('.import-list-overlay-box-close');
+var importDataBtn = document.querySelector('input[id="ImportListBtn"]');
+var importDataFileSelector = document.getElementById("importFileSelector");
 
 initialise();
 
@@ -74,11 +76,18 @@ function importData(){
   console.log("importData");
   importDataOverlay.setAttribute("style","display:block");
   importDataOverlayClose.addEventListener('click', closeImportOverlay);
+  importDataBtn.addEventListener('click', importFromFileSelector);
 }
 
 function closeImportOverlay(){
   importDataOverlay.setAttribute("style","display:none");
   importDataOverlayClose.removeEventListener('click', closeImportOverlay);
+  importDataBtn.removeEventListener('click', importFromFileSelector);
+}
+
+function importFromFileSelector(){
+  var selectedFile = document.getElementById('importFileSelector').files[0];
+  console.log(selectedFile);
 }
 
 async function exportData(){
