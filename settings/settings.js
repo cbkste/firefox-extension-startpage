@@ -164,7 +164,7 @@ function getEntryData(entryName){
        entryData.push("url:"+entry[entryName].url);
        entryData.push("icon:"+entry[entryName].icon);
        entryData.push("iconColour:"+entry[entryName].iconColour);
-       //entryData.push("backgroundColour:"+entry[entryName].backgroundColour);
+       entryData.push("backgroundColour:"+entry[entryName].backgroundColour);
        entryData.push("Order:"+entry[entryName].Order);
       resolve(entryData);
     });
