@@ -88,6 +88,17 @@ function closeImportOverlay(){
 function importFromFileSelector(){
   var selectedFile = document.getElementById('importFileSelector').files[0];
   console.log(selectedFile);
+
+  var reader = new FileReader();
+
+  reader.readAsText(selectedFile);
+
+  reader.onload = function(event) {
+      arrayOfLines = event.target.result.match(/[^\r\n]+/g);
+      for (var i = 0; i < arrayOfLines.length; i++) {
+        console.log("LINE: "+arrayOfLines[i]);
+      }
+    };
 }
 
 async function exportData(){
