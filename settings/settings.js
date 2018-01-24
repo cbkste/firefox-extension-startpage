@@ -17,6 +17,8 @@ var settingsUpdateRowCountBtn = document.querySelector('input[id="UpdateSettings
 //import/export button selectors
 var importDataIcon = document.querySelector('.import-data-icon');
 var exportDataIcon = document.querySelector('.export-data-icon');
+var importDataOverlay = document.querySelector('.import-list-overlay-container');
+var importDataOverlayClose = document.querySelector('.import-list-overlay-box-close');
 
 initialise();
 
@@ -70,6 +72,13 @@ function updateBackgroundWithSettings(){
 
 function importData(){
   console.log("importData");
+  importDataOverlay.setAttribute("style","display:block");
+  importDataOverlayClose.addEventListener('click', closeImportOverlay);
+}
+
+function closeImportOverlay(){
+  importDataOverlay.setAttribute("style","display:none");
+  importDataOverlayClose.removeEventListener('click', closeImportOverlay);
 }
 
 async function exportData(){
