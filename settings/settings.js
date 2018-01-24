@@ -184,6 +184,7 @@ function download(settingsAray, favouritesArray, strFileName) {
       csvContent += dataString+ "\r\n";
     }
 
+  csvContent = csvContent.replace(/\#/g, "%23")
   var encodedUri = encodeURI(csvContent);
   window.open(encodedUri);
 }
