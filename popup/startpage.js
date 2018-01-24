@@ -11,6 +11,7 @@ oldest image stored
 - disable left & right favourite list if only single list currently exists
 - In edit mode and you click the left and right arrows, stay in edit mode on
 next List.
+- Handle special characters in export data backup
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
