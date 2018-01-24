@@ -117,10 +117,12 @@ function getFavouritesData(){
           for (let indiKet of results["FavouriteList"][favListKey]) {
               favouritesAray.push("KEY:"+indiKet);
               var entriesList = await getEntrriesInList(indiKet);
-              joinedFavouritesAray = joinedFavouritesAray.concat(entriesList);
+              var list = favouritesAray.concat(entriesList);
+              favouritesAray.pop();
+              joinedFavouritesAray = joinedFavouritesAray.concat(list);
             }
           }
-           completeArray = favouritesAray.concat(joinedFavouritesAray);
+           completeArray = joinedFavouritesAray;
            console.log(completeArray);
             resolve(completeArray);
          });
@@ -130,30 +132,56 @@ function getFavouritesData(){
 function getEntrriesInList(listName){
     return new Promise(resolve => {
      var entriesListArray = [];
+     var list = [];
+     var joinedEntryArray = [];
      var getEntriesInList = browser.storage.local.get(listName);
      getEntriesInList.then(async (result) => {
          for (let dataObject of result[listName]["data"]){
-           entriesListArray.push("ENTRY:"+dataObject);
+           if(dataObject["Settings"] !== undefined){
+              console.log("Settings");
+           } else {
+            entriesListArray.push("ENTRY:"+dataObject);
+            var entry = await getEntryData(dataObject);
+            console.log("ENTRY")
+            console.log(entry)
+            var list = entriesListArray.concat(entry);
+            entriesListArray.pop();
+            joinedEntryArray = joinedEntryArray.concat(list);
+           }
          }
-        console.log(entriesListArray);
-      resolve(entriesListArray);
+      resolve(joinedEntryArray);
+    });
+  });
+}
+
+function getEntryData(entryName){
+    return new Promise(resolve => {
+     var entryData = [];
+     var getEntry = browser.storage.local.get(entryName);
+     getEntry.then(async (entry) => {
+       entryData.push("ID:"+entry[entryName].id);
+       entryData.push("title:"+entry[entryName].title);
+       entryData.push("url:"+entry[entryName].url);
+       entryData.push("icon:"+entry[entryName].icon);
+       entryData.push("iconColour:"+entry[entryName].iconColour);
+       //entryData.push("backgroundColour:"+entry[entryName].backgroundColour);
+       entryData.push("Order:"+entry[entryName].Order);
+      resolve(entryData);
     });
   });
 }
 
 function download(settingsAray, favouritesArray, strFileName) {
   	var csvContent = "data:text/csv;charset=utf-8,";
+
     for (var i = 0; i < settingsAray.length; i++) {
       dataString = settingsAray[i];
       csvContent += dataString+ "\r\n";
     }
 
-    console.log(favouritesArray);
-    console.log(favouritesArray.length);
     for (var i = 0; i < favouritesArray.length; i++) {
       dataString = favouritesArray[i];
       csvContent += dataString+ "\r\n";
-      console.log(favouritesArray[i]);
     }
 
   var encodedUri = encodeURI(csvContent);
