@@ -72,9 +72,48 @@ function importData(){
   console.log("importData");
 }
 
-function exportData(){
+async function exportData(){
   console.log("exportData");
+  var data = await getSettings();
+  download(data, 'filename.txt');
 }
+
+function getSettings(){
+  return new Promise(resolve => {
+     var settingsAray = [];
+     var gettingSettingsItem = browser.storage.local.get("startpagesettings");
+    gettingSettingsItem.then(async (result) => {
+      var objTest = Object.keys(result);
+        if(objTest.length < 1) {
+          console.log("Settings Not Found");
+          storeSettings("10", "4","6","","1");
+        } else {
+          var myString = "2";
+          settingsAray.push(myString);
+          settingsAray.push("storedBackgroundImageCount:"+result.startpagesettings.storedBackgroundImageCount);
+          settingsAray.push("RowCount:"+result.startpagesettings.RowCount);
+          settingsAray.push("SelectedBackgroundImage:"+result.startpagesettings.SelectedBackgroundImage);
+          settingsAray.push("Order:"+result.startpagesettings.Order);
+        }
+        console.log("Returning array");
+          resolve(settingsAray);
+    });
+  });
+
+
+}
+function download(settingsAray, strFileName) {
+  	var csvContent = "data:text/csv;charset=utf-8,";
+    for (var i = 0; i < settingsAray.length; i++) {
+      dataString = settingsAray[i];
+      csvContent += dataString+ "\n";
+      console.log(settingsAray[i]);
+    }
+
+  var encodedUri = encodeURI(csvContent);
+  window.open(encodedUri);
+}
+
 
 function updateSettings(updatedSettingsType){
   if(updatedSettingsType == "rowCount"){
