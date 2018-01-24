@@ -74,8 +74,9 @@ function importData(){
 
 async function exportData(){
   console.log("exportData");
-  var data = await getSettings();
-  download(data, 'filename.txt');
+  var settingsData = await getSettings();
+  var favouritesData = await getFavouritesData();
+  download(settingsData,favouritesData, 'filename.txt');
 }
 
 function getSettings(){
@@ -89,25 +90,70 @@ function getSettings(){
           storeSettings("10", "4","6","","1");
         } else {
           var myString = "2";
-          settingsAray.push(myString);
+          //settingsAray.push("##**SETTINGS**##");
+          settingsAray.push("ID:"+result.startpagesettings.id);
           settingsAray.push("storedBackgroundImageCount:"+result.startpagesettings.storedBackgroundImageCount);
           settingsAray.push("RowCount:"+result.startpagesettings.RowCount);
           settingsAray.push("SelectedBackgroundImage:"+result.startpagesettings.SelectedBackgroundImage);
           settingsAray.push("Order:"+result.startpagesettings.Order);
         }
         console.log("Returning array");
-          resolve(settingsAray);
+        resolve(settingsAray);
     });
   });
-
-
 }
-function download(settingsAray, strFileName) {
+
+function getFavouritesData(){
+  return new Promise(resolve => {
+     var favouritesAray = [];
+     var joinedFavouritesAray = [];
+     var completeArray = [];
+     var gettingFavoutieItem = browser.storage.local.get("FavouriteList");
+    gettingFavoutieItem.then(async (results) => {
+      var favouriteKeys = Object.keys(results);
+      var favouriteListKeys = Object.keys(results["FavouriteList"]);
+      //favouritesAray.push("##**FAVOURITE LIST**##");
+        for (let favListKey of favouriteListKeys) {
+          for (let indiKet of results["FavouriteList"][favListKey]) {
+              favouritesAray.push("KEY:"+indiKet);
+              var entriesList = await getEntrriesInList(indiKet);
+              joinedFavouritesAray = joinedFavouritesAray.concat(entriesList);
+            }
+          }
+           completeArray = favouritesAray.concat(joinedFavouritesAray);
+           console.log(completeArray);
+            resolve(completeArray);
+         });
+  });
+}
+
+function getEntrriesInList(listName){
+    return new Promise(resolve => {
+     var entriesListArray = [];
+     var getEntriesInList = browser.storage.local.get(listName);
+     getEntriesInList.then(async (result) => {
+         for (let dataObject of result[listName]["data"]){
+           entriesListArray.push("ENTRY:"+dataObject);
+         }
+        console.log(entriesListArray);
+      resolve(entriesListArray);
+    });
+  });
+}
+
+function download(settingsAray, favouritesArray, strFileName) {
   	var csvContent = "data:text/csv;charset=utf-8,";
     for (var i = 0; i < settingsAray.length; i++) {
       dataString = settingsAray[i];
-      csvContent += dataString+ "\n";
-      console.log(settingsAray[i]);
+      csvContent += dataString+ "\r\n";
+    }
+
+    console.log(favouritesArray);
+    console.log(favouritesArray.length);
+    for (var i = 0; i < favouritesArray.length; i++) {
+      dataString = favouritesArray[i];
+      csvContent += dataString+ "\r\n";
+      console.log(favouritesArray[i]);
     }
 
   var encodedUri = encodeURI(csvContent);
