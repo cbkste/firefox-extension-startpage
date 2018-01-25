@@ -100,9 +100,6 @@ function importFromFileSelector(){
 
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
       for (var i = 0; i < arrayOfLines.length; i++) {
-        if(){
-
-        }
         console.log("LINE: "+arrayOfLines[i]);
       }
     };
