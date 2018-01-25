@@ -262,6 +262,7 @@ async function initialise() {
       console.log("SETTINGS FOUND: GLOBALID: "+global_id);
       settingsBackgroundImageLimit = result.startpagesettings.storedBackgroundImageCount;
       settingsRowCountLimit = result.startpagesettings.RowCount;
+      getNewCssClass(settingsRowCountLimit);
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       currentOrderPosition = result.startpagesettings.Order;

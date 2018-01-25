@@ -94,8 +94,15 @@ function importFromFileSelector(){
   reader.readAsText(selectedFile);
 
   reader.onload = function(event) {
+    var listOfEntries = [];
+    var settings = [];
+    var listOfFavourites = [];
+
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
       for (var i = 0; i < arrayOfLines.length; i++) {
+        if(){
+
+        }
         console.log("LINE: "+arrayOfLines[i]);
       }
     };
