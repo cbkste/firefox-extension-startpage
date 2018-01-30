@@ -611,6 +611,7 @@ if(Object.keys(list).length === 0) {
       var FavouriteList = result["FavouriteList"]["FavouriteList"];
       FavouriteList.push(newListTitle);
       browser.storage.local.set({ ["FavouriteList"] : {FavouriteList} });
+      renderFavouritListDivWithInfo(newListTitle);
     }, onError);
   }
 } else {
