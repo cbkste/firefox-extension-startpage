@@ -126,7 +126,6 @@ function onSettingsScreenError(message) {
 
 function onNewFavouriteListScreenError(message) {
   newFavouriteListTitleErrorMessageDiv.setAttribute("style", "display: flex;");
-  console.log(message);
   newFavouriteListTitleErrorMessageText.textContent = message;
 }
 
