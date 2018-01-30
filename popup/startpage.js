@@ -81,6 +81,8 @@ var iconColourExampleDiv = document.querySelector('.icon-colour-example-add');
 var NewListTitleTextField = document.querySelector('input[name="NewListTitle"]');
 var addNewListBtn = document.querySelector('input[id="AddNewListBtn"]');
 var renameListBtn = document.querySelector('input[id="RenamedListBtn"]');
+var newFavouriteListTitleErrorMessageDiv = document.querySelector('.favourite-new-list-error-message-block');
+var newFavouriteListTitleErrorMessageText = document.querySelector('.favourite-new-list-error-message-block-text');
 
 var clearBtn = document.querySelector('.clear');
 var favouriteListSelectorLeft = document.querySelector('.change-selected-favourite-list-left');
@@ -119,8 +121,15 @@ function onSettingsScreenSuccess(message) {
 
 function onSettingsScreenError(message) {
   backgroundImageInfoBlock.setAttribute("style", "display: flex;");
-  backgroundImageInfoBlockText.text = message;
+  backgroundImageInfoBlockText.textContent = message;
 }
+
+function onNewFavouriteListScreenError(message) {
+  newFavouriteListTitleErrorMessageDiv.setAttribute("style", "display: flex;");
+  console.log(message);
+  newFavouriteListTitleErrorMessageText.textContent = message;
+}
+
 
 function defaultEventListener() {
   editModeBtn.addEventListener('click', EditOverlay);
@@ -615,7 +624,7 @@ if(Object.keys(list).length === 0) {
     }, onError);
   }
 } else {
-  console.log("list already exists with same name");
+  onNewFavouriteListScreenError("List with alrerady exists!");
 }
 }, onError);
 }

@@ -169,11 +169,14 @@
   background-position: center;
 }
 
-.background-image-info-block {
+.background-image-info-block,
+.favourite-new-list-error-message-block {
   display: none;
 }
 
-.background-image-info-block-icon {
+.background-image-info-block-icon,
+.favourite-new-list-error-message-block-icon,
+ {
   color: white;
   background: #ce2745;
   font-size: 15px;
@@ -181,7 +184,8 @@
   font-weight: 800;
 }
 
-.background-image-info-block-text {
+.background-image-info-block-text,
+.favourite-new-list-error-message-block-text, {
   color: white;
   background: #ce2745;
   font-size: 15px;
