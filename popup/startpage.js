@@ -12,6 +12,7 @@ oldest image stored
 - In edit mode and you click the left and right arrows, stay in edit mode on
 next List.
 - Handle special characters in export data backup
+- Stop Duplicate Lists being created, Do check on list name
 **/
 
 var currentListSelection = document.querySelector('.current-favourite-list');
@@ -589,6 +590,11 @@ if(settingsMode){
 
 function createNewFavouriteList(){
   var newListTitle = NewListTitleTextField.value;
+
+  var checkIfListExists = browser.storage.local.get(newListTitle);
+  checkIfListExists.then((list) => {
+    console.log(list);
+if(Object.keys(list).length === 0) {
   if(newListTitle !== ""){
     var data = [];
     var Settings = { ["Settings"] : { "default" : "false" } };
@@ -607,6 +613,10 @@ function createNewFavouriteList(){
       browser.storage.local.set({ ["FavouriteList"] : {FavouriteList} });
     }, onError);
   }
+} else {
+  console.log("list already exists with same name");
+}
+}, onError);
 }
 
 function createNewFavouriteListOverlay(){
