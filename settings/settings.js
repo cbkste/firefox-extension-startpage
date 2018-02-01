@@ -137,7 +137,7 @@ async function importFromFileSelector(){
                     Order = stringsplit[1];
                     listOfEntries.push(listKey+":"+id);
                     var entryTitle = "Entry"+id;
-                    browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : Order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+                    browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : Order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
             }
           }
 
@@ -188,7 +188,7 @@ function getFavouteListToAdd(key, entries) {
           var stringsplit = entries[i].split(/:(.+)/);
           if(stringsplit[0] == key){
             console.log("ENTRY FOUND FOR LIST"+key+" "+stringsplit[1]);
-            data.push("Entry"+stringsplit[1]);
+            data.push(stringsplit[1]);
           }
         }
 

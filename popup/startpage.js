@@ -361,12 +361,14 @@ async function initialise() {
          for (let indiKet of results["FavouriteList"][favListKey]) {
            var getEntriesInList = browser.storage.local.get(indiKet);
            getEntriesInList.then((result) => {
+             console.log(result);
              if(result[indiKet]["data"].length !== 1){
               var defaultList = false;
                for (let dataObject of result[indiKet]["data"]){
                  var getEntry = browser.storage.local.get(dataObject);
                  getEntry.then((entry) => {
                    if(entry[dataObject] === undefined){
+                     console.log(entry);
                      if(entry["Settings"].default == "true"){
                        defaultList = true;
                        currentListSelection.textContent = indiKet;
