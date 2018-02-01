@@ -128,10 +128,10 @@ async function importFromFileSelector(){
                     icon = stringsplit[1];
                     break;
                 case 'iconColour':
-                    iconColour = stringsplit[1];
+                    iconColour = unescape(stringsplit[1]);
                     break;
                 case 'backgroundColour':
-                    backgroundColour = stringsplit[1];
+                    backgroundColour = unescape(stringsplit[1]);
                     break;
                 case 'Order':
                     Order = stringsplit[1];
