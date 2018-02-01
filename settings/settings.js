@@ -104,7 +104,8 @@ async function importFromFileSelector(){
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
       for (var i = 0; i < arrayOfLines.length; i++) {
         if(i < 5){
-          settings.push(arrayOfLines[i]);
+          var stringsplit = arrayOfLines[i].split(/:(.+)/);
+          settings.push(stringsplit[1]);
         } else {
           if(arrayOfLines[i].startsWith("KEY:")){
             var stringsplitKey = arrayOfLines[i].substring(arrayOfLines[i].indexOf(':')+1)
@@ -142,13 +143,19 @@ async function importFromFileSelector(){
 
         }
       }
-      //processImportSettings(settings);
+      processImportSettings(settings);
       processImportList(listOfEntries, listOfFavourites);
     };
 }
 
 function processImportSettings(data){
   console.log("processImportSettings")
+  settingsCurrentSelectedBackground = data[3];
+  settingsBackgroundImageLimit = data[1];
+  settingsRowCountLimit = data[2];
+  currentOrderPosition = data[4];
+
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : data[0], "RowCount" : data[2], "storedBackgroundImageCount" : data[1], "SelectedBackgroundImage" : data[3], "Order" : data[4] } });
 }
 
 async function processImportList(listOfEntries, listOfFavourites){
