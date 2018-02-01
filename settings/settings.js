@@ -180,7 +180,7 @@ function getFavouteListToAdd(key, entries) {
       console.log("adding list");
       if(key !== ""){
         var data = [];
-        var Settings = { ["Settings"] : { "default" : "false" } };
+        var Settings = { ["Settings"] : { "default" : "true" } };
         data.push(Settings);
         browser.storage.local.set({ [key] : {data} });
 
