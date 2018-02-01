@@ -134,7 +134,7 @@ async function importFromFileSelector(){
                     break;
                 case 'Order':
                     Order = stringsplit[1];
-                    listOfEntries.push(id);
+                    listOfEntries.push(listKey+":"+id);
                     var entryTitle = "Entry"+id;
                     browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : Order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
             }
@@ -158,13 +158,13 @@ async function processImportList(listOfEntries, listOfFavourites){
   var FavouriteList = [];
 
   for (i = 0; i < listOfFavourites.length; i++) {
-    var FavouriteList = await getFavouteListToAdd(listOfFavourites[i]);
+    var FavouriteList = await getFavouteListToAdd(listOfFavourites[i], listOfEntries);
   }
   console.log();
 
 }
 
-function getFavouteListToAdd(key) {
+function getFavouteListToAdd(key, entries) {
   return new Promise(resolve => {
     console.log(key);
     var checkIfListExists = browser.storage.local.get(key);
@@ -177,6 +177,15 @@ function getFavouteListToAdd(key) {
         data.push(Settings);
         browser.storage.local.set({ [key] : {data} });
 
+        for (var i = 0; i < entries.length; i++) {
+          var stringsplit = entries[i].split(/:(.+)/);
+          if(stringsplit[0] == key){
+            console.log("ENTRY FOUND FOR LIST"+key+" "+stringsplit[1]);
+            data.push("Entry"+stringsplit[1]);
+          }
+        }
+
+        browser.storage.local.set({ [key] : {data} });
         var listOfFavourites = browser.storage.local.get("FavouriteList");
         listOfFavourites.then(async (result) => {
           var FavouriteList = [];
