@@ -85,7 +85,7 @@ function closeImportOverlay(){
   importDataBtn.removeEventListener('click', importFromFileSelector);
 }
 
-function importFromFileSelector(){
+async function importFromFileSelector(){
   var selectedFile = document.getElementById('importFileSelector').files[0];
   console.log(selectedFile);
 
@@ -94,15 +94,107 @@ function importFromFileSelector(){
   reader.readAsText(selectedFile);
 
   reader.onload = function(event) {
-    var listOfEntries = [];
     var settings = [];
+    var listOfEntries = [];
     var listOfFavourites = [];
+
+    var id,title,url,icon,iconColour,backgroundColour,Order;
+    var listKey;
 
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
       for (var i = 0; i < arrayOfLines.length; i++) {
-        console.log("LINE: "+arrayOfLines[i]);
+        if(i < 5){
+          settings.push(arrayOfLines[i]);
+        } else {
+          if(arrayOfLines[i].startsWith("KEY:")){
+            var stringsplitKey = arrayOfLines[i].substring(arrayOfLines[i].indexOf(':')+1)
+            listKey = stringsplitKey;
+            console.log(listKey);
+            listOfFavourites.push(listKey);
+          } else {
+            var stringsplit = arrayOfLines[i].split(/:(.+)/);
+            switch(stringsplit[0]) {
+                case 'ID':
+                    id = stringsplit[1];
+                    break;
+                case 'title':
+                    title = stringsplit[1];
+                    break;
+                case 'url':
+                    url = stringsplit[1];
+                    break;
+                case 'icon':
+                    icon = stringsplit[1];
+                    break;
+                case 'iconColour':
+                    iconColour = stringsplit[1];
+                    break;
+                case 'backgroundColour':
+                    backgroundColour = stringsplit[1];
+                    break;
+                case 'Order':
+                    Order = stringsplit[1];
+                    listOfEntries.push(id);
+                    var entryTitle = "Entry"+id;
+                    browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : Order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+            }
+          }
+
+        }
       }
+      //processImportSettings(settings);
+      processImportList(listOfEntries, listOfFavourites);
     };
+}
+
+function processImportSettings(data){
+  console.log("processImportSettings")
+}
+
+async function processImportList(listOfEntries, listOfFavourites){
+  console.log("processImportList")
+  console.log(listOfEntries)
+  console.log(listOfFavourites)
+  var FavouriteList = [];
+
+  for (i = 0; i < listOfFavourites.length; i++) {
+    var FavouriteList = await getFavouteListToAdd(listOfFavourites[i]);
+  }
+  console.log();
+
+}
+
+function getFavouteListToAdd(key) {
+  return new Promise(resolve => {
+    console.log(key);
+    var checkIfListExists = browser.storage.local.get(key);
+    checkIfListExists.then(async (entry) => {
+    if(Object.keys(entry).length === 0) {
+      console.log("adding list");
+      if(key !== ""){
+        var data = [];
+        var Settings = { ["Settings"] : { "default" : "false" } };
+        data.push(Settings);
+        browser.storage.local.set({ [key] : {data} });
+
+        var listOfFavourites = browser.storage.local.get("FavouriteList");
+        listOfFavourites.then(async (result) => {
+          var FavouriteList = [];
+          if(result["FavouriteList"] !== undefined){
+            FavouriteList = result["FavouriteList"]["FavouriteList"];
+          }
+          FavouriteList.push(key);
+          console.log(FavouriteList);
+          browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+          resolve(FavouriteList);
+        });
+      }
+    } else {
+      console.log("list already exist");
+      resolve(null);
+    }
+  });
+  });
 }
 
 async function exportData(){
@@ -111,6 +203,7 @@ async function exportData(){
   var favouritesData = await getFavouritesData();
   download(settingsData,favouritesData, 'filename.txt');
 }
+
 
 function getSettings(){
   return new Promise(resolve => {
