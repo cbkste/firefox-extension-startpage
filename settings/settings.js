@@ -155,7 +155,7 @@ function processImportSettings(data){
   settingsRowCountLimit = data[2];
   currentOrderPosition = data[4];
 
-  browser.storage.local.set({ ["startpagesettings"] : { "id" : data[0], "RowCount" : data[2], "storedBackgroundImageCount" : data[1], "SelectedBackgroundImage" : data[3], "Order" : data[4] } });
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : data[0], "RowCount" : data[2], "storedBackgroundImageCount" : data[1], "SelectedBackgroundImage" : "", "Order" : data[4] } });
 }
 
 async function processImportList(listOfEntries, listOfFavourites){
