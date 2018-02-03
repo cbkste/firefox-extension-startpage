@@ -167,8 +167,6 @@ async function processImportList(listOfEntries, listOfFavourites){
   for (i = 0; i < listOfFavourites.length; i++) {
     var FavouriteList = await getFavouteListToAdd(listOfFavourites[i], listOfEntries);
   }
-  console.log();
-
 }
 
 function getFavouteListToAdd(key, entries) {
@@ -182,7 +180,6 @@ function getFavouteListToAdd(key, entries) {
         var data = [];
         var Settings = { ["Settings"] : { "default" : "true" } };
         data.push(Settings);
-        browser.storage.local.set({ [key] : {data} });
 
         for (var i = 0; i < entries.length; i++) {
           var stringsplit = entries[i].split(/:(.+)/);
@@ -207,6 +204,16 @@ function getFavouteListToAdd(key, entries) {
       }
     } else {
       console.log("list already exist");
+      console.log("only adding favourite entries");
+      var data = entry[key]["data"];
+      for (var i = 0; i < entries.length; i++) {
+        var stringsplit = entries[i].split(/:(.+)/);
+        if(stringsplit[0] == key){
+          console.log("ENTRY FOUND FOR LIST"+key+" "+stringsplit[1]);
+          data.push(stringsplit[1]);
+        }
+      }
+      browser.storage.local.set({ [key] : {data} });
       resolve(null);
     }
   });
