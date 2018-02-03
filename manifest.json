@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Startpage",
-  "version": "1.31",
+  "version": "1.32",
 
   "description": "Custom Startpage for firefox",
   "icons": {
