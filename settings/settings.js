@@ -110,7 +110,6 @@ async function importFromFileSelector(){
           if(arrayOfLines[i].startsWith("KEY:")){
             var stringsplitKey = arrayOfLines[i].substring(arrayOfLines[i].indexOf(':')+1)
             listKey = stringsplitKey;
-            console.log(listKey);
             listOfFavourites.push(listKey);
           } else {
             var stringsplit = arrayOfLines[i].split(/:(.+)/);
@@ -160,8 +159,6 @@ function processImportSettings(data){
 
 async function processImportList(listOfEntries, listOfFavourites){
   console.log("processImportList")
-  console.log(listOfEntries)
-  console.log(listOfFavourites)
   var FavouriteList = [];
 
   for (i = 0; i < listOfFavourites.length; i++) {
@@ -309,9 +306,21 @@ function getEntryData(entryName){
      var getEntry = browser.storage.local.get(entryName);
      getEntry.then(async (entry) => {
        entryData.push("ID:"+entry[entryName].id);
-       entryData.push("title:"+entry[entryName].title);
-       entryData.push("url:"+entry[entryName].url);
-       entryData.push("icon:"+entry[entryName].icon);
+       if(entry[entryName].title == ''){
+         entryData.push("title:empty");
+       } else {
+         entryData.push("title:"+entry[entryName].title);
+       }
+       if(entry[entryName].url == ''){
+         entryData.push("url:https://empty");
+       } else {
+         entryData.push("url:"+entry[entryName].url);
+       }
+       if(entry[entryName].icon == ''){
+         entryData.push("icon:empty");
+       } else {
+         entryData.push("icon:"+entry[entryName].icon);
+       }
        entryData.push("iconColour:"+entry[entryName].iconColour);
        entryData.push("backgroundColour:"+entry[entryName].backgroundColour);
        entryData.push("Order:"+entry[entryName].Order);
