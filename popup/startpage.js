@@ -84,6 +84,8 @@ var renameListBtn = document.querySelector('input[id="RenamedListBtn"]');
 var newFavouriteListTitleErrorMessageDiv = document.querySelector('.favourite-new-list-error-message-block');
 var newFavouriteListTitleErrorMessageText = document.querySelector('.favourite-new-list-error-message-block-text');
 
+var iconInfomationIcon = document.querySelector('#IconInfo');
+
 var clearBtn = document.querySelector('.clear');
 var favouriteListSelectorLeft = document.querySelector('.change-selected-favourite-list-left');
 var favouriteListSelectorRight = document.querySelector('.change-selected-favourite-list-right');
@@ -929,7 +931,20 @@ function displayAddNewFavourite() {
     NewFavouriteIconTextField.addEventListener('keyup', updatePreviewForNewFavouriteIcon);
     newFavouriteIconColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteIconColour);
     newFavouriteBackgroundColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteBackgroundColour);
+    iconInfomationIcon.addEventListener('click', openIconInformationTab);
   })
+}
+
+function openIconInformationTab(){
+  console.log('Open Tab');
+  var creating = browser.tabs.create({
+     url:"../information/information.html"
+   });
+   creating.then(onCreated, onError);
+}
+
+function onCreated(tab) {
+  console.log(`Created new tab: ${tab.id}`)
 }
 
 function addNewFavourite(id, title,url,icon,iconColour,backgroundColour) {

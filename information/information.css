@@ -1,0 +1,10 @@
+.icon-example-container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 100px;
+}
+
+.icon-example-use {
+  height: 800px;
+}
