@@ -96,6 +96,7 @@ var settingsBtn = document.querySelector('.settings-icon');
 var editModeWelcomeBtn = document.querySelector('.welcome-edit-icon');
 var settingsWelcomeBtn = document.querySelector('.welcome-settings-icon');
 var favouriteListWelcomeBtn = document.querySelector('.welcome-favourite-list');
+var howToUseIconWelcomeBtn = document.querySelector('.welcome-icon-how-to');
 var settingsMode = false;
 var inEditMode = false;
 var FavouriteListsViewMode = false;
@@ -245,12 +246,14 @@ function defaultWelcomeEventListener() {
   editModeWelcomeBtn.addEventListener('click', EditOverlay);
   settingsWelcomeBtn.addEventListener('click', OpenSettings);
   favouriteListWelcomeBtn.addEventListener('click', openFavouriteList);
+  howToUseIconWelcomeBtn.addEventListener('click', openIconInformationTab);
 }
 
 function RemoveDefaultWelcomeEventListener() {
   editModeWelcomeBtn.removeEventListener("click", EditOverlay);
   settingsWelcomeBtn.removeEventListener("click", OpenSettings);
   favouriteListWelcomeBtn.removeEventListener('click', openFavouriteList);
+  howToUseIconWelcomeBtn.removeEventListener('click', openIconInformationTab);
 }
 
 /* display previously-saved stored notes on startup */
