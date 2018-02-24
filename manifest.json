@@ -34,5 +34,8 @@
   "page": "settings/settings.html",
   "open_in_tab" : true
   },
+  "web_accessible_resources": [
+  "information/icon-example.jpg"
+],
 "content_security_policy": "script-src 'self'; object-src 'self';"
 }
