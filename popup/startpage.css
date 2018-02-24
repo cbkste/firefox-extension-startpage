@@ -211,6 +211,10 @@ p {
   }
 }
 
+.margin-top-20 {
+  margin-top: 20px;
+}
+
 .import-list-overlay-box-name-container {
   padding-left: 0px;
   padding-right: 0px;
