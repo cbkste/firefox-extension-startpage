@@ -282,6 +282,11 @@ async function initialise() {
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       currentOrderPosition = result.startpagesettings.Order;
       currentDefaultList = result.startpagesettings.CurrentDefaultList;
+      //TODO:Verify settings once updated to a new version happenes
+      if(currentDefaultList === undefined){
+        currentDefaultList = "Favourite list 1";
+        updateSettingsForType(currentDefaultList, "currentDefaultList")
+      }
       console.log("INIT:currentDefaultList"+currentDefaultList);
       console.log("INIT:currentOrderPosition"+currentOrderPosition);
       await setupbackgroundInit();
