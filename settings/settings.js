@@ -260,20 +260,23 @@ function getFavouritesData(){
      var gettingFavoutieItem = browser.storage.local.get("FavouriteList");
     gettingFavoutieItem.then(async (results) => {
       var favouriteKeys = Object.keys(results);
-      var favouriteListKeys = Object.keys(results["FavouriteList"]);
-      //favouritesAray.push("##**FAVOURITE LIST**##");
-        for (let favListKey of favouriteListKeys) {
-          for (let indiKet of results["FavouriteList"][favListKey]) {
-              favouritesAray.push("KEY:"+indiKet);
-              var entriesList = await getEntrriesInList(indiKet);
-              var list = favouritesAray.concat(entriesList);
-              favouritesAray.pop();
-              joinedFavouritesAray = joinedFavouritesAray.concat(list);
+      console.log(favouriteKeys.length);
+      if(favouriteKeys.length !== 0){
+        var favouriteListKeys = Object.keys(results["FavouriteList"]);
+        //favouritesAray.push("##**FAVOURITE LIST**##");
+          for (let favListKey of favouriteListKeys) {
+            for (let indiKet of results["FavouriteList"][favListKey]) {
+                favouritesAray.push("KEY:"+indiKet);
+                var entriesList = await getEntrriesInList(indiKet);
+                var list = favouritesAray.concat(entriesList);
+                favouritesAray.pop();
+                joinedFavouritesAray = joinedFavouritesAray.concat(list);
+              }
             }
-          }
-           completeArray = joinedFavouritesAray;
-           console.log(completeArray);
-            resolve(completeArray);
+      }
+       completeArray = joinedFavouritesAray;
+       console.log(completeArray);
+       resolve(completeArray);
          });
   });
 }

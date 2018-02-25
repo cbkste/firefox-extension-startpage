@@ -973,7 +973,8 @@ function createNewFavourite(){
   } else {
     backgroundColour = '#fff'
   }
-
+  url = url.trim();
+  console.log(url);
   addNewFavourite(id, title,url,icon,iconColour,backgroundColour)
 }
 
@@ -1096,8 +1097,10 @@ function ProcessUpdateFavourite(evt)
     updatedBackgroundColour = '#'+updatedBackgroundColour;
   }
   document.getElementById(idToEdit).remove();
-
-  updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, editCurrentFavouriteUrlTextField.value, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
+  var url = editCurrentFavouriteUrlTextField.value
+  url = url.trim();
+  console.log(url);
+  updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, url, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
   editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   console.log("ProcessUpdateFavourite")
   eventListnerForNewUpdateDiv(evt.target.order);
