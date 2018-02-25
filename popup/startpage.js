@@ -108,6 +108,7 @@ var settingsRowCountLimit = "4";
 var settingsCurrentSelectedBackground;
 var currentBackgroudnBlobUrl;
 var currentOrderPosition = 0;
+var currentDefaultList = "Favourite list 1";
 var InWelcomeMode = false;
 var favourtieArrayList = document.querySelectorAll('.favourite-container');
 var dragSrcEl = null;
@@ -268,7 +269,7 @@ async function initialise() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("10", "4","6","","1");
+      storeSettings("10", "4","6","","1", "Favourite list 1");
     } else {
       console.log("SETTINGS FOUND: ID: "+result.startpagesettings.id);
       console.log("SETTINGS FOUND: BGCOUNT: "+result.startpagesettings.storedBackgroundImageCount);
@@ -280,6 +281,8 @@ async function initialise() {
       console.log(result.startpagesettings.SelectedBackgroundImage);
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       currentOrderPosition = result.startpagesettings.Order;
+      currentDefaultList = result.startpagesettings.CurrentDefaultList;
+      console.log("INIT:currentDefaultList"+currentDefaultList);
       console.log("INIT:currentOrderPosition"+currentOrderPosition);
       await setupbackgroundInit();
     }
@@ -290,8 +293,7 @@ async function initialise() {
   FavouriteListGet.then((results) => {
     if(results["FavouriteList"] === undefined){
         var data = [];
-        var Settings = { ["Settings"] : { "default" : "true" } };
-        data.push(Settings);
+        currentDefaultList = "Favourite list 1";
         // data.push("Entry1");
         // data.push("Entry2");
         // data.push("Entry3");
@@ -362,41 +364,33 @@ async function initialise() {
       favouriteListSelectorLeft.setAttribute("style", "color: grey;");
       favouriteListSelectorRight.setAttribute("style", "color: grey;");
     }
-      for (let favListKey of favouriteListKeys) {
-         for (let indiKet of results["FavouriteList"][favListKey]) {
-           var getEntriesInList = browser.storage.local.get(indiKet);
-           getEntriesInList.then((result) => {
-             console.log(result);
-             if(result[indiKet]["data"].length !== 1){
-              var defaultList = false;
-               for (let dataObject of result[indiKet]["data"]){
-                 var getEntry = browser.storage.local.get(dataObject);
-                 getEntry.then((entry) => {
-                   if(entry[dataObject] === undefined){
-                     console.log(entry);
-                     if(entry["Settings"].default == "true"){
-                       defaultList = true;
-                       currentListSelection.textContent = indiKet;
-                     }
-                   }
-                   if(defaultList && entry[dataObject] !== undefined){
-                     var id = entry[dataObject].id;
-                     var title = entry[dataObject].title;
-                     var url = entry[dataObject].url;
-                     var icon = entry[dataObject].icon;
-                     var iconColour = entry[dataObject].iconColour;
-                     var backgroundColour = entry[dataObject].backgroundColour;
-                     var order = entry[dataObject].Order;
-                     displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
-                   }
-                 }, onError);
-               }
-             } else {
-               currentListSelection.textContent = indiKet;
+    console.log(currentDefaultList);
+    currentListSelection.textContent = currentDefaultList;
+     var getEntriesInList = browser.storage.local.get(currentDefaultList);
+     getEntriesInList.then((result) => {
+       console.log(result);
+       if(result[currentDefaultList]["data"].length !== 1){
+        var defaultList = false;
+         for (let dataObject of result[currentDefaultList]["data"]){
+           var getEntry = browser.storage.local.get(dataObject);
+           getEntry.then((entry) => {
+             currentListSelection.textContent = currentDefaultList;
+             if(entry[dataObject] !== undefined){
+               var id = entry[dataObject].id;
+               var title = entry[dataObject].title;
+               var url = entry[dataObject].url;
+               var icon = entry[dataObject].icon;
+               var iconColour = entry[dataObject].iconColour;
+               var backgroundColour = entry[dataObject].backgroundColour;
+               var order = entry[dataObject].Order;
+               displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
              }
-          }, onError);
+           }, onError);
+         }
+       } else {
+         currentListSelection.textContent = currentDefaultList;
        }
-    }
+    }, onError);
   }
   }, onError);
 
@@ -428,7 +422,7 @@ function getListCount(key) {
       console.log(results);
       console.log(key);
       countAmount = results[key]["data"].length;
-      resolve(--countAmount);
+      resolve(countAmount);
     });
   });
 }
@@ -526,7 +520,7 @@ async function OpenSettings() {
     settingsMode = false;
   } else {
        if(!settingsRowCountLimit) {
-         storeSettings(global_id,"4","6","","1");
+         storeSettings(global_id,"4","6","","1","Favourite List 1");
          settingsRowCountTextField.value = "4";
        } else {
          settingsRowCountTextField.value = settingsRowCountLimit;
@@ -612,10 +606,7 @@ function createNewFavouriteList(){
 if(Object.keys(list).length === 0) {
   if(newListTitle !== ""){
     var data = [];
-    var Settings = { ["Settings"] : { "default" : "false" } };
-    data.push(Settings);
     browser.storage.local.set({ [newListTitle] : {data} });
-
     var listOfFavourites = browser.storage.local.get("FavouriteList");
     listOfFavourites.then((result) => {
       if(result["FavouriteList"]["FavouriteList"].length == 1){
@@ -784,11 +775,11 @@ deleteIconbox.addEventListener('click',(e) => {
     console.log(listPositionInFavourites);
     var removed = results["FavouriteList"]["FavouriteList"].splice(listPositionInFavourites, 1);
     var FavouriteList = results["FavouriteList"]["FavouriteList"];
--               console.log(FavouriteList);
--               browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
+    console.log(FavouriteList);
+    browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
   }, onError);
   const evtTgt = e.target;
--             evtTgt.parentNode.parentNode.remove();
+  evtTgt.parentNode.parentNode.remove();
 
   var listDataToRemove = browser.storage.local.get(listKey);
   listDataToRemove.then(async (result) => {
@@ -798,15 +789,14 @@ deleteIconbox.addEventListener('click',(e) => {
         if(entry[dataObject] !== undefined){
           console.log("Removing Entry:"+ dataObject);
           browser.storage.local.remove(dataObject);
-        } else {
-          if(entry["Settings"].default == "true"){
-              setNewDefaultList(0);
-            } else {
-              changeSelection();
-            }
-          }
+        }
       }, onError);
     }
+    if(currentDefaultList == listKey){
+        setNewDefaultList(0);
+      } else {
+        changeSelection();
+      }
     console.log("Removing List:"+ listKey);
     browser.storage.local.remove(listKey);
     console.log("Removal of list:"+ listKey+" complete.");
@@ -825,8 +815,8 @@ function setNewDefaultList(position){
     FavouriteListGet.then((results) => {
       if(results["FavouriteList"]["FavouriteList"].length <= 0){
         var data = [];
-        var Settings = { ["Settings"] : { "default" : "true" } };
-        data.push(Settings);
+        currentDefaultList = "Favourite list 1";
+        currentListSelection.textContent = currentDefaultList;
         data.push("Entry1");
         browser.storage.local.set({ ["Entry1"] : { "id" : "Entry1", "title" : "NEW LIST", "url" : "url111111111111", "Order" : "1", "icon" : "fa-steam", "iconColour" : "#000", "backgroundColour" : "#000" } });
         browser.storage.local.set({ ["Favourite list 1"] : {data} });
@@ -834,23 +824,11 @@ function setNewDefaultList(position){
         FavouriteList.push("Favourite list 1");
         browser.storage.local.set({ ["FavouriteList"] : { FavouriteList } });
       } else {
+      console.log(newDefaultListName);
       var newDefaultListName = results["FavouriteList"]["FavouriteList"][position];
-      var newDefaultList = browser.storage.local.get(newDefaultListName);
-      newDefaultList.then((result) => {
-        console.log(result);
-        for (let dataObject of result[newDefaultListName]["data"]){
-          var dataObjectKeys = Object.keys(dataObject);
-          //console.log(dataObject);
-          var dataObjectKeyss = Object.keys(dataObject);
-          currentListSelection.textContent = newDefaultListName;
-          if(dataObjectKeyss == "Settings"){
-            dataObject[dataObjectKeys] = { "default" : "true" };
-            console.log(dataObject[dataObjectKeys].default);
-            var data = result[newDefaultListName]["data"];
-            browser.storage.local.set({ [newDefaultListName] : {data} });
-          }
-        }
-    }, onError);
+      currentDefaultList = newDefaultListName;
+      currentListSelection.textContent = newDefaultListName;
+      updateSettingsForType(newDefaultListName, "currentDefaultList")
   }
   }, onError);
   changeSelectionRight();
@@ -1026,12 +1004,13 @@ function storeFavourite(id, title, url, order, icon, iconColour, backgroundColou
   displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
 }
 
-function storeSettings(id, rowCount, backgroundCount, backgroundImage, order) {
-  console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order);
-  browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order } });
+function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, defaultList) {
+  console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order+ ", Default List: " + defaultList);
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order, "CurrentDefaultList" : defaultList } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
   settingsCurrentSelectedBackground = backgroundImage;
+  currentDefaultList = defaultList;
 }
 
 function generateValidUrl(url) {
@@ -1236,7 +1215,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
     if(order === currentOrderPosition) {
       console.log("Last Div Removed, reduce current order Position");
       currentOrderPosition--;
-      storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+      storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
     }
     //browser.storage.local.remove(title);
     var currentInUseList = currentListSelection.textContent;
@@ -1379,15 +1358,18 @@ function updateSettingsForType(updatedValue, settingsType) {
     if(objTest.length < 1) {
       switch (settingsType) {
           case "rowCount":
-              storeSettings(global_id, updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings(global_id, updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
               settingsRowCountTextField.value = newRowCount;
               break;
           case "backgroundImageCount":
-              storeSettings(global_id, settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings(global_id, settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
               settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
               break;
+          case "currentDefaultList":
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, updatedValue);
+              break;
           case "DivOrderUpdate":
-              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue);
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue, currentDefaultList);
               break;
       }
     } else {
@@ -1396,7 +1378,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.RowCount !== updatedValue)
               {
                 console.log("Updated Row Count Settings");
-                storeSettings(global_id,updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings(global_id,updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
                 settingsRowCountTextField.value = updatedValue;
                 updateUi(getNewCssClass(updatedValue));
                 onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
@@ -1406,7 +1388,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
               {
                 console.log("Updated BackgrondImage Count Settings");
-                storeSettings(global_id,settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings(global_id,settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
               }
@@ -1415,8 +1397,16 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.Order !== updatedValue)
               {
                 console.log("Updated Order");
-                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue);
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue,currentDefaultList);
                 onSettingsScreenSuccess("Updated Order to "+updatedValue);
+              }
+              break;
+          case "currentDefaultList":
+              if(result.startpagesettings.CurrentDefaultList !== updatedValue)
+              {
+                console.log("Updated DefaultList");
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,updatedValue);
+                onSettingsScreenSuccess("Updated DefaultList to "+updatedValue);
               }
               break;
       }
@@ -1640,7 +1630,7 @@ async function displayBackgroundImage(filename){
     // currentBackgroudnBlobUrl = objectURL;
     // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
     settingsCurrentSelectedBackground = void 0;
-    storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+    storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
    } else {
      var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
      console.log(backgroundImageDivs);
@@ -1651,7 +1641,7 @@ async function displayBackgroundImage(filename){
      setBackgroundContainerImage(objectURL);
      settingsCurrentSelectedBackground = filename;
      currentBackgroudnBlobUrl = objectURL;
-     storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+     storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition,currentDefaultList);
    }
  });
 }

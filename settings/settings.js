@@ -8,6 +8,7 @@ var settingsCurrentSelectedBackground;
 var settingsBackgroundImageLimit = "6";
 var settingsRowCountLimit = "4";
 var currentOrderPosition = 0;
+var currentDefaultList = null;
 
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateStoredBackgroundImageCountTextField = document.querySelector('input[name="StoredBackgroundImagesCountTextBox"]');
@@ -33,7 +34,7 @@ async function initialise() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("1", "4","6","","1");
+      storeSettings("1", "4","6","","1", null);
       settingsRowCountTextField.value = settingsRowCountLimit;
       settingsUpdateStoredBackgroundImageCountTextField.value = settingsBackgroundImageLimit;
     } else {
@@ -46,6 +47,8 @@ async function initialise() {
       console.log("INIT:currentOrderPosition"+currentOrderPosition);
       settingsRowCountTextField.value = result.startpagesettings.RowCount;
       settingsUpdateStoredBackgroundImageCountTextField.value = result.startpagesettings.storedBackgroundImageCount;
+      currentDefaultList = result.startpagesettings.currentDefaultList;
+      console.log(currentDefaultList);
       await setupBackgroundImages();
       await setupbackgroundInit();
     }
@@ -103,7 +106,7 @@ async function importFromFileSelector(){
 
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
       for (var i = 0; i < arrayOfLines.length; i++) {
-        if(i < 5){
+        if(i < 6){
           var stringsplit = arrayOfLines[i].split(/:(.+)/);
           settings.push(stringsplit[1]);
         } else {
@@ -153,8 +156,9 @@ function processImportSettings(data){
   settingsBackgroundImageLimit = data[1];
   settingsRowCountLimit = data[2];
   currentOrderPosition = data[4];
+  currentDefaultList = data[5];
 
-  browser.storage.local.set({ ["startpagesettings"] : { "id" : data[0], "RowCount" : data[2], "storedBackgroundImageCount" : data[1], "SelectedBackgroundImage" : "", "Order" : data[4] } });
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : data[0], "RowCount" : data[2], "storedBackgroundImageCount" : data[1], "SelectedBackgroundImage" : "", "Order" : data[4], "CurrentDefaultList" : data[5] } });
 }
 
 async function processImportList(listOfEntries, listOfFavourites){
@@ -175,8 +179,6 @@ function getFavouteListToAdd(key, entries) {
       console.log("adding list");
       if(key !== ""){
         var data = [];
-        var Settings = { ["Settings"] : { "default" : "true" } };
-        data.push(Settings);
 
         for (var i = 0; i < entries.length; i++) {
           var stringsplit = entries[i].split(/:(.+)/);
@@ -233,7 +235,7 @@ function getSettings(){
       var objTest = Object.keys(result);
         if(objTest.length < 1) {
           console.log("Settings Not Found");
-          storeSettings("10", "4","6","","1");
+          storeSettings("10", "4","6","","1", null);
         } else {
           var myString = "2";
           //settingsAray.push("##**SETTINGS**##");
@@ -242,6 +244,7 @@ function getSettings(){
           settingsAray.push("RowCount:"+result.startpagesettings.RowCount);
           settingsAray.push("SelectedBackgroundImage:"+result.startpagesettings.SelectedBackgroundImage);
           settingsAray.push("Order:"+result.startpagesettings.Order);
+          settingsAray.push("CurrentDefaultList:"+result.startpagesettings.CurrentDefaultList);
         }
         console.log("Returning array");
         resolve(settingsAray);
@@ -369,11 +372,11 @@ function updateSettingsForType(updatedValue, settingsType) {
     if(objTest.length < 1) {
       switch (settingsType) {
           case "rowCount":
-              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings("1", updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
               settingsRowCountTextField.value = newRowCount;
               break;
           case "backgroundImageCount":
-              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition);
+              storeSettings("1", settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
               settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
               break;
       }
@@ -383,7 +386,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.RowCount !== updatedValue)
               {
                 console.log("Updated Row Count Settings");
-                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings("1",updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
                 settingsRowCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
               }
@@ -392,7 +395,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
               {
                 console.log("Updated BackgrondImage Count Settings");
-                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition);
+                storeSettings("1",settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
               }
@@ -630,7 +633,7 @@ menuItem2.addEventListener('click',(e) => {
         //setBackgroundContainerImage(objectURL);
         settingsCurrentSelectedBackground = filename;
         currentBackgroudnBlobUrl = objectURL;
-        storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition);
+        storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition,currentDefaultList);
         onSettingsScreenSuccess("Background Set as "+filename);
     }
   });
@@ -681,9 +684,9 @@ function onError(error) {
   console.log(error);
 }
 
-function storeSettings(id, rowCount, backgroundCount, backgroundImage, order) {
+function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, currentDefaultList) {
   console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order);
-  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order } });
+  var storingNote = browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order, "CurrentDefaultList" : currentDefaultList } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
   settingsCurrentSelectedBackground = backgroundImage;
