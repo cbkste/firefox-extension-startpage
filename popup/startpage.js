@@ -864,10 +864,17 @@ function switchIconsToEditAndDelete() {
   for (i = 0; i < editDeleteIconDivs.length; ++i) {
     editDeleteIconDivs[i].setAttribute('style','display: inline-block');
   }
-  var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
+
+  var FavouritesIconDivs = document.querySelectorAll('.active-text-or-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
+    var iconOrTextClass = FavouritesIconDivs[i].getAttribute("class");
+    if(iconOrTextClass.includes('text-only-icon-box')){
+      console.log("Icon");
+      FavouritesIconDivs[i].setAttribute('style',"display: none");
+    } else {
     var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
     FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: none");
+    }
   }
 }
 
@@ -876,10 +883,17 @@ function switchIconsToLogo() {
   for (i = 0; i < editDeleteIconDivs.length; ++i) {
     editDeleteIconDivs[i].setAttribute('style','display: none');
   }
-  var FavouritesIconDivs = document.querySelectorAll('.favourite-icon');
+
+  var FavouritesIconDivs = document.querySelectorAll('.active-text-or-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
-    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
-    FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: inline-block");
+    var iconOrTextClass = FavouritesIconDivs[i].getAttribute("class");
+    if(iconOrTextClass.includes('text-only-icon-box')){
+      console.log("Icon");
+      FavouritesIconDivs[i].setAttribute('style',"display: inline-block");
+    } else {
+      var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
+      FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: inline-block");
+    }
   }
 }
 
@@ -1127,9 +1141,6 @@ function eventListnerForNewUpdateDiv(order){
 
 /* function to display a favourite */
 function displayFavourite(id, title, url,order, icon, iconColour, text, useTextNotIcon, backgroundColour, inEditMode) {
-  console.log("INSIDE DISPLLAYFAVC")
-  console.log(text);
-  console.log(useTextNotIcon);
   var createCorrectUrl = generateValidUrl(url);
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
@@ -1145,7 +1156,6 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
   var textIconH1 = document.createElement('h1');
   var newID = id.toString();
   if(newID.startsWith('Entry')){
-      console.log("HERE");
       var divID = newID;
   } else {
       var divID = "Entry"+id;
@@ -1165,15 +1175,17 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 tablet-grid-100 mobile-grid-100 edit-delete-icons');
-  favouriteTextOnlyBox.setAttribute('class','text-only-icon-box');
   editiconfavouritebox.setAttribute('class','grid-50 tablet-grid-50 mobile-grid-50 edit-favourite-icon');
   editiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
   deleteiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
-  var iconClass = "favourite-icon fa fa-5x "+ icon;
-  favouriteIconbox.setAttribute('class',iconClass);
   textIconH1.textContent = text;
+
+  var iconClass = "favourite-icon fa fa-5x "+ icon;
+  var iconClassTextOnly = "favourite-icon text-only-icon-box";
+  favouriteIconbox.setAttribute('class',iconClass);
+  favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly);
 
   if(useTextNotIcon){
     if(inEditMode){
@@ -1182,6 +1194,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
       editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
     } else {
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly+" active-text-or-icon");
       favouriteTextOnlyBox.setAttribute('style','display: inline-block');
       editdeleteiconfavouritebox.setAttribute('style','display: none');
     }
@@ -1191,6 +1204,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
       favouriteTextOnlyBox.setAttribute('style','display: none');
       editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
     } else {
+      favouriteIconbox.setAttribute('class',iconClass+ " active-text-or-icon");
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: inline-block");
       favouriteTextOnlyBox.setAttribute('style','display: none');
       editdeleteiconfavouritebox.setAttribute('style','display: none');
