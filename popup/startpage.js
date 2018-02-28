@@ -234,7 +234,9 @@ newListToDisplayEntries.then((result) => {
         var iconColour = entry[dataObject].iconColour;
         var backgroundColour = entry[dataObject].backgroundColour;
         var order = entry[dataObject].Order;
-        displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
+        var text = entry[dataObject].text;
+        var useTextNotIcon = entry[dataObject].useTextNotIcon;
+        displayFavourite(id,title,url,order,icon,iconColour,text,useTextNotIcon,backgroundColour,false);
       }
     }, onError);
   }
@@ -349,7 +351,9 @@ async function initialise() {
                 var iconColour = entry[dataObject].iconColour;
                 var backgroundColour = entry[dataObject].backgroundColour;
                 var order = entry[dataObject].Order;
-                displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
+                var text = entry[dataObject].text;
+                var useTextNotIcon = entry[dataObject].useTextNotIcon;
+                displayFavourite(id,title,url,order,icon,iconColour,text, useTextNotIcon,backgroundColour,false);
               }
             }, onError);
           }
@@ -388,7 +392,11 @@ async function initialise() {
                var iconColour = entry[dataObject].iconColour;
                var backgroundColour = entry[dataObject].backgroundColour;
                var order = entry[dataObject].Order;
-               displayFavourite(id,title,url,order,icon,iconColour,backgroundColour,false);
+               //var text = entry[dataObject].text;
+               //var useTextNotIcon = entry[dataObject].useTextNotIcon;
+               var text = "TEXT"
+               var useTextNotIcon = true;
+               displayFavourite(id,title,url,order,icon,iconColour,text,useTextNotIcon,backgroundColour,false);
              }
            }, onError);
          }
@@ -728,7 +736,7 @@ editIconbox.addEventListener('click',(e) => {
   renameListOverlayContainer.setAttribute("style", "display: block");
   renameFavouriteListCloseBtn.addEventListener('click', removeRenameOverlay);
   renameListBtn.addEventListener('click',(e) => {
-    // Remobve and rerende Div
+    // Remove and rerende Div
     var newListTitle = renameFavouriteListTitleTextField.value;
     console.log(listKey);
     console.log(newListTitle);
@@ -993,10 +1001,10 @@ function updateIconColourExampleDiv(){
 }
 
 /* function to store a new favourite in storage */
-function storeFavourite(id, title, url, order, icon, iconColour, backgroundColour, inEditMode) {
+function storeFavourite(id, title, url, order, icon, iconColour, text, useTextNotIcon, backgroundColour, inEditMode) {
   var entryTitle = "Entry"+id;
   console.log("storeFavourite: "+id);
-  browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+  browser.storage.local.set({ [entryTitle] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "text" : text, "useTextNotIcon" : useTextNotIcon, "backgroundColour" : backgroundColour } });
 
   var currentInUseList = currentListSelection.textContent;
   var currentInUseListArrayName = currentInUseList;
@@ -1007,7 +1015,7 @@ function storeFavourite(id, title, url, order, icon, iconColour, backgroundColou
     data.push(entryTitle);
     browser.storage.local.set({ [currentInUseList] : {data} });
   }, onError);
-  displayFavourite(id, title,url,order,icon,iconColour,backgroundColour,inEditMode);
+  displayFavourite(id, title,url,order,icon,iconColour,text,useTextNotIcon,backgroundColour,inEditMode);
 }
 
 function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, defaultList) {
@@ -1118,18 +1126,23 @@ function eventListnerForNewUpdateDiv(order){
 }
 
 /* function to display a favourite */
-function displayFavourite(id, title, url,order, icon, iconColour, backgroundColour, inEditMode) {
+function displayFavourite(id, title, url,order, icon, iconColour, text, useTextNotIcon, backgroundColour, inEditMode) {
+  console.log("INSIDE DISPLLAYFAVC")
+  console.log(text);
+  console.log(useTextNotIcon);
   var createCorrectUrl = generateValidUrl(url);
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
   var favouriteboximage = document.createElement('div');
   var editdeleteiconfavouritebox = document.createElement('div');
+  var favouriteTextOnlyBox = document.createElement('div');
   var editiconfavouritebox = document.createElement('div');
   var deleteiconfavouritebox = document.createElement('div');
   var favouriteIconbox = document.createElement('i');
   var editIconbox = document.createElement('i');
   var deleteIconbox = document.createElement('i');
   var favouriteboxtitle = document.createElement('div');
+  var textIconH1 = document.createElement('h1');
   var newID = id.toString();
   if(newID.startsWith('Entry')){
       console.log("HERE");
@@ -1152,7 +1165,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   favouritebox.setAttribute('class','favourite-box');
   favouritebox.setAttribute('href', createCorrectUrl);
   editdeleteiconfavouritebox.setAttribute('class','grid-100 tablet-grid-100 mobile-grid-100 edit-delete-icons');
-  //editdeleteiconfavouritebox.setAttribute('style','display: none');
+  favouriteTextOnlyBox.setAttribute('class','text-only-icon-box');
   editiconfavouritebox.setAttribute('class','grid-50 tablet-grid-50 mobile-grid-50 edit-favourite-icon');
   editiconfavouritebox.setAttribute('style','justify-content: center; align-items: center; display: flex;');
   deleteiconfavouritebox.setAttribute('class','grid-50 delete-favourite-icon');
@@ -1160,12 +1173,28 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   var iconClass = "favourite-icon fa fa-5x "+ icon;
   favouriteIconbox.setAttribute('class',iconClass);
-  if(inEditMode){
-    favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
-    editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
+  textIconH1.textContent = text;
+
+  if(useTextNotIcon){
+    if(inEditMode){
+      favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteTextOnlyBox.setAttribute('style','display: none');
+      editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
+    } else {
+      favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteTextOnlyBox.setAttribute('style','display: inline-block');
+      editdeleteiconfavouritebox.setAttribute('style','display: none');
+    }
   } else {
-    favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: inline-block");
-    editdeleteiconfavouritebox.setAttribute('style','display: none');
+    if(inEditMode){
+      favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteTextOnlyBox.setAttribute('style','display: none');
+      editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
+    } else {
+      favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: inline-block");
+      favouriteTextOnlyBox.setAttribute('style','display: none');
+      editdeleteiconfavouritebox.setAttribute('style','display: none');
+    }
   }
 
   favouriteIconbox.setAttribute('aria-hidden','true');
@@ -1182,17 +1211,15 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
   deleteiconfavouritebox.appendChild(deleteIconbox);
   editdeleteiconfavouritebox.appendChild(editiconfavouritebox);
   editdeleteiconfavouritebox.appendChild(deleteiconfavouritebox);
+  favouriteTextOnlyBox.appendChild(textIconH1);
   favouriteboximage.appendChild(favouriteIconbox);
+  favouriteboximage.appendChild(favouriteTextOnlyBox);
   favouriteboximage.appendChild(editdeleteiconfavouritebox);
   favouritebox.appendChild(favouriteboximage);
   favouritebox.appendChild(favouriteboxtitle);
   favouritecontainer.appendChild(favouritebox);
-  //**TODO: Remove if, Not Needed due to flexbox order, keep else part of statment**//
-  if(inEditMode){
-    favouritesContainer.insertBefore(favouritecontainer, favouritesContainer.lastChild);
-  } else {
-    favouritesContainer.appendChild(favouritecontainer);
-  }
+
+  favouritesContainer.appendChild(favouritecontainer);
 
   favouritebox.addEventListener('click',(e) => {
     const evtTgt = e.target;
@@ -1267,13 +1294,13 @@ function displayFavourite(id, title, url,order, icon, iconColour, backgroundColo
 
 /* function to update notes */
 
-function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour) {
+function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour, text, useTextNotIcon) {
   console.log(id);
   console.log(delNote);
   var storingFavourite = browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
     console.log("INSIDE");
-      displayFavourite(id,title, url, order,icon, iconColour, backgroundColour,true);
+      displayFavourite(id,title, url, order,icon, iconColour, text, useTextNotIcon, backgroundColour,true);
   }, onError);
 }
 
