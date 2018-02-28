@@ -392,10 +392,8 @@ async function initialise() {
                var iconColour = entry[dataObject].iconColour;
                var backgroundColour = entry[dataObject].backgroundColour;
                var order = entry[dataObject].Order;
-               //var text = entry[dataObject].text;
-               //var useTextNotIcon = entry[dataObject].useTextNotIcon;
-               var text = "TEXT"
-               var useTextNotIcon = true;
+               var text = entry[dataObject].text;
+               var useTextNotIcon = entry[dataObject].useTextNotIcon;
                displayFavourite(id,title,url,order,icon,iconColour,text,useTextNotIcon,backgroundColour,false);
              }
            }, onError);
@@ -955,7 +953,7 @@ function onCreated(tab) {
   console.log(`Created new tab: ${tab.id}`)
 }
 
-function addNewFavourite(id, title,url,icon,iconColour,backgroundColour) {
+function addNewFavourite(id, title,url,icon,iconColour,text,useTextNotIcon,backgroundColour) {
   var gettingItem = browser.storage.local.get(title);
   gettingItem.then((result) => {
     var objTest = Object.keys(result);
@@ -964,7 +962,7 @@ function addNewFavourite(id, title,url,icon,iconColour,backgroundColour) {
       newFavouriteUrlTextField.value = '';
       currentOrderPosition++;
       console.log("addNewFavourite Updaed Order Position"+currentOrderPosition);
-      storeFavourite(id,title,url,currentOrderPosition,icon,iconColour, backgroundColour,true);
+      storeFavourite(id,title,url,currentOrderPosition,icon,iconColour,text,useTextNotIcon,backgroundColour,true);
       updateDivOrderCount();
 
       if(InWelcomeMode){
@@ -1001,8 +999,11 @@ function createNewFavourite(){
     backgroundColour = '#fff'
   }
   url = url.trim();
-  console.log(url);
-  addNewFavourite(id, title,url,icon,iconColour,backgroundColour)
+
+  text = icon;
+  var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
+
+  addNewFavourite(id, title,url,icon,iconColour,text,useTextNotIcon,backgroundColour)
 }
 
 /* TODO: Add Debouce */
@@ -1141,6 +1142,8 @@ function eventListnerForNewUpdateDiv(order){
 
 /* function to display a favourite */
 function displayFavourite(id, title, url,order, icon, iconColour, text, useTextNotIcon, backgroundColour, inEditMode) {
+  console.log(text);
+  console.log(useTextNotIcon);
   var createCorrectUrl = generateValidUrl(url);
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
@@ -1190,6 +1193,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
   if(useTextNotIcon){
     if(inEditMode){
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly+" active-text-or-icon");
       favouriteTextOnlyBox.setAttribute('style','display: none');
       editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
     } else {
@@ -1201,6 +1205,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
   } else {
     if(inEditMode){
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
+      favouriteIconbox.setAttribute('class',iconClass+ " active-text-or-icon");
       favouriteTextOnlyBox.setAttribute('style','display: none');
       editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
     } else {
