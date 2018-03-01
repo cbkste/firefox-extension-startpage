@@ -83,6 +83,7 @@ var addNewListBtn = document.querySelector('input[id="AddNewListBtn"]');
 var renameListBtn = document.querySelector('input[id="RenamedListBtn"]');
 var newFavouriteListTitleErrorMessageDiv = document.querySelector('.favourite-new-list-error-message-block');
 var newFavouriteListTitleErrorMessageText = document.querySelector('.favourite-new-list-error-message-block-text');
+var switchIconOrText = document.querySelector('.checkbox-useTextNotIcon');
 
 var iconInfomationIcon = document.querySelector('#IconInfo');
 
@@ -143,7 +144,6 @@ function defaultEventListener() {
   backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
-  newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
   favouriteListSelectorLeft.addEventListener("click", changeSelectionLeft);
   favouriteListSelectorRight.addEventListener('click', changeSelectionRight);
   //newFavouriteIconColourTextField.addEventListener('keyup', updateIconColourExampleDiv);
@@ -439,11 +439,12 @@ function getListCount(key) {
 }
 
 function CloseAddNewFavouritesOverlay() {
-  addNewFavouriteBtn.removeEventListener('click', createNewFavourite);
+  addNewFavouriteBtn.removeEventListener('click', createNewFavourite)
   newFavouriteTitleTextField.removeEventListener('keyup', updatePreviewForNewFavouriteTitle);
   NewFavouriteIconTextField.removeEventListener('keyup', updatePreviewForNewFavouriteIcon);
   newFavouriteIconColourTextField.removeEventListener('keyup', updatePreviewForNewFavouriteIconColour);
   newFavouriteBackgroundColourTextField.removeEventListener('keyup', updatePreviewForNewFavouriteBackgroundColour);
+  switchIconOrText.removeEventListener('click', useTextNotIconSwitch);
   newFavouriteOverlayContainer.setAttribute("style", "display: none;");
   BrowsingHistoryList.innerHTML = "";
 }
@@ -938,7 +939,20 @@ function displayAddNewFavourite() {
     newFavouriteIconColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteIconColour);
     newFavouriteBackgroundColourTextField.addEventListener('keyup', updatePreviewForNewFavouriteBackgroundColour);
     iconInfomationIcon.addEventListener('click', openIconInformationTab);
+    newFavouriteOverlayCloseContainerBtn.addEventListener('click', CloseAddNewFavouritesOverlay);
+    switchIconOrText.addEventListener('click', useTextNotIconSwitch);
   })
+}
+
+function useTextNotIconSwitch(){
+  var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
+  var textP = document.querySelector('#NewFavouriteIcon');
+  console.log(useTextNotIcon);
+  if(useTextNotIcon){
+    textP.textContent = "Favourite Icon(Text):";
+  } else {
+    textP.textContent = "Favourite Icon:";
+  }
 }
 
 function openIconInformationTab(){
