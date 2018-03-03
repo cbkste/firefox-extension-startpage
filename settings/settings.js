@@ -22,7 +22,8 @@ var importDataOverlay = document.querySelector('.import-list-overlay-container')
 var importDataOverlayClose = document.querySelector('.import-list-overlay-box-close');
 var importDataBtn = document.querySelector('input[id="ImportListBtn"]');
 var importDataFileSelector = document.getElementById("importFileSelector");
-
+var importMessageDiv = document.querySelector('.import-favourite-list-message-block');
+var importMessageDivMessageText = document.querySelector('.import-favourite-list-message-block-text');
 initialise();
 
 
@@ -159,6 +160,7 @@ async function importFromFileSelector(){
       }
       processImportSettings(settings);
       processImportList(listOfEntries, listOfFavourites);
+      displayImportFavouriteListMessage("List Imported containing:",listOfFavourites.length,listOfEntries.length);
     };
 }
 
@@ -715,6 +717,12 @@ function deletedStoredBackgroundImageDiv(filename){
 function onError(error) {
   console.log(error);
 }
+
+function displayImportFavouriteListMessage(message,countList,countFavourites) {
+  importMessageDiv.setAttribute("style", "display: flex;");
+  importMessageDivMessageText.textContent = message+"Lists: "+countList+" Entries: "+countFavourites;
+}
+
 
 function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, currentDefaultList) {
   console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order);
