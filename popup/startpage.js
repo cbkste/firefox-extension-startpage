@@ -1800,8 +1800,10 @@ function handleDrop(e) {
         var icon = result[favouriteId].icon;
         var iconColour = result[favouriteId].iconColour;
         var backgroundColour = result[favouriteId].backgroundColour;
+        var text = result[favouriteId].text;
+        var useTextNotIcon = result[favouriteId].useTextNotIcon;
         oldPosition = result[favouriteId].Order;
-        updateFavourite(favouriteId, favouriteId, title, url, newPosition, icon, iconColour, backgroundColour);
+        updateFavourite(favouriteId,favouriteId,title,url,newPosition,icon,iconColour,backgroundColour,text,useTextNotIcon);
       }, onError);
 
       var gettingSecondItem = browser.storage.local.get(this.id);
@@ -1814,7 +1816,9 @@ function handleDrop(e) {
         var icon = result[this.id].icon;
         var iconColour = result[this.id].iconColour;
         var backgroundColour = result[this.id].backgroundColour;
-        updateFavourite(this.id, this.id, title, url, oldPosition, icon, iconColour, backgroundColour);
+        var text = result[this.id].text;
+        var useTextNotIcon = result[this.id].useTextNotIcon;
+        updateFavourite(this.id,this.id,title,url,oldPosition,icon,iconColour,backgroundColour,text,useTextNotIcon);
       }, onError);
      }
     handleDragEnd();
