@@ -1330,7 +1330,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
 function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour, text, useTextNotIcon) {
   console.log(id);
   console.log(delNote);
-  var storingFavourite = browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+  var storingFavourite = browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "text" : text, "useTextNotIcon" : useTextNotIcon, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
     console.log("INSIDE");
       displayFavourite(id,title, url, order,icon, iconColour, text, useTextNotIcon, backgroundColour,true);

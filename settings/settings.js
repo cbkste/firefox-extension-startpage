@@ -101,7 +101,7 @@ async function importFromFileSelector(){
     var listOfEntries = [];
     var listOfFavourites = [];
 
-    var id,title,url,icon,iconColour,backgroundColour,Order;
+    var id,title,url,icon,iconColour,backgroundColour,order,text,useTextNotIcon;
     var listKey;
 
       arrayOfLines = event.target.result.match(/[^\r\n]+/g);
@@ -135,11 +135,23 @@ async function importFromFileSelector(){
                 case 'backgroundColour':
                     backgroundColour = unescape(stringsplit[1]);
                     break;
+                case 'text':
+                    if(stringsplit[1] == 'undefined'){
+                      stringsplit[1] = "";
+                    }
+                    text = stringsplit[1];
+                    break;
+                case 'useTextNotIcon':
+                    if(stringsplit[1] == 'undefined'){
+                      stringsplit[1] = false;
+                    }
+                    useTextNotIcon = stringsplit[1];
+                    break;
                 case 'Order':
-                    Order = stringsplit[1];
+                    order = stringsplit[1];
                     listOfEntries.push(listKey+":"+id);
                     var entryTitle = "Entry"+id;
-                    browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : Order, "icon" : icon, "iconColour" : iconColour, "backgroundColour" : backgroundColour } });
+                    browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "text" : text, "useTextNotIcon" : useTextNotIcon, "backgroundColour" : backgroundColour } });
             }
           }
 
@@ -205,13 +217,23 @@ function getFavouteListToAdd(key, entries) {
       console.log("list already exist");
       console.log("only adding favourite entries");
       var data = entry[key]["data"];
+      var foundInList;
       for (var i = 0; i < entries.length; i++) {
         var stringsplit = entries[i].split(/:(.+)/);
         if(stringsplit[0] == key){
           console.log("ENTRY FOUND FOR LIST"+key+" "+stringsplit[1]);
-          data.push(stringsplit[1]);
+          console.log("Checking if favourite list "+key+" contains entry "+stringsplit[1]+" already");
+          foundInList = false;
+          for (let dataObject of entry[key]["data"]){
+            if(dataObject == stringsplit[1]){
+              foundInList = true;
+            }
+          }
+          if(!foundInList){
+            data.push(stringsplit[1]);
+          }
+          }
         }
-      }
       browser.storage.local.set({ [key] : {data} });
       resolve(null);
     }
@@ -311,7 +333,12 @@ function getEntryData(entryName){
      var entryData = [];
      var getEntry = browser.storage.local.get(entryName);
      getEntry.then(async (entry) => {
-       entryData.push("ID:"+entry[entryName].id);
+       var id = entry[entryName].id
+       if(String(id).startsWith('Entry')){
+         entryData.push("ID:"+id);
+       } else {
+         entryData.push("ID:Entry"+id);
+       }
        if(entry[entryName].title == ''){
          entryData.push("title:empty");
        } else {
@@ -329,6 +356,8 @@ function getEntryData(entryName){
        }
        entryData.push("iconColour:"+entry[entryName].iconColour);
        entryData.push("backgroundColour:"+entry[entryName].backgroundColour);
+       entryData.push("text:"+entry[entryName].text);
+       entryData.push("useTextNotIcon:"+entry[entryName].useTextNotIcon);
        entryData.push("Order:"+entry[entryName].Order);
       resolve(entryData);
     });
