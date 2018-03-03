@@ -84,6 +84,7 @@ var renameListBtn = document.querySelector('input[id="RenamedListBtn"]');
 var newFavouriteListTitleErrorMessageDiv = document.querySelector('.favourite-new-list-error-message-block');
 var newFavouriteListTitleErrorMessageText = document.querySelector('.favourite-new-list-error-message-block-text');
 var switchIconOrText = document.querySelector('.checkbox-useTextNotIcon');
+var switchIconOrTextUpdateFavourite = document.querySelector('.checkbox-useTextNotIcon-update');
 
 var iconInfomationIcon = document.querySelector('#IconInfo');
 
@@ -1087,11 +1088,15 @@ function displayEditCurrentFavouriteOverlay(id) {
     var currentIconColour = results[objectKeys].iconColour;
     var currentBackgroundColour = results[objectKeys].backgroundColour;
     var currentOrder = results[objectKeys].Order;
-    createEditCurrentFavouriteDivOverlay(id, currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour);
+    var useTextNotIcon = results[objectKeys].useTextNotIcon;
+    createEditCurrentFavouriteDivOverlay(id, currentTitle, currentUrl, currentOrder, currentIcon, currentIconColour, currentBackgroundColour,useTextNotIcon);
   }, onError);
 }
 
-function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconColour, backgroundColour) {
+function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconColour, backgroundColour,useTextNotIcon) {
+  useTextNotIcon ? document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = true
+                 : document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = false;
+
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
   editCurrentFavouriteIconTextField.value = icon;
@@ -1110,8 +1115,10 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
     editCurrentFavouriteIconColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteIconColour);
     editCurrentFavouriteBackgroundColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteBackgroundColour);
     editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
+    switchIconOrTextUpdateFavourite.removeEventListener('click', useTextNotIconSwitchUpdateFavourite);
   })
 
+  switchIconOrTextUpdateFavourite.addEventListener('click', useTextNotIconSwitchUpdateFavourite);
   editCurrentFavouriteTitleTextField.addEventListener('keyup',updatePreviewInEditFavouriteTitle);
   editCurrentFavouriteUrlTextField.addEventListener('keyup',updatePreviewInEditFavouriteUrl);
   editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
@@ -1123,6 +1130,17 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   idToEdit = id;
   editUpdateFavouriteBtn.addEventListener('click',ProcessUpdateFavourite, false);
   editCurrentFavouriteOverlayContainer.setAttribute("style","display:block");
+}
+
+function useTextNotIconSwitchUpdateFavourite(){
+  var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked ? true : false
+  var textP = document.querySelector('#EditCurrentFavouriteIcon');
+  console.log(useTextNotIcon);
+  if(useTextNotIcon){
+    textP.textContent = "Favourite Icon(Text):";
+  } else {
+    textP.textContent = "Favourite Icon:";
+  }
 }
 
 function ProcessUpdateFavourite(evt)
@@ -1142,7 +1160,9 @@ function ProcessUpdateFavourite(evt)
   var url = editCurrentFavouriteUrlTextField.value
   url = url.trim();
   console.log(url);
-  updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, url, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour);
+  var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked ? true : false
+  var text = useTextNotIcon ? editCurrentFavouriteIconTextField.value : "";
+  updateFavourite(idToEdit,evt.target.title, editCurrentFavouriteTitleTextField.value, url, evt.target.order, editCurrentFavouriteIconTextField.value, updatedIconColour, updatedBackgroundColour,text,useTextNotIcon);
   editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
   console.log("ProcessUpdateFavourite")
   eventListnerForNewUpdateDiv(evt.target.order);
@@ -1156,8 +1176,6 @@ function eventListnerForNewUpdateDiv(order){
 
 /* function to display a favourite */
 function displayFavourite(id, title, url,order, icon, iconColour, text, useTextNotIcon, backgroundColour, inEditMode) {
-  console.log(text);
-  console.log(useTextNotIcon);
   var createCorrectUrl = generateValidUrl(url);
   var favouritecontainer = document.createElement('div');
   var favouritebox = document.createElement('a');
@@ -1330,6 +1348,8 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
 function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgroundColour, text, useTextNotIcon) {
   console.log(id);
   console.log(delNote);
+  console.log(text);
+  console.log(useTextNotIcon);
   var storingFavourite = browser.storage.local.set({ [id] : { "id" : id, "title" : title, "url" : url, "Order" : order, "icon" : icon, "iconColour" : iconColour, "text" : text, "useTextNotIcon" : useTextNotIcon, "backgroundColour" : backgroundColour } });
   storingFavourite.then(() => {
     console.log("INSIDE");
