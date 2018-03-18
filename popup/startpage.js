@@ -1103,6 +1103,17 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   useTextNotIcon ? document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = true
                  : document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = false;
 
+   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
+  var previewTextOnlyIconBoxH1 = document.querySelector('.preview-text-only-icon-box-h1');
+   var previewIconBox = document.querySelector('.preview-favourite-icon');
+
+  if(useTextNotIcon){
+    previewIconBox.setAttribute("style", "display: none");
+    previewTextOnlyIconBoxH1.textContent = title;
+  } else {
+    previewTextOnlyIconBox.setAttribute("style", "display: none");
+  }
+
  useTextNotIcon ? iconP.textContent = "Text Colour #:"
                 : iconP.textContent = "Icon Colour #:";
 
@@ -1115,7 +1126,6 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+icon);
   previewIcon.setAttribute('style',"display: inline-block; color: "+iconColour);
   previewTitle.setAttribute('style',"background-color: "+backgroundColour);
-
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click',(e) => {
     CloseEditCurrentFavouritesOverlay();
     editCurrentFavouriteTitleTextField.removeEventListener("keyup", updatePreviewInEditFavouriteTitle);
@@ -1145,14 +1155,22 @@ function useTextNotIconSwitchUpdateFavourite(){
   var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked ? true : false
   var textP = document.querySelector('#EditCurrentFavouriteIcon');
   var iconP = document.querySelector('#EditCurrentFavouriteIconColour');
+  var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
+  var previewIconBox = document.querySelector('.preview-favourite-icon');
 
   console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
     iconP.textContent = "Text Colour #:";
+    previewIconBox.setAttribute("style", "display: none");
+    previewTextOnlyIconBox.setAttribute("style", "display: block");
+    var previewIconTextyBox = document.querySelector('.preview-text-only-icon-box-h1');
+    previewIconTextyBox.textContent = editCurrentFavouriteIconTextField.value;
   } else {
     textP.textContent = "Favourite Icon:";
     iconP.textContent = "Icon Colour #:";
+    previewIconBox.setAttribute("style", "display: block");
+    previewTextOnlyIconBox.setAttribute("style", "display: none");
   }
 }
 
@@ -1429,16 +1447,20 @@ function updatePreviewInEditFavouriteIcon() {
   var updatedIcon = editCurrentFavouriteIconTextField.value;
   console.log(updatedIcon);
   previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
+  var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box-h1');
+  previewTextOnlyIconBox.textContent = updatedIcon;
 }
 
 /**TODO: Add Debounce**/
 function updatePreviewInEditFavouriteIconColour() {
   var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
+  var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box-h1');
   console.log(updatedIconColour);
   if(!updatedIconColour.startsWith('#')){
     updatedIconColour = '#'+updatedIconColour;
   }
   previewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
+  previewTextOnlyIconBox.setAttribute('style',"color: "+updatedIconColour);
 }
 
 /**TODO: Add Debounce**/
