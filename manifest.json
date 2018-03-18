@@ -2,7 +2,6 @@
   "manifest_version": 2,
   "name": "Startpage",
   "version": "1.45",
-  "strict_min_version": "54.0",
   "description": "Custom Startpage for firefox",
   "icons": {
     "48": "icons/startpage-48.png"
@@ -26,7 +25,8 @@
   },
   "applications": {
     "gecko": {
-      "id": "{ca6fa83e-3d6d-432d-a0d7-b060a69e8c68}"
+      "id": "{ca6fa83e-3d6d-432d-a0d7-b060a69e8c68}",
+      "strict_min_version": "54.0"
     }
   },
   "options_ui": {
