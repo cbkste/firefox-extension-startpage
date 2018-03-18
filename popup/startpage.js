@@ -868,11 +868,11 @@ function switchIconsToEditAndDelete() {
   var FavouritesIconDivs = document.querySelectorAll('.active-text-or-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
     var iconOrTextClass = FavouritesIconDivs[i].getAttribute("class");
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
     if(iconOrTextClass.includes('text-only-icon-box')){
       console.log("Icon");
-      FavouritesIconDivs[i].setAttribute('style',"display: none");
+      FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: none");
     } else {
-    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
     FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: none");
     }
   }
@@ -887,11 +887,11 @@ function switchIconsToLogo() {
   var FavouritesIconDivs = document.querySelectorAll('.active-text-or-icon');
   for (i = 0; i < FavouritesIconDivs.length; ++i) {
     var iconOrTextClass = FavouritesIconDivs[i].getAttribute("class");
+    var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
     if(iconOrTextClass.includes('text-only-icon-box')){
       console.log("Icon");
-      FavouritesIconDivs[i].setAttribute('style',"display: inline-block");
+      FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: inline-block");
     } else {
-      var iconcolour = FavouritesIconDivs[i].getAttribute("style").split("color:")[1].split(";")[0];
       FavouritesIconDivs[i].setAttribute('style',"color:"+iconcolour+"; display: inline-block");
     }
   }
@@ -948,11 +948,15 @@ function displayAddNewFavourite() {
 function useTextNotIconSwitch(){
   var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
   var textP = document.querySelector('#NewFavouriteIcon');
+  var iconP = document.querySelector('#NewFavouriteIconColour');
+
   console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
+    iconP.textContent = "Text Colour #:";
   } else {
     textP.textContent = "Favourite Icon:";
+    iconP.textContent = "Icon Colour #:";
   }
 }
 
@@ -1094,8 +1098,13 @@ function displayEditCurrentFavouriteOverlay(id) {
 }
 
 function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconColour, backgroundColour,useTextNotIcon) {
+  var iconP = document.querySelector('#EditCurrentFavouriteIconColour');
+
   useTextNotIcon ? document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = true
                  : document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = false;
+
+ useTextNotIcon ? iconP.textContent = "Text Colour #:"
+                : iconP.textContent = "Icon Colour #:";
 
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
@@ -1135,11 +1144,15 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
 function useTextNotIconSwitchUpdateFavourite(){
   var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked ? true : false
   var textP = document.querySelector('#EditCurrentFavouriteIcon');
+  var iconP = document.querySelector('#EditCurrentFavouriteIconColour');
+
   console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
+    iconP.textContent = "Text Colour #:";
   } else {
     textP.textContent = "Favourite Icon:";
+    iconP.textContent = "Icon Colour #:";
   }
 }
 
@@ -1226,12 +1239,12 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
     if(inEditMode){
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
       favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly+" active-text-or-icon");
-      favouriteTextOnlyBox.setAttribute('style','display: none');
+      favouriteTextOnlyBox.setAttribute('style','display: none; color: '+iconColour);
       editdeleteiconfavouritebox.setAttribute('style','display: inline-block');
     } else {
       favouriteIconbox.setAttribute('style',"color: "+iconColour+"; display: none");
       favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly+" active-text-or-icon");
-      favouriteTextOnlyBox.setAttribute('style','display: inline-block');
+      favouriteTextOnlyBox.setAttribute('style','display: inline-block; color: '+iconColour);
       editdeleteiconfavouritebox.setAttribute('style','display: none');
     }
   } else {
