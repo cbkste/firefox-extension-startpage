@@ -1109,8 +1109,10 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
 
   if(useTextNotIcon){
     previewIconBox.setAttribute("style", "display: none");
-    previewTextOnlyIconBoxH1.textContent = title;
+    previewTextOnlyIconBox.setAttribute("style", "display: block");
+    previewTextOnlyIconBoxH1.textContent = icon;
   } else {
+    previewIconBox.setAttribute("style", "display: block");
     previewTextOnlyIconBox.setAttribute("style", "display: none");
   }
 
