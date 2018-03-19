@@ -798,4 +798,3 @@
    * @external {IDBRequest} https://developer.mozilla.org/en-US/docs/Web/API/IDBRequest
    */
 });
-//# sourceMappingURL=idb-file-storage.js.map
