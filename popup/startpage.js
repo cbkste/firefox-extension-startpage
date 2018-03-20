@@ -605,14 +605,11 @@ function updateUi(newCssClass){
 
 function updateIconSizeUi(oldIconSize, newIconSize){
   var allFavouritesIconDivs = document.querySelectorAll('.favourite-icon');
-  console.log(oldIconSize)
   for (i = 0; i < allFavouritesIconDivs.length; ++i) {
     var currentIcon = allFavouritesIconDivs[i].getAttribute('class').split("favourite-icon fa "+oldIconSize);
     if(currentIcon[1] !== undefined && currentIcon[1].includes('active-text-or-icon')){
       var currentIcon = currentIcon[1].split("active-text-or-icon")[0]
-      console.log(currentIcon)
       newIconCss = "favourite-icon fa "+ newIconSize +" "+ currentIcon + " active-text-or-icon";
-      console.log(newIconCss)
       allFavouritesIconDivs[i].setAttribute('class',newIconCss);
     }
   }
