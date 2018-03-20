@@ -266,7 +266,7 @@ function RemoveDefaultWelcomeEventListener() {
 
 /* display previously-saved stored notes on startup */
 
-browser.runtime.onInstalled.addListener(handleUpdate);
+browser.runtime.onInstalled.addListener(handleInstalled);
 initialise();
 
 async function initialise() {
@@ -1002,15 +1002,8 @@ function useTextNotIconSwitch(){
   }
 }
 
-function openIconInformationTab(){
-  console.log('Open Tab');
-  var creating = browser.tabs.create({
-     url:"../information/updateInformation.html"
-   });
-   creating.then(onCreated, onError);
-}
-
-function handleUpdate() {
+function handleInstalled(details) {
+  console.log(details.reason);
   browser.tabs.create({
     url: "../information/updateInformation.html"
   });
