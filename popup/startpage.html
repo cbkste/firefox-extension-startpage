@@ -271,8 +271,14 @@
     <div class="grid-50 tablet-grid-100">
       <div class="grid-100 tablet-grid-100">
         <div class="grid-100 tablet-grid-100 radio-buttons">
-          <input type="radio" name="itemsPerRowRadio" value="Single" checked> Single<br>
-          <input type="radio" name="itemsPerRowRadio" value="Custom"> Custom<br>
+          <select id="iconSize">
+            <option value="fa-1x">extra small</option>
+            <option value="fa-2x">small</option>
+            <option value="fa-3x">medium</option>
+            <option value="fa-4x">large</option>
+            <option value="fa-5x">extra large</option>
+          </select>
+          <input id="UpdateIconSizeBtn" type="submit" value="Update Default Icon Size">
         </div>
         <div class="tablet-grid-50">
           <div class="tablet-grid-100 ItemsPerRowCountContainer">

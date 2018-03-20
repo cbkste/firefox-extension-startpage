@@ -30,6 +30,8 @@ var settingsRowCountLabel = document.querySelector('#ItemsPerRowCountLabel');
 var settingsRowCountTextField = document.querySelector('input[name="ItemsPerRowCountTextBox"]');
 var settingsUpdateRowCountBtn = document.querySelector('input[id="UpdateSettingsRowCountBtn"]');
 var settingsUpdateStoredBackgroundImageCountBtn = document.querySelector('input[id="UpdateStoredBackgroundImagesBtn"]');
+var iconSizeSelect = document.getElementById("iconSize");
+var settingsUpdateIconSizeBtn = document.querySelector('input[id="UpdateIconSizeBtn"]');
 var settingsUpdateStoredBackgroundImageCountTextField = document.querySelector('input[name="StoredBackgroundImagesCountTextBox"]');
 var itemsPerRowRadio = document.querySelector('input[name="itemsPerRowRadio"]:checked');
 var backgroundImageDropZone = document.querySelector('.image-drop-zone');
@@ -103,6 +105,7 @@ var settingsMode = false;
 var inEditMode = false;
 var FavouriteListsViewMode = false;
 var currentCssClassSize = "grid-25 tablet-grid-25 mobile-grid-25";
+var currentDefaultIconSize = 'fa-5x';
 var changeLinksToHttps = true;
 var NoCurrentFavourites = false;
 var settingsBackgroundImageLimit = "6";
@@ -142,6 +145,7 @@ function defaultEventListener() {
   favouriteListBtn.addEventListener('click', openFavouriteList);
   settingsUpdateRowCountBtn.addEventListener('click', updateRowCountAndUiWithSettings);
   settingsUpdateStoredBackgroundImageCountBtn.addEventListener('click', updateBackgroundWithSettings);
+  settingsUpdateIconSizeBtn.addEventListener('click', updateIconSizeWithSettings);
   backgroundImageDropZone.addEventListener("dragend", processImageDragEndDropZone, false);
   backgroundImageDropZone.addEventListener("dragover", processImageDragOverDropZone, false);
   backgroundImageDropZone.addEventListener("drop", processImageDropZone, false);
@@ -273,7 +277,7 @@ async function initialise() {
     var objTest = Object.keys(result);
     if(objTest.length < 1) {
       console.log("Settings Not Found");
-      storeSettings("10", "4","6","","1", "Favourite list 1");
+      storeSettings("10", "4","6","","1", "Favourite list 1","fa-5x");
     } else {
       console.log("SETTINGS FOUND: ID: "+result.startpagesettings.id);
       console.log("SETTINGS FOUND: BGCOUNT: "+result.startpagesettings.storedBackgroundImageCount);
@@ -286,11 +290,18 @@ async function initialise() {
       settingsCurrentSelectedBackground = result.startpagesettings.SelectedBackgroundImage;
       currentOrderPosition = result.startpagesettings.Order;
       currentDefaultList = result.startpagesettings.CurrentDefaultList;
+      currentDefaultIconSize = result.startpagesettings.CurrentIconSize;
       //TODO:Verify settings once updated to a new version happenes
       if(currentDefaultList === undefined){
         currentDefaultList = "Favourite list 1";
         updateSettingsForType(currentDefaultList, "currentDefaultList")
       }
+
+      if(currentDefaultIconSize === undefined){
+        currentDefaultIconSize = "fa-5x";
+        updateSettingsForType(currentDefaultIconSize, "iconSize")
+      }
+      console.log("INIT:currentDefaultIconSize"+currentDefaultIconSize);
       console.log("INIT:currentDefaultList"+currentDefaultList);
       console.log("INIT:currentOrderPosition"+currentOrderPosition);
       await setupbackgroundInit();
@@ -534,15 +545,20 @@ async function OpenSettings() {
     settingsMode = false;
   } else {
        if(!settingsRowCountLimit) {
-         storeSettings(global_id,"4","6","","1","Favourite List 1");
+         storeSettings(global_id,"4","6","","1","Favourite List 1","fa-5x");
          settingsRowCountTextField.value = "4";
        } else {
          settingsRowCountTextField.value = settingsRowCountLimit;
          settingsUpdateStoredBackgroundImageCountTextField.value = settingsBackgroundImageLimit;
        }
+    setCurrentDropDownIconSize();
     settingsContainer.setAttribute("style", "display: block;");
     settingsMode = true;
   }
+}
+
+function setCurrentDropDownIconSize(){
+      iconSizeSelect.value = currentDefaultIconSize;
 }
 
 function updateRowCountAndUiWithSettings(){
@@ -551,6 +567,10 @@ function updateRowCountAndUiWithSettings(){
 
 function updateBackgroundWithSettings(){
   updateSettings("backgroundImageCount");
+}
+
+function updateIconSizeWithSettings(){
+  updateSettings("iconSize");
 }
 
 function updateSettings(updatedSettingsType){
@@ -563,6 +583,12 @@ function updateSettings(updatedSettingsType){
     var newBackgroundCountValue = settingsUpdateStoredBackgroundImageCountTextField.value;
     updateSettingsForType(newBackgroundCountValue, updatedSettingsType);
   }
+
+  if(updatedSettingsType == "iconSize"){
+    var iconSizeValue = iconSizeSelect.options[iconSizeSelect.selectedIndex].value;
+    console.log(iconSizeValue);
+    updateSettingsForType(iconSizeValue, updatedSettingsType);
+  }
 }
 
 function updateDivOrderCount(){
@@ -574,6 +600,21 @@ function updateUi(newCssClass){
   var cssClass = newCssClass + " favourite-container";
   for (i = 0; i < allFavouritesDivs.length; ++i) {
     allFavouritesDivs[i].setAttribute('class',cssClass);
+  }
+}
+
+function updateIconSizeUi(oldIconSize, newIconSize){
+  var allFavouritesIconDivs = document.querySelectorAll('.favourite-icon');
+  console.log(oldIconSize)
+  for (i = 0; i < allFavouritesIconDivs.length; ++i) {
+    var currentIcon = allFavouritesIconDivs[i].getAttribute('class').split("favourite-icon fa "+oldIconSize);
+    if(currentIcon[1] !== undefined && currentIcon[1].includes('active-text-or-icon')){
+      var currentIcon = currentIcon[1].split("active-text-or-icon")[0]
+      console.log(currentIcon)
+      newIconCss = "favourite-icon fa "+ newIconSize +" "+ currentIcon + " active-text-or-icon";
+      console.log(newIconCss)
+      allFavouritesIconDivs[i].setAttribute('class',newIconCss);
+    }
   }
 }
 
@@ -1068,13 +1109,14 @@ function storeFavourite(id, title, url, order, icon, iconColour, text, useTextNo
   displayFavourite(id, title,url,order,icon,iconColour,text,useTextNotIcon,backgroundColour,inEditMode);
 }
 
-function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, defaultList) {
+function storeSettings(id, rowCount, backgroundCount, backgroundImage, order, defaultList, iconSize) {
   console.log("storeSettings: "+ id + ", RowCount: " +rowCount + ", BackgroundImageCount: " +backgroundCount+ ", Order: " +order+ ", Default List: " + defaultList);
-  browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order, "CurrentDefaultList" : defaultList } });
+  browser.storage.local.set({ ["startpagesettings"] : { "id" : id, "RowCount" : rowCount, "storedBackgroundImageCount" : backgroundCount, "SelectedBackgroundImage" : backgroundImage, "Order" : order, "CurrentDefaultList" : defaultList, "CurrentIconSize": iconSize } });
   settingsBackgroundImageLimit = backgroundCount;
   settingsRowCountLimit = rowCount;
   settingsCurrentSelectedBackground = backgroundImage;
   currentDefaultList = defaultList;
+  currentDefaultIconSize = iconSize;
 }
 
 function generateValidUrl(url) {
@@ -1264,7 +1306,7 @@ function displayFavourite(id, title, url,order, icon, iconColour, text, useTextN
   favouriteboximage.setAttribute('class','grid-100 favourite-box-image');
   textIconH1.textContent = text;
 
-  var iconClass = "favourite-icon fa fa-5x "+ icon;
+  var iconClass = "favourite-icon fa "+ currentDefaultIconSize +" "+ icon;
   var iconClassTextOnly = "favourite-icon text-only-icon-box";
   favouriteIconbox.setAttribute('class',iconClass);
   favouriteTextOnlyBox.setAttribute('class',iconClassTextOnly);
@@ -1497,18 +1539,20 @@ function updateSettingsForType(updatedValue, settingsType) {
     if(objTest.length < 1) {
       switch (settingsType) {
           case "rowCount":
-              storeSettings(global_id, updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
+              storeSettings(global_id, updatedValue, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList, currentDefaultIconSize);
               settingsRowCountTextField.value = newRowCount;
               break;
           case "backgroundImageCount":
-              storeSettings(global_id, settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList);
+              storeSettings(global_id, settingsRowCountLimit, updatedValue, settingsCurrentSelectedBackground,currentOrderPosition, currentDefaultList, currentDefaultIconSize);
               settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
               break;
           case "currentDefaultList":
-              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, updatedValue);
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground,currentOrderPosition, updatedValue, currentDefaultIconSize);
               break;
           case "DivOrderUpdate":
-              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue, currentDefaultList);
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, updatedValue, currentDefaultList, currentDefaultIconSize);
+          case "iconSize":
+              storeSettings(global_id, settingsRowCountLimit, settingsBackgroundImageLimit, settingsCurrentSelectedBackground, currentOrderPosition, currentDefaultList, updatedValue);
               break;
       }
     } else {
@@ -1517,7 +1561,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.RowCount !== updatedValue)
               {
                 console.log("Updated Row Count Settings");
-                storeSettings(global_id,updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
+                storeSettings(global_id,updatedValue, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList, currentDefaultIconSize);
                 settingsRowCountTextField.value = updatedValue;
                 updateUi(getNewCssClass(updatedValue));
                 onSettingsScreenSuccess("Items Per Row Updated to "+updatedValue);
@@ -1527,7 +1571,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.storedBackgroundImageCount !== updatedValue)
               {
                 console.log("Updated BackgrondImage Count Settings");
-                storeSettings(global_id,settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
+                storeSettings(global_id,settingsRowCountLimit, updatedValue,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList, currentDefaultIconSize);
                 settingsUpdateStoredBackgroundImageCountTextField.value = updatedValue;
                 onSettingsScreenSuccess("Stored Background Image Count Updated to "+updatedValue);
               }
@@ -1536,7 +1580,7 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.Order !== updatedValue)
               {
                 console.log("Updated Order");
-                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue,currentDefaultList);
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,updatedValue,currentDefaultList, currentDefaultIconSize);
                 onSettingsScreenSuccess("Updated Order to "+updatedValue);
               }
               break;
@@ -1544,8 +1588,16 @@ function updateSettingsForType(updatedValue, settingsType) {
               if(result.startpagesettings.CurrentDefaultList !== updatedValue)
               {
                 console.log("Updated DefaultList");
-                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,updatedValue);
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,updatedValue, currentDefaultIconSize);
                 onSettingsScreenSuccess("Updated DefaultList to "+updatedValue);
+              }
+              break;
+          case "iconSize":
+              if(result.startpagesettings.iconSize !== updatedValue)
+              {
+                updateIconSizeUi(currentDefaultIconSize, updatedValue);
+                storeSettings(global_id,settingsRowCountLimit, settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList,updatedValue);
+                onSettingsScreenSuccess("Updated Icon Size to "+updatedValue);
               }
               break;
       }
@@ -1769,7 +1821,7 @@ async function displayBackgroundImage(filename){
     // currentBackgroudnBlobUrl = objectURL;
     // storeSettings("1", settingsRowCountLimit,settingsBackgroundImageLimit,"",currentOrderPosition)
     settingsCurrentSelectedBackground = void 0;
-    storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList);
+    storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,settingsCurrentSelectedBackground,currentOrderPosition,currentDefaultList, currentDefaultIconSize);
    } else {
      var backgroundImageDivs = document.querySelectorAll('.single-image-zone-icon');
      console.log(backgroundImageDivs);
@@ -1780,7 +1832,7 @@ async function displayBackgroundImage(filename){
      setBackgroundContainerImage(objectURL);
      settingsCurrentSelectedBackground = filename;
      currentBackgroudnBlobUrl = objectURL;
-     storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition,currentDefaultList);
+     storeSettings(global_id, settingsRowCountLimit,settingsBackgroundImageLimit,filename,currentOrderPosition,currentDefaultList, currentDefaultIconSize);
    }
  });
 }
