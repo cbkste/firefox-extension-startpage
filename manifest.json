@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Startpage",
-  "version": "1.5",
+  "version": "1.47",
   "description": "Custom Startpage for firefox",
   "icons": {
     "48": "icons/startpage-48.png"
@@ -34,9 +34,7 @@
   },
   "web_accessible_resources": [
     "information/icon-example.jpg",
-    "information/icon-example-id.jpg",
-    "assets/css/font-awesome.css",
-    "assets/css/font-mfizz.css"
+    "information/icon-example-id.jpg"
 ],
   "content_security_policy": "script-src 'self'; object-src 'self';"
 }
