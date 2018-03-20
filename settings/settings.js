@@ -24,8 +24,8 @@ var importDataBtn = document.querySelector('input[id="ImportListBtn"]');
 var importDataFileSelector = document.getElementById("importFileSelector");
 var importMessageDiv = document.querySelector('.import-favourite-list-message-block');
 var importMessageDivMessageText = document.querySelector('.import-favourite-list-message-block-text');
-initialise();
 
+initialise();
 
 async function initialise() {
   defaultEventListener();

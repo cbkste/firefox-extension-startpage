@@ -262,6 +262,7 @@ function RemoveDefaultWelcomeEventListener() {
 
 /* display previously-saved stored notes on startup */
 
+browser.runtime.onInstalled.addListener(handleUpdate);
 initialise();
 
 async function initialise() {
@@ -959,6 +960,21 @@ function useTextNotIconSwitch(){
     iconP.textContent = "Icon Colour #:";
   }
 }
+
+function openIconInformationTab(){
+  console.log('Open Tab');
+  var creating = browser.tabs.create({
+     url:"../information/updateInformation.html"
+   });
+   creating.then(onCreated, onError);
+}
+
+function handleUpdate() {
+  browser.tabs.create({
+    url: "../information/updateInformation.html"
+  });
+}
+
 
 function openIconInformationTab(){
   console.log('Open Tab');
