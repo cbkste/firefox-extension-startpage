@@ -1120,20 +1120,20 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
                  : document.getElementsByClassName("checkbox-useTextNotIcon-update")[0].checked = false;
 
    var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
-  var previewTextOnlyIconBoxH1 = document.querySelector('.preview-text-only-icon-box-h1');
+   var previewTextOnlyIconBoxH1 = document.querySelector('.preview-text-only-icon-box-h1');
    var previewIconBox = document.querySelector('.preview-favourite-icon');
 
   if(useTextNotIcon){
+    console.log(previewIconBox)
     previewIconBox.setAttribute("style", "display: none");
     previewTextOnlyIconBox.setAttribute("style", "display: block");
     previewTextOnlyIconBoxH1.textContent = icon;
+    iconP.textContent = "Text Colour #:";
   } else {
     previewIconBox.setAttribute("style", "display: block");
     previewTextOnlyIconBox.setAttribute("style", "display: none");
+    iconP.textContent = "Icon Colour #:";
   }
-
- useTextNotIcon ? iconP.textContent = "Text Colour #:"
-                : iconP.textContent = "Icon Colour #:";
 
   editCurrentFavouriteTitleTextField.value = title;
   editCurrentFavouriteUrlTextField.value = url;
@@ -1142,7 +1142,6 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   editCurrentFavouriteBackgroundColourTextField.value = backgroundColour;
   previewTitle.textContent = title;
   previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+icon);
-  previewIcon.setAttribute('style',"display: inline-block; color: "+iconColour);
   previewTitle.setAttribute('style',"background-color: "+backgroundColour);
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click',(e) => {
     CloseEditCurrentFavouritesOverlay();
@@ -1176,7 +1175,6 @@ function useTextNotIconSwitchUpdateFavourite(){
   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
   var previewIconBox = document.querySelector('.preview-favourite-icon');
 
-  console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
     iconP.textContent = "Text Colour #:";
