@@ -62,7 +62,7 @@ var editCurrentFavouriteIconColourTextField = document.querySelector('input[name
 var editCurrentFavouriteBackgroundColourTextField = document.querySelector('input[name="EditCurrentFavouriteBackgroundColour"]');
 //Preview
 var previewTitle = document.querySelector('.preview-favourite-box-title');
-var previewIcon = document.querySelector('.preview-favourite-icon');
+var previewIcon = document.querySelector('.preview-favourite-icon-update');
 var previewUrl = document.querySelector('.preview-favourite-box');
 //input
 var newFavouriteTitleTextField = document.querySelector('input[name="NewFavouriteTitle"]');
@@ -71,7 +71,7 @@ var newFavouriteIconColourTextField = document.querySelector('input[name="NewFav
 var newFavouriteBackgroundColourTextField = document.querySelector('input[name="NewFavouriteBackgroundColour"]');
 //NewFavouritePreview
 var newFavouritePreviewTitle = document.querySelector('.new-preview-favourite-box-title');
-var newFavouritePreviewIcon = document.querySelector('.new-preview-favourite-icon');
+var newFavouritePreviewIcon = document.querySelector('.new-preview-favourite-icon-only');
 var newFavouritePreviewUrl = document.querySelector('.new-preview-favourite-box');
 
 var BrowsingHistoryList = document.getElementById('browsing-history-container');
@@ -989,14 +989,23 @@ function useTextNotIconSwitch(){
   var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
   var textP = document.querySelector('#NewFavouriteIcon');
   var iconP = document.querySelector('#NewFavouriteIconColour');
+  var newPreviewTextOnlyBox = document.querySelector('.new-preview-text-only-icon-box');
+  var newPreviewFavIcon = document.querySelector('.new-preview-favourite-icon-only');
+  var newPreviewTextOnlyH1 = document.querySelector('.new-preview-text-only-icon-box-h1');
+  var text = NewFavouriteIconTextField.value;
 
   console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
     iconP.textContent = "Text Colour #:";
+    newPreviewTextOnlyBox.setAttribute('style',"display: block")
+    newPreviewFavIcon.setAttribute('style',"display: none")
+    newPreviewTextOnlyH1.textContent = text;
   } else {
     textP.textContent = "Favourite Icon:";
     iconP.textContent = "Icon Colour #:";
+    newPreviewFavIcon.setAttribute('style',"display: block")
+    newPreviewTextOnlyBox.setAttribute('style',"display: none")
   }
 }
 
@@ -1154,7 +1163,7 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
 
    var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
    var previewTextOnlyIconBoxH1 = document.querySelector('.preview-text-only-icon-box-h1');
-   var previewIconBox = document.querySelector('.preview-favourite-icon');
+   var previewIconBox = document.querySelector('.preview-favourite-icon-update');
 
   if(useTextNotIcon){
     console.log(previewIconBox)
@@ -1174,7 +1183,7 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   editCurrentFavouriteIconColourTextField.value = iconColour;
   editCurrentFavouriteBackgroundColourTextField.value = backgroundColour;
   previewTitle.textContent = title;
-  previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+icon);
+  previewIcon.setAttribute('class',"preview-favourite-icon-update fa fa-5x "+icon);
   previewTitle.setAttribute('style',"background-color: "+backgroundColour);
   editCurrentFavouriteOverlayCloseContainerBtn.addEventListener('click',(e) => {
     CloseEditCurrentFavouritesOverlay();
@@ -1208,7 +1217,7 @@ function useTextNotIconSwitchUpdateFavourite(){
   var textP = document.querySelector('#EditCurrentFavouriteIcon');
   var iconP = document.querySelector('#EditCurrentFavouriteIconColour');
   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
-  var previewIconBox = document.querySelector('.preview-favourite-icon');
+  var previewIconBox = document.querySelector('.preview-favourite-icon-update');
 
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
@@ -1455,7 +1464,7 @@ function updatePreviewForNewFavouriteUrl() {
 function updatePreviewForNewFavouriteIcon() {
   var updatedIcon = NewFavouriteIconTextField.value;
   console.log(updatedIcon);
-  newFavouritePreviewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
+  newFavouritePreviewIcon.setAttribute('class',"new-preview-favourite-icon-only fa fa-5x "+updatedIcon);
 }
 
 /**TODO: Add Debounce**/
@@ -1497,7 +1506,7 @@ function updatePreviewInEditFavouriteUrl() {
 function updatePreviewInEditFavouriteIcon() {
   var updatedIcon = editCurrentFavouriteIconTextField.value;
   console.log(updatedIcon);
-  previewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
+  previewIcon.setAttribute('class',"preview-favourite-icon-update fa fa-5x "+updatedIcon);
   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box-h1');
   previewTextOnlyIconBox.textContent = updatedIcon;
 }
