@@ -1003,15 +1003,7 @@ function useTextNotIconSwitch(){
     textP.textContent = "Favourite Icon:";
     iconP.textContent = "Icon Colour #:";
     newPreviewTextOnlyIconBox.setAttribute("style", "display: none");
-
-    var iconcolour = document.querySelector('.new-preview-text-only-icon-box-h1').getAttribute("style") //.split("color:")[1].split(";")[0];
-    console.log(iconcolour)
-    if(iconcolour.includes('color')){
-      iconcolour = iconcolour.split("color:")[1].split(";")[0];
-      newFavouritePreviewIcon.setAttribute("style", "display: block; color:"+iconcolour);
-    } else {
-      newFavouritePreviewIcon.setAttribute("style", "display: block");
-    }
+    newFavouritePreviewIcon.setAttribute("style", "display: block");
   }
 }
 
@@ -1478,14 +1470,11 @@ function updatePreviewForNewFavouriteIcon() {
 /**TODO: Add Debounce**/
 function updatePreviewForNewFavouriteIconColour() {
   var updatedIconColour = newFavouriteIconColourTextField.value;
-  var newPreviewIconTextBox = document.querySelector('.new-preview-text-only-icon-box-h1');
-
   console.log(updatedIconColour);
   if(!updatedIconColour.startsWith('#')){
     updatedIconColour = '#'+updatedIconColour;
   }
   newFavouritePreviewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
-  newPreviewIconTextBox.setAttribute('style',"color: "+updatedIconColour);
 }
 
 /**TODO: Add Debounce**/
