@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Startpage",
-  "version": "1.48",
+  "version": "1.49",
   "description": "Custom Startpage for firefox",
   "icons": {
     "48": "icons/startpage-48.png"
