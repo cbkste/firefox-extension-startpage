@@ -989,14 +989,21 @@ function useTextNotIconSwitch(){
   var useTextNotIcon = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
   var textP = document.querySelector('#NewFavouriteIcon');
   var iconP = document.querySelector('#NewFavouriteIconColour');
+  var newPreviewTextOnlyIconBox = document.querySelector('.new-preview-text-only-icon-box');
 
   console.log(useTextNotIcon);
   if(useTextNotIcon){
     textP.textContent = "Favourite Icon(Text):";
     iconP.textContent = "Text Colour #:";
+    newPreviewTextOnlyIconBox.setAttribute("style", "display: block");
+    newFavouritePreviewIcon.setAttribute("style", "display: none");
+    var newPreviewIconTextBox = document.querySelector('.new-preview-text-only-icon-box-h1');
+    newPreviewIconTextBox.textContent = NewFavouriteIconTextField.value;
   } else {
     textP.textContent = "Favourite Icon:";
     iconP.textContent = "Icon Colour #:";
+    newPreviewTextOnlyIconBox.setAttribute("style", "display: none");
+    newFavouritePreviewIcon.setAttribute("style", "display: block");
   }
 }
 
@@ -1041,6 +1048,7 @@ function addNewFavourite(id, title,url,icon,iconColour,text,useTextNotIcon,backg
 }
 
 function createNewFavourite(){
+  console.log('HERE')
   console.log(global_id);
   var title = newFavouriteTitleTextField.value;
   var url = newFavouriteUrlTextField.value;
@@ -1454,8 +1462,9 @@ function updatePreviewForNewFavouriteUrl() {
 /**TODO: Add Debounce**/
 function updatePreviewForNewFavouriteIcon() {
   var updatedIcon = NewFavouriteIconTextField.value;
-  console.log(updatedIcon);
   newFavouritePreviewIcon.setAttribute('class',"preview-favourite-icon fa fa-5x "+updatedIcon);
+  var newPreviewIconTextBox = document.querySelector('.new-preview-text-only-icon-box-h1');
+  newPreviewIconTextBox.textContent = updatedIcon;
 }
 
 /**TODO: Add Debounce**/
