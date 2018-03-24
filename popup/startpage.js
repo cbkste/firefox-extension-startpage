@@ -89,6 +89,7 @@ var switchIconOrText = document.querySelector('.checkbox-useTextNotIcon');
 var switchIconOrTextUpdateFavourite = document.querySelector('.checkbox-useTextNotIcon-update');
 
 var iconInfomationIcon = document.querySelector('#IconInfo');
+var iconInfomationIconNewFavourite = document.querySelector('#IconInfoNew');
 
 var clearBtn = document.querySelector('.clear');
 var favouriteListSelectorLeft = document.querySelector('.change-selected-favourite-list-left');
@@ -1184,6 +1185,7 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
     editCurrentFavouriteBackgroundColourTextField.removeEventListener("keyup", updatePreviewInEditFavouriteBackgroundColour);
     editUpdateFavouriteBtn.removeEventListener('click',ProcessUpdateFavourite, false);
     switchIconOrTextUpdateFavourite.removeEventListener('click', useTextNotIconSwitchUpdateFavourite);
+    iconInfomationIconNewFavourite.removeEventListener('click', openIconInformationTab);
   })
 
   switchIconOrTextUpdateFavourite.addEventListener('click', useTextNotIconSwitchUpdateFavourite);
@@ -1192,6 +1194,7 @@ function createEditCurrentFavouriteDivOverlay(id, title, url, order, icon, iconC
   editCurrentFavouriteIconTextField.addEventListener('keyup',updatePreviewInEditFavouriteIcon);
   editCurrentFavouriteIconColourTextField.addEventListener('keyup',updatePreviewInEditFavouriteIconColour);
   editCurrentFavouriteBackgroundColourTextField.addEventListener("keyup", updatePreviewInEditFavouriteBackgroundColour);
+  iconInfomationIconNewFavourite.addEventListener('click', openIconInformationTab);
 
   editUpdateFavouriteBtn.title = title;
   editUpdateFavouriteBtn.order = order;
