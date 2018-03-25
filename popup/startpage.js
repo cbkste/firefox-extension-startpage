@@ -265,8 +265,6 @@ function RemoveDefaultWelcomeEventListener() {
 }
 
 /* display previously-saved stored notes on startup */
-
-browser.runtime.onInstalled.addListener(handleInstalled);
 initialise();
 
 async function initialise() {
@@ -1018,13 +1016,6 @@ function useTextNotIconSwitch(){
     newPreviewFavIcon.setAttribute('style',"display: block; color: "+IconColour);
     newPreviewTextOnlyBox.setAttribute('style',"display: none")
   }
-}
-
-function handleInstalled(details) {
-  console.log(details.reason);
-  browser.tabs.create({
-    url: "../information/updateInformation.html"
-  });
 }
 
 
