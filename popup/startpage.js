@@ -1,7 +1,6 @@
 /**
 --------TODO LIST-------
 TODO:
-- add debounce to certain eventLIsteners
 - in background image handle if same image is added twice,
 no need to delete
 - in background image use lastmodififeddate in IMage obkect to remove
@@ -1465,27 +1464,22 @@ function updateFavourite(id, delNote,title, url, order, icon, iconColour, backgr
   }, onError);
 }
 
-/**TODO: Add Debounce**/
-function updatePreviewForNewFavouriteTitle() {
+var updatePreviewForNewFavouriteTitle = debounce(function() {
   var updatedTitle = newFavouriteTitleTextField.value;
   console.log(updatedTitle);
   newFavouritePreviewTitle.textContent = updatedTitle;
-}
+}, 300);
 
-/**TODO: Add Debounce**/
-function updatePreviewForNewFavouriteUrl() {
+var updatePreviewForNewFavouriteUrl = debounce(function() {
+}, 300);
 
-}
-
-/**TODO: Add Debounce**/
-function updatePreviewForNewFavouriteIcon() {
+var updatePreviewForNewFavouriteIcon = debounce(function() {
   var updatedIcon = NewFavouriteIconTextField.value;
   console.log(updatedIcon);
   newFavouritePreviewIcon.setAttribute('class',"new-preview-favourite-icon-only fa fa-5x "+updatedIcon);
-}
+}, 300);
 
-/**TODO: Add Debounce**/
-function updatePreviewForNewFavouriteIconColour() {
+var updatePreviewForNewFavouriteIconColour = debounce(function() {
   var updatedIconColour = newFavouriteIconColourTextField.value;
   var iconInUse = document.getElementsByClassName("checkbox-useTextNotIcon")[0].checked ? true : false
   var newPreviewTextOnlyBox = document.querySelector('.new-preview-text-only-icon-box');
@@ -1502,45 +1496,43 @@ function updatePreviewForNewFavouriteIconColour() {
     newPreviewTextOnlyBox.setAttribute('style',"display: none; color: "+updatedIconColour);
     newFavouritePreviewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
   }
+}, 300);
 
-}
-
-/**TODO: Add Debounce**/
-function updatePreviewForNewFavouriteBackgroundColour() {
+var updatePreviewForNewFavouriteBackgroundColour = debounce(function() {
   var updatedBackgroundColour = newFavouriteBackgroundColourTextField.value;
   console.log(updatedBackgroundColour);
   if(!updatedBackgroundColour.startsWith('#')){
     updatedBackgroundColour = '#'+updatedBackgroundColour;
   }
   newFavouritePreviewTitle.setAttribute('style',"background-color: "+updatedBackgroundColour);
-}
+}, 300);
 
-
-
-
-/**TODO: Add Debounce**/
-function updatePreviewInEditFavouriteTitle() {
+var updatePreviewInEditFavouriteTitle = debounce(function() {
   var updatedTitle = editCurrentFavouriteTitleTextField.value;
   console.log(updatedTitle);
   previewTitle.textContent = updatedTitle;
-}
+}, 300);
 
-/**TODO: Add Debounce**/
-function updatePreviewInEditFavouriteUrl() {
+var updatePreviewInEditFavouriteUrl = debounce(function() {
+}, 300);
 
-}
-
-/**TODO: Add Debounce**/
-function updatePreviewInEditFavouriteIcon() {
+var updatePreviewInEditFavouriteIcon = debounce(function() {
   var updatedIcon = editCurrentFavouriteIconTextField.value;
   console.log(updatedIcon);
   previewIcon.setAttribute('class',"preview-favourite-icon-update fa fa-5x "+updatedIcon);
   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box-h1');
   previewTextOnlyIconBox.textContent = updatedIcon;
-}
+}, 300);
 
-/**TODO: Add Debounce**/
-function updatePreviewInEditFavouriteIconColour() {
+var updatePreviewInEditFavouriteIcon = debounce(function() {
+  var updatedIcon = editCurrentFavouriteIconTextField.value;
+  console.log(updatedIcon);
+  previewIcon.setAttribute('class',"preview-favourite-icon-update fa fa-5x "+updatedIcon);
+  var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box-h1');
+  previewTextOnlyIconBox.textContent = updatedIcon;
+}, 300);
+
+var updatePreviewInEditFavouriteIconColour = debounce(function() {
   var updatedIconColour = editCurrentFavouriteIconColourTextField.value;
   var previewTextOnlyIconBox = document.querySelector('.preview-text-only-icon-box');
   console.log(updatedIconColour);
@@ -1556,17 +1548,16 @@ function updatePreviewInEditFavouriteIconColour() {
     previewIcon.setAttribute('style',"display: inline-block; color: "+updatedIconColour);
     previewTextOnlyIconBox.setAttribute('style',"display: none; color: "+updatedIconColour);
   }
-}
+}, 300);
 
-/**TODO: Add Debounce**/
-function updatePreviewInEditFavouriteBackgroundColour() {
+var updatePreviewInEditFavouriteBackgroundColour = debounce(function() {
   var updatedBackgroundColour = editCurrentFavouriteBackgroundColourTextField.value;
   console.log(updatedBackgroundColour);
   if(!updatedBackgroundColour.startsWith('#')){
     updatedBackgroundColour = '#'+updatedBackgroundColour;
   }
   previewTitle.setAttribute('style',"background-color: "+updatedBackgroundColour);
-}
+}, 300);
 
 function updateSettingsForType(updatedValue, settingsType) {
   console.log("updateSettingsForType")
@@ -1877,6 +1868,22 @@ async function displayBackgroundImage(filename){
 function setBackgroundContainerImage(url) {
   startpageImageContainerHTML.setAttribute("style", "background: url("+url+'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;');
 }
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
 
 /**
 JS SECTION FOR
