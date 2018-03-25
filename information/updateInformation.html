@@ -13,10 +13,13 @@
 </head>
 
 <body>
-  <div class="grid-parent grid-100 settings-title-image">
+  <div class="grid-parent grid-100 tablet-grid-100 mobile-grid-100 settings-title-image">
     <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-grid-100 settings-title-container">
-      <div class="grid-40 tablet-grid-40 mobile-grid-40 options-title">
+      <div class="grid-60 tablet-grid-50 mobile-grid-100 options-title">
         <p>Version Updates:</p>
+      </div>
+      <div id="useIcons" class="grid-40 tablet-grid-50 mobile-grid-100 options-title">
+        <p>Click to find out how to use Icons</p>
       </div>
     </div>
     </div>
@@ -33,19 +36,18 @@
       <div class="grid-100 tablet-grid-100 mobile-grid-100 options-title">
         <p>v1.48</p>
       </div>
+      <ul>
+        <li>Fixed bug with Text and Icon Preview showing both under certain situation</li>
+      </ul>
       <h2>New Feature</h2>
       <ul>
         <li>Added Ability to change Size of Icons</li>
-      </ul>
-      <h2>Bug Fixes</h2>
-      <ul>
-        <li>Fixed bug with Text and Icon Preview showing both under certain situation</li>
       </ul>
       <div class="grid-100 tablet-grid-100 mobile-grid-100 options-title">
         <p>v1.47</p>
       </div>
       <ul>
-        <li>Updated css to use local assets not download icons/fonts from cdn</li>
+        <li>Updated css to use local assets, not download icons/fonts from cdn</li>
         <li>Cleanup of unused code</li>
       </ul>
       <div class="grid-100 tablet-grid-100 mobile-grid-100 options-title">
@@ -73,6 +75,7 @@
 <div class="suffix-10 prefix-10 grid-80 tablet-suffix-5 tablet-prefix-5 tablet-grid-90 mobile-grid-100 settings-page-container">
 
 </div>
+<script src="updateInformation.js"></script>
 </body>
 
 </html>
